@@ -256,4 +256,185 @@
       }
     });
   });
+
+  // ----- Career Path Planner -----
+  (function initCareerPlanner() {
+    const planner = document.querySelector('.career-planner');
+    if (!planner) return;
+
+    const steps = Array.from(planner.querySelectorAll('.planner-step'));
+    const options = planner.querySelectorAll('.planner-option');
+    const progressBar = document.getElementById('career-planner-progress');
+    const restartBtn = document.getElementById('career-planner-restart');
+    const rolesEl = document.getElementById('planner-roles');
+    const interviewEl = document.getElementById('planner-interview-focus');
+    const timelineEl = document.getElementById('planner-timeline');
+
+    if (!steps.length) return;
+
+    let currentStepIndex = 0;
+    const selections = {
+      tracks: new Set(),
+      seniority: null,
+      style: null,
+      goal: null
+    };
+
+    const roleMap = {
+      mechanical: ['Mechanical Engineer', 'CAD Designer'],
+      production: ['Manufacturing Engineer', 'CNC Machinist', 'Assembly Technician'],
+      software: ['Software Engineer', 'Embedded Systems Engineer'],
+      electronics: ['Electronics Engineer', 'Embedded Systems Engineer'],
+      systems: ['Systems / Integration Engineer']
+    };
+
+    function setActiveStep(index) {
+      steps.forEach(function (step, i) {
+        step.classList.toggle('is-active', i === index);
+      });
+      currentStepIndex = index;
+      const progress = ((index) / (steps.length - 1)) * 100;
+      if (progressBar) {
+        progressBar.style.width = progress + '%';
+      }
+    }
+
+    function resetPlanner() {
+      selections.tracks.clear();
+      selections.seniority = null;
+      selections.style = null;
+      selections.goal = null;
+      setActiveStep(0);
+      if (rolesEl) {
+        rolesEl.innerHTML = '<li>Mechanical Engineer · Manufacturing Engineer · Software / Embedded Engineer · Electronics Engineer · Assembly / CNC roles</li>';
+      }
+      if (interviewEl) {
+        interviewEl.innerHTML = '' +
+          '<li>Bring 1–2 projects you can walk through end‑to‑end—decisions, failures, and what you’d change.</li>' +
+          '<li>Be ready to talk about how you work with constraints: time, budget, materials, or mission.</li>';
+      }
+      if (timelineEl) {
+        timelineEl.innerHTML = '' +
+          '<li>0–3 months: onboarding, platform overview, shadowing on SIG SPEAR or T‑90M.</li>' +
+          '<li>3–6 months: owning small components, documenting work to TTM standards.</li>' +
+          '<li>6–12 months: leading sub‑assemblies or features with real field impact.</li>';
+      }
+    }
+
+    function updateSummary() {
+      // Roles
+      const trackArray = Array.from(selections.tracks);
+      const suggestedRoles = [];
+      trackArray.forEach(function (t) {
+        const roles = roleMap[t];
+        if (roles) {
+          roles.forEach(function (r) {
+            if (!suggestedRoles.includes(r)) suggestedRoles.push(r);
+          });
+        }
+      });
+
+      if (rolesEl && suggestedRoles.length) {
+        rolesEl.innerHTML = suggestedRoles.map(function (r) {
+          return '<li>' + r + '</li>';
+        }).join('');
+      }
+
+      // Interview focus
+      if (interviewEl) {
+        const focusItems = [];
+
+        if (selections.style === 'theory') {
+          focusItems.push('Walk through a design you engineered from requirements to validation. Bring sketches, CAD, or calculations.');
+        } else if (selections.style === 'prototype') {
+          focusItems.push('Show a prototype or build you iterated on. Be specific about failures and fixes.');
+        } else if (selections.style === 'systems') {
+          focusItems.push('Pick a system (SIG SPEAR, T‑90M, or similar) and explain how subsystems interact and where you would improve it.');
+        }
+
+        if (selections.tracks.has('production')) {
+          focusItems.push('Be ready to talk about safety, repeatability, and how you debug issues on the workshop floor.');
+        }
+        if (selections.tracks.has('software')) {
+          focusItems.push('Highlight an embedded or controls project—real‑time constraints, debugging on hardware, and test strategy.');
+        }
+
+        if (selections.seniority === 'entry') {
+          focusItems.push('Emphasize potential: side projects, curiosity, and how quickly you ramp up on new tools.');
+        } else if (selections.seniority === 'senior') {
+          focusItems.push('Come with a story where you led a team or design decision under pressure.');
+        }
+
+        if (!focusItems.length) {
+          focusItems.push('Bring 1–2 projects you can walk through end‑to‑end—decisions, failures, and what you’d change.');
+        }
+
+        interviewEl.innerHTML = focusItems.map(function (item) {
+          return '<li>' + item + '</li>';
+        }).join('');
+      }
+
+      // Timeline
+      if (timelineEl) {
+        const items = [];
+        if (selections.goal === 'craft') {
+          items.push('0–3 months: lock in fundamentals on one machine, codebase, or subsystem. Shadow senior engineers.');
+          items.push('3–6 months: own a repeatable task: a CNC program family, a fixture, or a firmware module.');
+          items.push('6–12 months: become the person others come to for that craft, and start documenting best practices.');
+        } else if (selections.goal === 'impact') {
+          items.push('0–3 months: join an existing SIG SPEAR or T‑90M workstream; fix bugs and close small tickets.');
+          items.push('3–6 months: take ownership of a component that ships to the field—design, test, and validation.');
+          items.push('6–12 months: drive improvements from field feedback back into design or processes.');
+        } else if (selections.goal === 'lead') {
+          items.push('0–3 months: understand how engineering, manufacturing, and assembly connect at TTM.');
+          items.push('3–6 months: coordinate a small cross‑discipline task—mechanical + software + assembly.');
+          items.push('6–12 months: lead a sub‑assembly or feature from concept to deployment.');
+        } else {
+          items.push('0–3 months: onboarding, platform overview, shadowing on SIG SPEAR or T‑90M.');
+          items.push('3–6 months: owning small components, documenting work to TTM standards.');
+          items.push('6–12 months: leading sub‑assemblies or features with real field impact.');
+        }
+
+        timelineEl.innerHTML = items.map(function (item) {
+          return '<li>' + item + '</li>';
+        }).join('');
+      }
+    }
+
+    options.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const tracks = (this.dataset.tracks || '').split(',').map(function (t) { return t.trim(); }).filter(Boolean);
+        tracks.forEach(function (t) { selections.tracks.add(t); });
+
+        if (this.dataset.seniority) {
+          selections.seniority = this.dataset.seniority;
+        }
+        if (this.dataset.style) {
+          selections.style = this.dataset.style;
+        }
+        if (this.dataset.goal) {
+          selections.goal = this.dataset.goal;
+        }
+
+        const nextIndex = currentStepIndex + 1;
+        if (nextIndex < steps.length) {
+          setActiveStep(nextIndex);
+        } else {
+          // Completed
+          setActiveStep(currentStepIndex);
+          updateSummary();
+        }
+      });
+    });
+
+    if (restartBtn) {
+      restartBtn.addEventListener('click', function () {
+        resetPlanner();
+      });
+    }
+
+    // initial state
+    resetPlanner();
+  })();
+
 })();

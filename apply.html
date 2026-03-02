@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apply for a Position | TTM - Tomer Tamir Machinery</title>
+  <meta name="description" content="Apply for engineering and manufacturing positions at TTM. Join our team of precision engineers.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
+  <link rel="icon" href="TTMLogo.png" type="image/png">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="apply.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <header class="header" id="header">
+    <nav class="nav container">
+      <a href="index.html" class="nav__logo">
+        <img src="TTMLogo.png" alt="" class="nav__logo-img" width="40" height="40">
+        <span class="nav__logo-text">
+          <span class="logo__ttm">TTM</span>
+          <span class="logo__tagline logo__tagline--russo">Tomer Tamir Machinery</span>
+        </span>
+      </a>
+      <ul class="nav__menu">
+        <li><a href="index.html#about" class="nav__link">About</a></li>
+        <li><a href="index.html#projects" class="nav__link">Projects</a></li>
+        <li><a href="index.html#careers" class="nav__link">Careers</a></li>
+        <li><a href="index.html#contact" class="nav__link">Contact</a></li>
+      </ul>
+      <button class="nav__toggle" id="nav-toggle" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Application Header -->
+    <section class="apply-hero">
+      <div class="container">
+        <div class="apply-hero__content animate-in">
+          <a href="index.html#careers" class="apply-hero__back">← Back to Careers</a>
+          <h1 class="apply-hero__title">Apply for a Position</h1>
+          <p class="apply-hero__subtitle">Join TTM's engineering and manufacturing team. Tell us about your experience, skills, and why you want to work with us.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Application Form -->
+    <section class="section apply-form-section">
+      <div class="container">
+        <form class="apply-form" id="application-form" action="mailto:tomertamirmachinery@gmail.com" method="post" enctype="text/plain">
+          
+          <!-- Personal Information -->
+          <div class="form-section animate-in">
+            <h2 class="form-section__title">Personal Information</h2>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="first-name" class="form-label">First Name <span class="required">*</span></label>
+                <input type="text" id="first-name" name="first-name" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="last-name" class="form-label">Last Name <span class="required">*</span></label>
+                <input type="text" id="last-name" name="last-name" class="form-input" required>
+              </div>
+            </div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="email" class="form-label">Email <span class="required">*</span></label>
+                <input type="email" id="email" name="email" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="phone" class="form-label">Phone Number <span class="required">*</span></label>
+                <input type="tel" id="phone" name="phone" class="form-input" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="location" class="form-label">Location</label>
+              <input type="text" id="location" name="location" class="form-input" placeholder="City, Country">
+            </div>
+          </div>
+
+          <!-- Position Information -->
+          <div class="form-section animate-in">
+            <h2 class="form-section__title">Position Information</h2>
+            <div class="form-group">
+              <label for="position" class="form-label">Position Applying For <span class="required">*</span></label>
+              <select id="position" name="position" class="form-select" required>
+                <option value="">Select a position</option>
+                <option value="mechanical-engineer">Mechanical Engineer</option>
+                <option value="cad-specialist">CAD Specialist</option>
+                <option value="cad-designer">CAD Designer</option>
+                <option value="manufacturing-engineer">Manufacturing Engineer</option>
+                <option value="cnc-machinist">CNC Machinist</option>
+                <option value="assembly-technician">Assembly Technician</option>
+                <option value="software-engineer">Software Engineer</option>
+                <option value="electronics-engineer">Electronics Engineer</option>
+                <option value="embedded-systems-engineer">Embedded Systems Engineer</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group" id="other-position-group" style="display: none;">
+              <label for="other-position" class="form-label">Specify Position</label>
+              <input type="text" id="other-position" name="other-position" class="form-input">
+            </div>
+            <div class="form-group">
+              <label for="availability" class="form-label">Availability <span class="required">*</span></label>
+              <select id="availability" name="availability" class="form-select" required>
+                <option value="">Select availability</option>
+                <option value="immediate">Immediate</option>
+                <option value="2-weeks">Within 2 weeks</option>
+                <option value="1-month">Within 1 month</option>
+                <option value="2-months">Within 2 months</option>
+                <option value="3-months">3+ months</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Experience & Skills -->
+          <div class="form-section animate-in">
+            <h2 class="form-section__title">Experience & Skills</h2>
+            <div class="form-group">
+              <label for="experience" class="form-label">Years of Experience <span class="required">*</span></label>
+              <select id="experience" name="experience" class="form-select" required>
+                <option value="">Select experience level</option>
+                <option value="0-1">0-1 years</option>
+                <option value="2-3">2-3 years</option>
+                <option value="4-5">4-5 years</option>
+                <option value="6-10">6-10 years</option>
+                <option value="10+">10+ years</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="cad-software" class="form-label">CAD Software Experience</label>
+              <div class="checkbox-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="cad-software" value="solidworks">
+                  <span>SolidWorks</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="cad-software" value="fusion-360">
+                  <span>Fusion 360</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="cad-software" value="autocad">
+                  <span>AutoCAD</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="cad-software" value="inventor">
+                  <span>Inventor</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="cad-software" value="catia">
+                  <span>CATIA</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="cad-software" value="other">
+                  <span>Other</span>
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="cnc-experience" class="form-label">CNC/Machining Experience</label>
+              <select id="cnc-experience" name="cnc-experience" class="form-select">
+                <option value="">Select level</option>
+                <option value="none">No experience</option>
+                <option value="basic">Basic (training/education)</option>
+                <option value="intermediate">Intermediate (1-3 years)</option>
+                <option value="advanced">Advanced (3+ years)</option>
+                <option value="expert">Expert (5+ years)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="programming-languages" class="form-label">Programming Languages (if applicable)</label>
+              <div class="checkbox-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="programming" value="c-cpp">
+                  <span>C/C++</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="programming" value="python">
+                  <span>Python</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="programming" value="javascript">
+                  <span>JavaScript</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="programming" value="embedded-c">
+                  <span>Embedded C</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="programming" value="other">
+                  <span>Other</span>
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="relevant-skills" class="form-label">Other Relevant Skills</label>
+              <textarea id="relevant-skills" name="relevant-skills" class="form-textarea" rows="3" placeholder="List any other technical skills, certifications, or relevant experience"></textarea>
+            </div>
+          </div>
+
+          <!-- Work History -->
+          <div class="form-section animate-in">
+            <h2 class="form-section__title">Work History</h2>
+            <div class="form-group">
+              <label for="current-company" class="form-label">Current/Most Recent Company</label>
+              <input type="text" id="current-company" name="current-company" class="form-input">
+            </div>
+            <div class="form-group">
+              <label for="current-role" class="form-label">Current/Most Recent Role</label>
+              <input type="text" id="current-role" name="current-role" class="form-input">
+            </div>
+            <div class="form-group">
+              <label for="work-experience" class="form-label">Work Experience Summary <span class="required">*</span></label>
+              <textarea id="work-experience" name="work-experience" class="form-textarea" rows="5" required placeholder="Describe your relevant work experience, projects, and achievements"></textarea>
+            </div>
+          </div>
+
+          <!-- Education -->
+          <div class="form-section animate-in">
+            <h2 class="form-section__title">Education</h2>
+            <div class="form-group">
+              <label for="education-level" class="form-label">Highest Education Level</label>
+              <select id="education-level" name="education-level" class="form-select">
+                <option value="">Select level</option>
+                <option value="high-school">High School</option>
+                <option value="associate">Associate Degree</option>
+                <option value="bachelor">Bachelor's Degree</option>
+                <option value="master">Master's Degree</option>
+                <option value="phd">PhD</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="degree-field" class="form-label">Field of Study</label>
+              <input type="text" id="degree-field" name="degree-field" class="form-input" placeholder="e.g., Mechanical Engineering, Computer Science">
+            </div>
+            <div class="form-group">
+              <label for="university" class="form-label">University/Institution</label>
+              <input type="text" id="university" name="university" class="form-input">
+            </div>
+          </div>
+
+          <!-- Why TTM -->
+          <div class="form-section animate-in">
+            <h2 class="form-section__title">Why TTM?</h2>
+            <div class="form-group">
+              <label for="why-ttm" class="form-label">Why do you want to work at TTM? <span class="required">*</span></label>
+              <textarea id="why-ttm" name="why-ttm" class="form-textarea" rows="4" required placeholder="Tell us what interests you about TTM and why you'd be a good fit"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="projects-interest" class="form-label">Which TTM projects interest you most?</label>
+              <div class="checkbox-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="projects-interest" value="sig-spear">
+                  <span>SIG SPEAR</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="projects-interest" value="t-90m">
+                  <span>T-90M</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="projects-interest" value="future-projects">
+                  <span>Future Projects</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Information -->
+          <div class="form-section animate-in">
+            <h2 class="form-section__title">Additional Information</h2>
+            <div class="form-group">
+              <label for="portfolio" class="form-label">Portfolio/Work Samples URL</label>
+              <input type="url" id="portfolio" name="portfolio" class="form-input" placeholder="https://...">
+            </div>
+            <div class="form-group">
+              <label for="linkedin" class="form-label">LinkedIn Profile</label>
+              <input type="url" id="linkedin" name="linkedin" class="form-input" placeholder="https://linkedin.com/in/...">
+            </div>
+            <div class="form-group">
+              <label for="resume" class="form-label">Resume/CV</label>
+              <input type="file" id="resume" name="resume" class="form-file" accept=".pdf,.doc,.docx">
+              <p class="form-hint">Accepted formats: PDF, DOC, DOCX (Max 5MB)</p>
+            </div>
+            <div class="form-group">
+              <label for="additional-info" class="form-label">Anything else you'd like us to know?</label>
+              <textarea id="additional-info" name="additional-info" class="form-textarea" rows="3" placeholder="Additional comments, questions, or information"></textarea>
+            </div>
+          </div>
+
+          <!-- Consent -->
+          <div class="form-section animate-in">
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="consent" name="consent" required>
+                <span>I consent to TTM processing my application data for recruitment purposes. <span class="required">*</span></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <div class="form-actions animate-in">
+            <button type="submit" class="btn btn--primary btn--large">Submit Application</button>
+            <p class="form-note">By submitting, you acknowledge that all information provided is accurate and truthful.</p>
+          </div>
+
+        </form>
+      </div>
+    </section>
+
+    <!-- Success Message (hidden by default) -->
+    <div class="form-success" id="form-success" hidden>
+      <div class="form-success__content">
+        <h2 class="form-success__title">Application Submitted</h2>
+        <p class="form-success__text">Thank you for your interest in joining TTM. We'll review your application and get back to you soon.</p>
+        <a href="index.html#careers" class="btn btn--outline">Return to Careers</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__top">
+        <a href="index.html" class="footer__logo nav__logo">
+          <img src="TTMLogo.png" alt="" class="nav__logo-img" width="36" height="36">
+          <span class="nav__logo-text">
+            <span class="logo__ttm">TTM</span>
+            <span class="logo__tagline logo__tagline--russo">Tomer Tamir Machinery</span>
+          </span>
+        </a>
+        <ul class="footer__links">
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#projects">Projects</a></li>
+          <li><a href="index.html#careers">Careers</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copy">© <span id="year"></span> Tomer Tamir Machinery. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script src="apply.js"></script>
+</body>
+</html>

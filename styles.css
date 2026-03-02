@@ -866,6 +866,90 @@ img {
   color: rgba(255, 255, 255, 0.9);
 }
 
+/* Project detail gallery */
+.project-gallery-section {
+  background: #0a0a0a;
+}
+
+.project-gallery {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.project-gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.project-gallery__item {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  aspect-ratio: 4/3;
+  background: #050505;
+}
+
+.project-gallery__item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.02);
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+.project-gallery__item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 55%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.project-gallery__item:hover img {
+  transform: scale(1.08);
+  opacity: 0.9;
+}
+
+.project-gallery__item:hover::after {
+  opacity: 1;
+}
+
+.project-gallery__caption {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 0.25rem;
+}
+
+.project-gallery__sidecopy {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.7;
+}
+
+.project-gallery__sidecopy p + p {
+  margin-top: 0.75rem;
+}
+
+@media (max-width: 900px) {
+  .project-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .project-gallery__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .project-gallery__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .project-card[data-project-modal] {
   cursor: pointer;
   transition: border-color 0.3s ease;
@@ -1822,11 +1906,15 @@ img {
   padding: 1.75rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: border-color 0.3s ease, background 0.3s ease;
+  display: block;
+  text-decoration: none;
+  color: inherit;
 }
 
 .career-card:hover {
   border-color: rgba(255, 255, 255, 0.2);
   background: rgba(255, 255, 255, 0.02);
+  transform: translateY(-2px);
 }
 
 .career-card__title {
@@ -1854,6 +1942,208 @@ img {
 
 @media (max-width: 768px) {
   .careers__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== CAREER PLANNER ===== */
+.career-planner {
+  margin: 2.75rem 0 3rem;
+  padding: 2.75rem 2.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.07), rgba(0, 0, 0, 0.96)),
+    linear-gradient(180deg, rgba(255,255,255,0.03), transparent 55%);
+}
+
+.career-planner__eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.5rem;
+}
+
+.career-planner__title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(1.9rem, 3vw, 2.3rem);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.career-planner__intro {
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 640px;
+  margin-bottom: 2rem;
+}
+
+.career-planner__body {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.45);
+  padding: 1.5rem 1.25rem;
+}
+
+.career-planner__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.planner-step {
+  display: none;
+}
+
+.planner-step.is-active {
+  display: block;
+}
+
+.planner-step__label {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 0.5rem;
+}
+
+.planner-step__question {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  margin-bottom: 1rem;
+}
+
+.planner-step__options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.planner-option {
+  width: 100%;
+  text-align: left;
+  padding: 1rem 1rem;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.9);
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: border-color 0.25s ease, background 0.25s ease, transform 0.15s ease;
+}
+
+.planner-option:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-1px);
+}
+
+.planner-option:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+.career-planner__summary {
+  margin-top: 1.5rem;
+  padding: 1.75rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.career-planner__summary-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.career-planner__summary-intro {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1.25rem;
+}
+
+.career-planner__summary-section {
+  margin-bottom: 1.25rem;
+}
+
+.career-planner__summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.career-planner__summary-grid .career-planner__summary-section {
+  margin-bottom: 0;
+  padding: 1.25rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.career-planner__summary-section h4 {
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.5rem;
+}
+
+.career-planner__list {
+  list-style: disc;
+  padding-left: 1.1rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.career-planner__list li + li {
+  margin-top: 0.3rem;
+}
+
+.career-planner__cta {
+  margin-top: 1.25rem;
+  font-size: 0.8rem;
+}
+
+.career-planner__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.career-planner__progress {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.career-planner__progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ffffff, rgba(255, 255, 255, 0.4));
+  transition: width 0.35s ease;
+}
+
+.career-planner__restart {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0.25rem 0;
+}
+
+.career-planner__restart:hover {
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .career-planner__summary-grid {
     grid-template-columns: 1fr;
   }
 }
