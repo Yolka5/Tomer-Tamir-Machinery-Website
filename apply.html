@@ -7,32 +7,46 @@
   <meta name="description" content="Apply for engineering and manufacturing positions at TTM. Join our team of precision engineers.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Russo+One&display=swap" rel="stylesheet">
-  <link rel="icon" href="TTMLogo.png" type="image/png">
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="icon" href="TTMNewLogo.png" type="image/png">
+  <link rel="stylesheet" href="styles.css?v=8">
   <link rel="stylesheet" href="apply.css">
 </head>
-<body>
-  <!-- Navigation -->
+<body class="subpage">
+  <div class="scroll-progress" id="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar"></div></div>
+  <div class="page-transition" id="page-transition" aria-hidden="true"></div>
   <header class="header" id="header">
-    <nav class="nav container">
-      <a href="index.html" class="nav__logo">
-        <img src="TTMLogo.png" alt="" class="nav__logo-img" width="40" height="40">
-        <span class="nav__logo-text">
-          <span class="logo__ttm">TTM</span>
-          <span class="logo__tagline logo__tagline--russo">Tomer Tamir Machinery</span>
+    <nav class="nav">
+      <a href="index.html" class="nav__logo" aria-label="Tomer Tamir Machinery">
+        <img src="TTMNewLogo.png" alt="" class="nav__logo-img" width="44" height="44">
+        <span class="nav__brand">
+          <span class="nav__wordmark">TTM</span>
+          <span class="nav__tagline">Tomer Tamir Machinery</span>
         </span>
       </a>
       <ul class="nav__menu">
+        <li class="nav__dropdown">
+          <button type="button" class="nav__link nav__dropdown-toggle" aria-expanded="false" aria-haspopup="true">Systems</button>
+          <ul class="nav__dropdown-menu" role="menu">
+            <li><a href="beaver.html" class="nav__dropdown-link" role="menuitem">TTM Beaver</a></li>
+            <li><a href="sigspear.html" class="nav__dropdown-link" role="menuitem">SIG SPEAR</a></li>
+            <li><a href="t90m.html" class="nav__dropdown-link" role="menuitem">T-90M</a></li>
+            <li><a href="cmmg-mk47.html" class="nav__dropdown-link" role="menuitem">CMMG MK47</a></li>
+            <li><a href="mp7.html" class="nav__dropdown-link" role="menuitem">MP7</a></li>
+            <li class="nav__dropdown-divider" aria-hidden="true"></li>
+            <li><a href="index.html#products" class="nav__dropdown-link" role="menuitem">View all</a></li>
+          </ul>
+        </li>
+        <li><a href="forge.html" class="nav__link">Forge OS</a></li>
+        <li><a href="index.html#workshop" class="nav__link">Workshop</a></li>
         <li><a href="index.html#about" class="nav__link">About</a></li>
-        <li><a href="index.html#projects" class="nav__link">Projects</a></li>
         <li><a href="index.html#careers" class="nav__link">Careers</a></li>
-        <li><a href="index.html#contact" class="nav__link">Contact</a></li>
       </ul>
+      <div class="nav__actions">
+        <a href="index.html#contact" class="nav__link nav__link--cta">Contact</a>
+      </div>
       <button class="nav__toggle" id="nav-toggle" aria-label="Toggle menu">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </button>
     </nav>
   </header>
@@ -52,7 +66,13 @@
     <!-- Application Form -->
     <section class="section apply-form-section">
       <div class="container">
-        <form class="apply-form" id="application-form" action="mailto:tomertamirmachinery@gmail.com" method="post" enctype="text/plain">
+        <div class="apply-steps animate-in">
+          <div class="apply-steps__item"><strong>1. Fill out the form</strong><span>All required fields marked with *</span></div>
+          <div class="apply-steps__item"><strong>2. Add your resume</strong><span>PDF or DOC, max 5MB</span></div>
+          <div class="apply-steps__item"><strong>3. Submit</strong><span>Sent to tomertamirmachinery@gmail.com</span></div>
+        </div>
+        <div id="form-error" class="form-error" hidden role="alert"></div>
+        <form class="apply-form" id="application-form" novalidate>
           
           <!-- Personal Information -->
           <div class="form-section animate-in">
@@ -91,7 +111,6 @@
               <select id="position" name="position" class="form-select" required>
                 <option value="">Select a position</option>
                 <option value="mechanical-engineer">Mechanical Engineer</option>
-                <option value="cad-specialist">CAD Specialist</option>
                 <option value="cad-designer">CAD Designer</option>
                 <option value="manufacturing-engineer">Manufacturing Engineer</option>
                 <option value="cnc-machinist">CNC Machinist</option>
@@ -257,6 +276,10 @@
               <label for="projects-interest" class="form-label">Which TTM projects interest you most?</label>
               <div class="checkbox-group">
                 <label class="checkbox-label">
+                  <input type="checkbox" name="projects-interest" value="beaver">
+                  <span>TTM Beaver</span>
+                </label>
+                <label class="checkbox-label">
                   <input type="checkbox" name="projects-interest" value="sig-spear">
                   <span>SIG SPEAR</span>
                 </label>
@@ -265,8 +288,12 @@
                   <span>T-90M</span>
                 </label>
                 <label class="checkbox-label">
-                  <input type="checkbox" name="projects-interest" value="future-projects">
-                  <span>Future Projects</span>
+                  <input type="checkbox" name="projects-interest" value="cmmg-mk47">
+                  <span>CMMG MK47</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" name="projects-interest" value="mp7">
+                  <span>MP7</span>
                 </label>
               </div>
             </div>
@@ -320,6 +347,7 @@
         <h2 class="form-success__title">Application Submitted</h2>
         <p class="form-success__text">Thank you for your interest in joining TTM. We'll review your application and get back to you soon.</p>
         <a href="index.html#careers" class="btn btn--outline">Return to Careers</a>
+        <button type="button" class="btn btn--outline form-success__close" id="form-success-close">Fill another application</button>
       </div>
     </div>
   </main>
@@ -328,16 +356,13 @@
   <footer class="footer">
     <div class="container">
       <div class="footer__top">
-        <a href="index.html" class="footer__logo nav__logo">
-          <img src="TTMLogo.png" alt="" class="nav__logo-img" width="36" height="36">
-          <span class="nav__logo-text">
-            <span class="logo__ttm">TTM</span>
-            <span class="logo__tagline logo__tagline--russo">Tomer Tamir Machinery</span>
-          </span>
+        <a href="index.html" class="footer__logo">
+          <img src="TTMNewLogo.png" alt="" width="36" height="36">
+          <span class="nav__wordmark">TTM</span>
         </a>
         <ul class="footer__links">
           <li><a href="index.html#about">About</a></li>
-          <li><a href="index.html#projects">Projects</a></li>
+          <li><a href="index.html#products">Systems</a></li>
           <li><a href="index.html#careers">Careers</a></li>
           <li><a href="index.html#contact">Contact</a></li>
         </ul>
@@ -348,7 +373,7 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
-  <script src="apply.js"></script>
+  <script src="script.js?v=8"></script>
+  <script src="apply.js?v=3"></script>
 </body>
 </html>

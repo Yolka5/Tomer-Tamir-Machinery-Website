@@ -1,0 +1,11 @@
+# Dependencies
+BeaverOS/node_modules/
+node_modules/
+
+# Large 3D assets (exceed GitHub 100MB limit)
+*.gltf
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.cursor/

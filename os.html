@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TTM FORGE OS</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Ubuntu:wght@400;500;700&family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <link rel="icon" href="TTMNewLogo.png" type="image/png">
+  <link rel="stylesheet" href="forge.css?v=4">
+</head>
+<body class="system-body">
+  <div class="config-banner" id="config-banner" hidden>
+    Firebase is not configured — paste your project config into <code>firebase-config.js</code> to enable live data.
+  </div>
+
+  <header class="os-topbar">
+    <div class="os-topbar__brand">
+      <img src="TTMNewLogo.png" alt="">
+      <span class="os-topbar__name">FORGE <span>OS</span></span>
+    </div>
+    <div class="os-topbar__meta">
+      <button type="button" class="os-kbd" id="palette-hint" title="Command palette">Ctrl K</button>
+      <span id="os-clock">—</span>
+      <span class="os-user" id="os-user">—</span>
+      <button type="button" class="os-logout" id="os-logout">Log out</button>
+    </div>
+  </header>
+
+  <div class="os-layout">
+    <aside class="os-sidebar">
+      <button type="button" class="os-nav__item is-active" data-section="overview">
+        <span class="os-nav__icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+        <span class="os-nav__label">Overview</span>
+      </button>
+      <button type="button" class="os-nav__item" data-section="inventory">
+        <span class="os-nav__icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/></svg></span>
+        <span class="os-nav__label">Inventory</span>
+      </button>
+      <button type="button" class="os-nav__item" data-section="projects">
+        <span class="os-nav__icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l9 5-9 5-9-5 9-5z"/><path d="M3 12l9 5 9-5"/><path d="M3 17l9 5 9-5"/></svg></span>
+        <span class="os-nav__label">Projects</span>
+      </button>
+      <button type="button" class="os-nav__item" data-section="personal">
+        <span class="os-nav__icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></span>
+        <span class="os-nav__label">My Space</span>
+      </button>
+      <button type="button" class="os-nav__item" data-section="workorders">
+        <span class="os-nav__icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span>
+        <span class="os-nav__label">Work orders</span>
+        <span class="os-nav__soon">Soon</span>
+      </button>
+      <button type="button" class="os-nav__item" data-section="machines">
+        <span class="os-nav__icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></span>
+        <span class="os-nav__label">Machines</span>
+        <span class="os-nav__soon">Soon</span>
+      </button>
+    </aside>
+
+    <main class="os-content">
+      <!-- Overview -->
+      <section class="os-section" id="section-overview">
+        <div class="os-greet">
+          <h1 id="greet-title">Welcome to the floor</h1>
+          <p id="greet-sub">Connecting to FORGE OS…</p>
+        </div>
+
+        <div class="os-kpis">
+          <div class="os-kpi os-kpi--white">
+            <span class="os-kpi__label">Inventory items</span>
+            <span class="os-kpi__value" id="kpi-items">—</span>
+          </div>
+          <div class="os-kpi os-kpi--amber">
+            <span class="os-kpi__label">Low stock alerts</span>
+            <span class="os-kpi__value" id="kpi-low">—</span>
+          </div>
+          <div class="os-kpi os-kpi--blue">
+            <span class="os-kpi__label">Categories</span>
+            <span class="os-kpi__value" id="kpi-cats">—</span>
+          </div>
+          <div class="os-kpi os-kpi--green">
+            <span class="os-kpi__label">Projects</span>
+            <span class="os-kpi__value" id="kpi-projects">—</span>
+          </div>
+        </div>
+
+        <div class="os-grid">
+          <div>
+            <div class="os-panel">
+              <h2>Low stock</h2>
+              <ul class="os-list" id="overview-low-list">
+                <li><span class="dim">Loading…</span></li>
+              </ul>
+            </div>
+            <div class="os-panel">
+              <h2>Recently updated</h2>
+              <ul class="os-list" id="overview-recent-list">
+                <li><span class="dim">Loading…</span></li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <div class="os-panel">
+              <h2>Floor announcements</h2>
+              <form id="announce-form" class="os-announce-form">
+                <input type="text" id="announce-input" maxlength="240" placeholder="Post to the team…" autocomplete="off">
+                <button type="submit" class="os-btn os-btn--primary">Post</button>
+              </form>
+              <ul class="os-list os-list--announce" id="announce-list">
+                <li><span class="dim">Loading…</span></li>
+              </ul>
+            </div>
+            <div class="os-panel">
+              <h2>Activity log</h2>
+              <ul class="os-list" id="activity-list">
+                <li><span class="dim">Loading…</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Inventory -->
+      <section class="os-section" id="section-inventory" hidden>
+        <div class="os-heading">
+          <h1>Inventory</h1>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button type="button" class="os-btn os-btn--ghost" id="btn-export-csv">Export CSV</button>
+            <button type="button" class="os-btn os-btn--ghost" id="btn-manage-cats">Categories</button>
+            <button type="button" class="os-btn os-btn--primary" id="btn-add-item">+ Add item</button>
+          </div>
+        </div>
+
+        <div class="os-legend">
+          <span><span class="os-dot os-dot--ok"></span> In stock</span>
+          <span><span class="os-dot os-dot--low"></span> Low</span>
+          <span><span class="os-dot os-dot--out"></span> Out</span>
+        </div>
+
+        <div class="os-toolbar">
+          <input type="search" class="os-search" id="inv-search" placeholder="Search by name, SKU, or location…">
+        </div>
+        <div class="os-chips" id="inv-chips"></div>
+
+        <div class="os-panel">
+          <table class="os-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>SKU</th>
+                <th>Category</th>
+                <th>Qty</th>
+                <th>Min</th>
+                <th>Location</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="inv-table-body"></tbody>
+          </table>
+          <div class="os-empty" id="inv-empty" hidden>
+            <strong>No items yet</strong>
+            Your stockroom is a blank page — add the first part and start tracking.
+          </div>
+        </div>
+      </section>
+
+      <!-- Projects -->
+      <section class="os-section" id="section-projects" hidden>
+        <div class="os-heading">
+          <h1>Projects</h1>
+          <button type="button" class="os-btn os-btn--primary" id="btn-add-project">+ New project</button>
+        </div>
+        <div class="os-projects" id="projects-grid"></div>
+        <div class="os-empty" id="projects-empty" hidden>
+          <strong>No projects yet</strong>
+          Spin up your first project — Beaver receiver run, workshop reorg, anything the team is building.
+        </div>
+      </section>
+
+      <!-- My Space -->
+      <section class="os-section" id="section-personal" hidden>
+        <div class="os-heading">
+          <h1>My Space</h1>
+          <span class="os-proto" id="personal-count">—</span>
+        </div>
+        <p class="os-subnote">Private to your account — track your own projects and tasks.</p>
+        <form id="personal-form" class="os-announce-form" style="max-width:520px;">
+          <input type="text" id="personal-input" maxlength="140" placeholder="Add a personal project or task…" autocomplete="off">
+          <button type="submit" class="os-btn os-btn--primary">Add</button>
+        </form>
+        <div id="personal-groups"></div>
+        <div class="os-empty" id="personal-empty" hidden>
+          <strong>Nothing here yet</strong>
+          Add your first personal project above. Click a status pill to move it along: To do → Doing → Done.
+        </div>
+      </section>
+
+      <!-- Stubs -->
+      <section class="os-section" id="section-workorders" hidden>
+        <div class="os-heading"><h1>Work orders</h1><span class="os-proto">Module in development</span></div>
+        <div class="os-panel"><div class="os-empty"><strong>Coming soon</strong>Create, assign, and track jobs across the workshop floor.</div></div>
+      </section>
+      <section class="os-section" id="section-machines" hidden>
+        <div class="os-heading"><h1>Machines</h1><span class="os-proto">Module in development</span></div>
+        <div class="os-panel"><div class="os-empty"><strong>Coming soon</strong>Run state, utilization, and maintenance windows per machine.</div></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Item editor modal -->
+  <div class="os-modal" id="item-modal" hidden>
+    <div class="os-modal__card">
+      <h2 class="os-modal__title" id="item-modal-title">Add item</h2>
+      <form id="item-form">
+        <div class="os-field">
+          <label for="item-name">Name *</label>
+          <input type="text" id="item-name" required>
+        </div>
+        <div class="os-field-row">
+          <div class="os-field">
+            <label for="item-sku">SKU</label>
+            <input type="text" id="item-sku" placeholder="e.g. BVR-RCVR">
+          </div>
+          <div class="os-field">
+            <label for="item-category">Category</label>
+            <select id="item-category"></select>
+          </div>
+        </div>
+        <div class="os-field-row">
+          <div class="os-field">
+            <label for="item-qty">Quantity *</label>
+            <input type="number" id="item-qty" min="0" step="any" required>
+          </div>
+          <div class="os-field">
+            <label for="item-unit">Unit</label>
+            <input type="text" id="item-unit" placeholder="pcs, kg, m…">
+          </div>
+        </div>
+        <div class="os-field-row">
+          <div class="os-field">
+            <label for="item-min">Min stock</label>
+            <input type="number" id="item-min" min="0" step="any" placeholder="alert threshold">
+          </div>
+          <div class="os-field">
+            <label for="item-location">Location</label>
+            <input type="text" id="item-location" placeholder="shelf / bay">
+          </div>
+        </div>
+        <div class="os-field">
+          <label for="item-notes">Notes</label>
+          <textarea id="item-notes" rows="2"></textarea>
+        </div>
+        <div class="os-modal__actions">
+          <button type="button" class="os-btn os-btn--ghost" id="item-cancel">Cancel</button>
+          <button type="submit" class="os-btn os-btn--primary" id="item-save">Save item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Category manager modal -->
+  <div class="os-modal" id="cat-modal" hidden>
+    <div class="os-modal__card">
+      <h2 class="os-modal__title">Categories</h2>
+      <div id="cat-list"></div>
+      <form id="cat-form" style="display:flex; gap:0.5rem; margin-top:1rem;">
+        <input type="text" id="cat-new-name" placeholder="New category name" required
+          style="flex:1; padding:0.6rem 0.85rem; font-family:inherit; font-size:0.875rem; color:#fff; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:10px;">
+        <button type="submit" class="os-btn os-btn--primary">Add</button>
+      </form>
+      <div class="os-modal__actions">
+        <button type="button" class="os-btn os-btn--ghost" id="cat-close">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project editor modal -->
+  <div class="os-modal" id="project-modal" hidden>
+    <div class="os-modal__card">
+      <h2 class="os-modal__title" id="project-modal-title">New project</h2>
+      <form id="project-form">
+        <div class="os-field">
+          <label for="project-name">Name *</label>
+          <input type="text" id="project-name" required placeholder="e.g. Beaver receiver batch 2">
+        </div>
+        <div class="os-field-row">
+          <div class="os-field">
+            <label for="project-lead">Lead</label>
+            <input type="text" id="project-lead" placeholder="who owns it">
+          </div>
+          <div class="os-field">
+            <label for="project-status">Status</label>
+            <select id="project-status">
+              <option value="planning">Planning</option>
+              <option value="active">Active</option>
+              <option value="hold">On hold</option>
+              <option value="done">Complete</option>
+            </select>
+          </div>
+        </div>
+        <div class="os-field">
+          <label for="project-progress">Progress — <output id="project-progress-out">0</output>%</label>
+          <input type="range" id="project-progress" min="0" max="100" step="5" value="0">
+        </div>
+        <div class="os-field">
+          <label for="project-desc">Description</label>
+          <textarea id="project-desc" rows="3" placeholder="Scope, notes, next steps…"></textarea>
+        </div>
+        <div class="os-modal__actions">
+          <button type="button" class="os-btn os-btn--danger" id="project-delete" hidden>Delete</button>
+          <button type="button" class="os-btn os-btn--ghost" id="project-cancel">Cancel</button>
+          <button type="submit" class="os-btn os-btn--primary">Save project</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Command palette -->
+  <div class="os-palette" id="palette" hidden>
+    <div class="os-palette__card">
+      <input type="text" id="palette-input" placeholder="Type a command or search inventory…" autocomplete="off">
+      <ul id="palette-results"></ul>
+    </div>
+  </div>
+
+  <div class="os-toast" id="toast"></div>
+
+  <script type="module" src="forge-app.js?v=3"></script>
+</body>
+</html>
