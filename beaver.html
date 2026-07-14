@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TTM Beaver | Tomer Tamir Machinery</title>
-  <meta name="description" content="TTM Beaver — purpose-built 7.62×39 rifle platform in active development for modern conflict. Lead engineer: Yoni Shapiro.">
+  <meta name="description" content="TTM Beaver — purpose-built 7.62×39 rifle platform in active development. Weight-optimized, AK-mag compatible, engineered for modern conflict.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="icon" href="TTMNewLogo.png" type="image/png">
-  <link rel="stylesheet" href="styles.css?v=8">
+  <link rel="stylesheet" href="styles.css?v=10">
 </head>
-<body class="subpage">
+<body class="subpage subpage--beaver">
   <div class="scroll-progress" id="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar"></div></div>
   <div class="page-transition" id="page-transition" aria-hidden="true"></div>
 
@@ -50,59 +50,196 @@
   </header>
 
   <main>
-    <section class="product-hero">
+    <!-- Hero -->
+    <section class="beaver-hero">
+      <div class="beaver-hero__bg" aria-hidden="true"></div>
       <div class="container">
-        <div class="product-hero__grid animate-in">
-          <div class="product-hero__placeholder">
-            <img src="TTMNewLogo.png" alt="" class="product-hero__placeholder-logo">
-            <span class="product-badge product-badge--dev">In development</span>
-            <span class="product-badge product-badge--flagship">Flagship program</span>
+        <div class="beaver-hero__grid animate-in">
+          <div class="beaver-hero__visual">
+            <div class="beaver-hero__placeholder">
+              <img src="TTMNewLogo.png" alt="" class="beaver-hero__logo">
+              <div class="beaver-hero__silhouette" aria-hidden="true"></div>
+            </div>
+            <div class="beaver-hero__visual-badges">
+              <span class="product-badge product-badge--flagship">Flagship program</span>
+              <span class="beaver-hero__live"><span class="beaver-hero__live-dot"></span>Active development</span>
+            </div>
           </div>
-          <div>
-            <span class="section__eyebrow">Small Arms · Flagship</span>
-            <h1 class="section__title">TTM Beaver</h1>
-            <p class="product-hero__tagline">7.62×39 · AK magazine compatible · Purpose-built for modern conflict</p>
-            <p class="product-hero__desc">The TTM Beaver is a tactical evolution designed for the unique demands of the conflict in Ukraine — combining battle-proven architecture with modern ergonomics for high-intensity, mobile warfare.</p>
-            <p class="product-hero__desc"><strong>Program lead:</strong> Yoni Shapiro, Lead Engineer</p>
-            <a href="index.html#products" class="btn btn--outline">← All systems</a>
+          <div class="beaver-hero__copy">
+            <span class="section__eyebrow">Small Arms · Program BVR-001</span>
+            <h1 class="beaver-hero__title">TTM Beaver</h1>
+            <p class="beaver-hero__tagline">7.62×39 · AK magazine compatible · Purpose-built for modern conflict</p>
+            <p class="beaver-hero__desc">A tactical evolution for high-intensity, mobile warfare — battle-proven architecture with modern ergonomics, weight discipline, and supply-chain resilience.</p>
+            <div class="beaver-hero__phase">
+              <span class="beaver-hero__phase-label">Current phase</span>
+              <span class="beaver-hero__phase-value">Gas system &amp; receiver iteration</span>
+            </div>
+            <ul class="beaver-hero__stats">
+              <li><span class="beaver-hero__stat-k">Cartridge</span><span class="beaver-hero__stat-v">7.62×39mm</span></li>
+              <li><span class="beaver-hero__stat-k">Magazines</span><span class="beaver-hero__stat-v">AK pattern</span></li>
+              <li><span class="beaver-hero__stat-k">Manufacturing</span><span class="beaver-hero__stat-v">TTM in-house</span></li>
+              <li><span class="beaver-hero__stat-k">Imagery</span><span class="beaver-hero__stat-v">Pre-release</span></li>
+            </ul>
+            <div class="beaver-hero__actions">
+              <a href="#roadmap" class="btn btn--primary">View roadmap</a>
+              <a href="index.html#products" class="btn btn--outline">← All systems</a>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section section--subtle">
+    <!-- Design pillars -->
+    <section class="section" id="pillars">
       <div class="container">
         <div class="section__header animate-in">
-          <span class="section__eyebrow">Overview</span>
-          <h2 class="section__title">Purpose-built for modern conflict</h2>
+          <span class="section__eyebrow">Design philosophy</span>
+          <h2 class="section__title">Four pillars</h2>
+          <p class="section__lead">Every decision on the Beaver program traces back to one of these constraints — what operators actually need in theater, not what looks good on a spec sheet.</p>
         </div>
+        <div class="beaver-pillars">
+          <article class="beaver-pillar animate-in">
+            <span class="beaver-pillar__num">01</span>
+            <h3 class="beaver-pillar__title">Mass budget</h3>
+            <p class="beaver-pillar__desc">Malicious weight reduction — every gram is functional. Less fatigue on long patrols, faster transitions in contact.</p>
+          </article>
+          <article class="beaver-pillar animate-in">
+            <span class="beaver-pillar__num">02</span>
+            <h3 class="beaver-pillar__title">Mobility</h3>
+            <p class="beaver-pillar__desc">Collapsible stock and a compact envelope for rapid ingress and egress from vehicles, APCs, and tight urban spaces.</p>
+          </article>
+          <article class="beaver-pillar animate-in">
+            <span class="beaver-pillar__num">03</span>
+            <h3 class="beaver-pillar__title">Logistics</h3>
+            <p class="beaver-pillar__desc">7.62×39mm and standard AK magazines — ammunition commonality and supply-chain resilience where it matters.</p>
+          </article>
+          <article class="beaver-pillar animate-in">
+            <span class="beaver-pillar__num">04</span>
+            <h3 class="beaver-pillar__title">Serviceability</h3>
+            <p class="beaver-pillar__desc">Simplified barrel connection and a refined short-stroke gas system — breakdown and cleaning without a full armorer shop.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Overview -->
+    <section class="section section--subtle">
+      <div class="container">
         <div class="product-prose animate-in">
-          <p>The Beaver is not just another rifle. It is a platform engineered specifically for operators who need reliability, mobility, and supply-chain resilience in theater.</p>
-
-          <h3>Engineered for the frontline</h3>
-          <p>The Beaver is deliberately optimized for weight reduction — every gram is functional. By removing unnecessary mass without sacrificing structural integrity, the platform minimizes fatigue during long patrols and rapid engagements.</p>
-
-          <h3>Tactical versatility &amp; mobility</h3>
-          <ul>
-            <li><strong>Fully ambidextrous controls</strong> — seamless strong- and weak-side transitions for urban obstacle work.</li>
-            <li><strong>Collapsible stock system</strong> — shrinks the rifle footprint for rapid ingress and egress from vehicles and APCs.</li>
-            <li><strong>Logistical readiness</strong> — chambered in 7.62×39mm with standard AK magazine compatibility for ammunition commonality in theater.</li>
-          </ul>
-
-          <h3>Performance &amp; maintenance</h3>
-          <p>A refined short-stroke gas system re-engineers the gas port and piston interface for improved cycle consistency and reduced recoil impulse versus traditional platforms.</p>
-          <p>Field serviceability drove the design: a simplified barrel connection system enables rapid breakdown and cleaning — less downtime, more time in operation.</p>
-
+          <span class="section__eyebrow">Overview</span>
+          <h2 class="section__title" style="margin-bottom:1rem">Purpose-built for the frontline</h2>
+          <p>The Beaver is not just another rifle. It is a platform engineered for operators who need reliability, mobility, and logistical sanity under sustained operational tempo.</p>
+          <p>A refined short-stroke gas system re-engineers the gas port and piston interface for improved cycle consistency and reduced recoil impulse versus traditional platforms. Fully ambidextrous controls support seamless strong- and weak-side transitions — critical when maneuvering around urban obstacles and debris.</p>
           <blockquote class="product-quote">
             <p>The TTM Beaver is the intersection of refined engineering and field-tested necessity. Built for those who need a rifle that works as hard as they do.</p>
           </blockquote>
-
-          <a href="apply.html?position=mechanical-engineer&program=beaver" class="btn btn--primary">Apply to the Beaver program</a>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <!-- Roadmap -->
+    <section class="section" id="roadmap">
+      <div class="container">
+        <div class="section__header animate-in">
+          <span class="section__eyebrow">Program status</span>
+          <h2 class="section__title">Development roadmap</h2>
+          <p class="section__lead">Public milestones for the Beaver program. Final specifications and imagery publish at production validation.</p>
+        </div>
+        <ol class="beaver-roadmap">
+          <li class="beaver-roadmap__item beaver-roadmap__item--done animate-in">
+            <span class="beaver-roadmap__marker" aria-hidden="true"></span>
+            <div class="beaver-roadmap__body">
+              <span class="beaver-roadmap__status">Complete</span>
+              <h3>Requirements &amp; architecture</h3>
+              <p>Operator constraints defined — weight targets, cartridge selection, magazine compatibility, and ergonomics baseline locked.</p>
+            </div>
+          </li>
+          <li class="beaver-roadmap__item beaver-roadmap__item--current animate-in">
+            <span class="beaver-roadmap__marker" aria-hidden="true"></span>
+            <div class="beaver-roadmap__body">
+              <span class="beaver-roadmap__status">In progress</span>
+              <h3>Receiver &amp; gas system iteration</h3>
+              <p>Short-stroke gas port tuning, piston interface refinement, and receiver geometry validation on the workshop floor.</p>
+            </div>
+          </li>
+          <li class="beaver-roadmap__item beaver-roadmap__item--next animate-in">
+            <span class="beaver-roadmap__marker" aria-hidden="true"></span>
+            <div class="beaver-roadmap__body">
+              <span class="beaver-roadmap__status">Up next</span>
+              <h3>Ergonomics &amp; controls validation</h3>
+              <p>Ambidextrous control layout, stock mechanism, and operator handling trials across gear configurations.</p>
+            </div>
+          </li>
+          <li class="beaver-roadmap__item beaver-roadmap__item--next animate-in">
+            <span class="beaver-roadmap__marker" aria-hidden="true"></span>
+            <div class="beaver-roadmap__body">
+              <span class="beaver-roadmap__status">Planned</span>
+              <h3>Production validation</h3>
+              <p>Manufacturing tolerances, serialization, and Forge OS traceability integrated into the production line.</p>
+            </div>
+          </li>
+          <li class="beaver-roadmap__item beaver-roadmap__item--next animate-in">
+            <span class="beaver-roadmap__marker" aria-hidden="true"></span>
+            <div class="beaver-roadmap__body">
+              <span class="beaver-roadmap__status">Planned</span>
+              <h3>Field evaluation</h3>
+              <p>Controlled field trials, feedback integration, and public release of imagery and finalized specifications.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Why this platform -->
+    <section class="section section--subtle" id="why">
+      <div class="container">
+        <div class="section__header animate-in">
+          <span class="section__eyebrow">Platform rationale</span>
+          <h2 class="section__title">Why not just run a standard AK?</h2>
+          <p class="section__lead">Theater already has 7.62×39 and AK magazines in the supply chain. The Beaver keeps that logistics advantage — and fixes what legacy platforms compromise.</p>
+        </div>
+        <div class="beaver-compare animate-in">
+          <div class="beaver-compare__head">
+            <span></span>
+            <span>Legacy AK-pattern</span>
+            <span>TTM Beaver</span>
+          </div>
+          <div class="beaver-compare__row">
+            <span class="beaver-compare__label">Weight discipline</span>
+            <span class="beaver-compare__cell beaver-compare__cell--muted">Unoptimized mass</span>
+            <span class="beaver-compare__cell beaver-compare__cell--win">Functional gram budget</span>
+          </div>
+          <div class="beaver-compare__row">
+            <span class="beaver-compare__label">Vehicle / CQB footprint</span>
+            <span class="beaver-compare__cell beaver-compare__cell--muted">Fixed or basic stock</span>
+            <span class="beaver-compare__cell beaver-compare__cell--win">Integrated collapsible stock</span>
+          </div>
+          <div class="beaver-compare__row">
+            <span class="beaver-compare__label">Ambidextrous use</span>
+            <span class="beaver-compare__cell beaver-compare__cell--muted">Right-biased controls</span>
+            <span class="beaver-compare__cell beaver-compare__cell--win">Fully ambidextrous layout</span>
+          </div>
+          <div class="beaver-compare__row">
+            <span class="beaver-compare__label">Gas system consistency</span>
+            <span class="beaver-compare__cell beaver-compare__cell--muted">Traditional long-stroke variance</span>
+            <span class="beaver-compare__cell beaver-compare__cell--win">Refined short-stroke tuning</span>
+          </div>
+          <div class="beaver-compare__row">
+            <span class="beaver-compare__label">Field breakdown</span>
+            <span class="beaver-compare__cell beaver-compare__cell--muted">Armorer-dependent service</span>
+            <span class="beaver-compare__cell beaver-compare__cell--win">Simplified barrel connection</span>
+          </div>
+          <div class="beaver-compare__row">
+            <span class="beaver-compare__label">Ammo &amp; magazines</span>
+            <span class="beaver-compare__cell beaver-compare__cell--tie">7.62×39 · AK mags</span>
+            <span class="beaver-compare__cell beaver-compare__cell--tie">7.62×39 · AK mags</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Specs -->
+    <section class="section" id="specs">
       <div class="container">
         <div class="section__header animate-in">
           <span class="section__eyebrow">Specifications</span>
@@ -120,13 +257,32 @@
               <li>Barrel: Simplified field-service connection</li>
               <li>Status: In active development</li>
               <li>Manufacturing: TTM in-house</li>
+              <li>Traceability: Forge OS program tracking</li>
             </ul>
           </div>
           <div class="specs-block">
             <h3>Program leadership</h3>
-            <p>Yoni Shapiro leads the Beaver program — integrating weight-reduction targets, gas-system refinement, and operator ergonomics into a single development roadmap.</p>
+            <p>Yoni leads the Beaver program — integrating weight-reduction targets, gas-system refinement, and operator ergonomics into a single development roadmap.</p>
             <p>Imagery and final specifications will be published as the program reaches production validation.</p>
-            <a href="apply.html?position=mechanical-engineer&program=beaver" class="btn btn--outline" style="margin-top:1rem">Join the program</a>
+            <p class="beaver-forge-line"><span class="dim">forge programs --active</span><br>BEAVER &nbsp;<span class="warn">DEVELOPMENT</span></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="beaver-cta" id="inquire">
+      <div class="container">
+        <div class="beaver-cta__grid animate-in">
+          <div>
+            <span class="section__eyebrow">Get involved</span>
+            <h2 class="section__title">Program inquiries</h2>
+            <p class="beaver-cta__desc">Partnerships, technical questions, or joining the build team — reach out directly or apply for an engineering role on the Beaver program.</p>
+          </div>
+          <div class="beaver-cta__actions">
+            <a href="apply.html?position=mechanical-engineer&amp;program=beaver" class="btn btn--primary">Apply to the program</a>
+            <a href="index.html#contact" class="btn btn--outline">Contact TTM</a>
+            <a href="mailto:tomertamirmachinery@gmail.com?subject=TTM%20Beaver%20program%20inquiry" class="beaver-cta__email">tomertamirmachinery@gmail.com</a>
           </div>
         </div>
       </div>
@@ -139,6 +295,6 @@
     </div>
   </footer>
 
-  <script src="script.js?v=8"></script>
+  <script src="script.js?v=10"></script>
 </body>
 </html>

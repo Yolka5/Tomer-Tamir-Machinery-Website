@@ -9,3 +9,13 @@ node_modules/
 .DS_Store
 Thumbs.db
 .cursor/
+
+# Original team photos (kept outside repo / web root)
+../TTM-team-photos-private/
+/yoni.JPG
+/micah.png
+/ItamarTold.jpeg
+/tamir.jpeg
+
+# Local API keys (copy from marcus-config.example.js)
+BeaverOS/app/marcus-config.js

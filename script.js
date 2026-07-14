@@ -68,14 +68,25 @@
     });
   });
 
-  const animateEls = document.querySelectorAll('.animate-in');
-  const observer = new IntersectionObserver(function (entries) {
+  const animateObserver = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (entry.isIntersecting) entry.target.classList.add('visible');
     });
-  }, { rootMargin: '0px 0px -60px 0px', threshold: 0.1 });
+  }, { rootMargin: '0px 0px -40px 0px', threshold: 0.05 });
 
-  animateEls.forEach(function (el) { observer.observe(el); });
+  function markVisibleIfInView(el) {
+    var rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
+      el.classList.add('visible');
+    }
+  }
+
+  function observeAnimate(el) {
+    markVisibleIfInView(el);
+    animateObserver.observe(el);
+  }
+
+  document.querySelectorAll('.animate-in').forEach(observeAnimate);
 
   document.querySelectorAll('.systems__grid .system-card.animate-in').forEach(function (el, i) {
     el.style.setProperty('--delay', (i * 0.12) + 's');
@@ -83,6 +94,19 @@
   });
 
   document.querySelectorAll('.team__grid .team__card.animate-in').forEach(function (el, i) {
+    el.style.setProperty('--delay', (i * 0.1) + 's');
+  });
+
+  document.querySelectorAll('.team__photo--private img').forEach(function (img) {
+    img.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    img.setAttribute('oncontextmenu', 'return false');
+  });
+
+  document.querySelectorAll('.beaver-pillars .beaver-pillar.animate-in').forEach(function (el, i) {
+    el.style.setProperty('--delay', (i * 0.08) + 's');
+  });
+
+  document.querySelectorAll('.beaver-roadmap__item.animate-in').forEach(function (el, i) {
     el.style.setProperty('--delay', (i * 0.1) + 's');
   });
 

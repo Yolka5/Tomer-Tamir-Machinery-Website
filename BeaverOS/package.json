@@ -1,0 +1,12 @@
+{
+  "name": "beaver-os",
+  "version": "0.1.0",
+  "description": "BeaverOS — personal dashboard for projects, school, hobbies, calendar, and MarcusAI",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^33.0.0"
+  }
+}
