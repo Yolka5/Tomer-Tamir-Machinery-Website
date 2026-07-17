@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tomer Tamir Machinery | Precision Engineering & Manufacturing</title>
-  <meta name="description" content="TTM engineers and manufactures cutting-edge defense systems in-house. SIG SPEAR, T-90M, CMMG MK47, MP7, and more.">
+  <meta name="description" content="TTM engineers and manufactures cutting-edge defense systems in-house. SIG SPEAR, T-90M, CMMG MK47, MP7, M4A1, AN-94, Ruger Precision, and more.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="icon" href="TTMNewLogo.png" type="image/png">
-  <link rel="stylesheet" href="styles.css?v=8">
+  <link rel="stylesheet" href="styles.css?v=22">
   <link rel="stylesheet" href="forge.css?v=1">
 </head>
 <body>
@@ -33,7 +33,14 @@
             <li><a href="t90m.html" class="nav__dropdown-link" role="menuitem">T-90M</a></li>
             <li><a href="cmmg-mk47.html" class="nav__dropdown-link" role="menuitem">CMMG MK47</a></li>
             <li><a href="mp7.html" class="nav__dropdown-link" role="menuitem">MP7</a></li>
+            <li><a href="m4a1.html" class="nav__dropdown-link" role="menuitem">M4A1</a></li>
+            <li><a href="an94.html" class="nav__dropdown-link" role="menuitem">AN-94</a></li>
+            <li><a href="ruger-precision.html" class="nav__dropdown-link" role="menuitem">Ruger Precision</a></li>
+            <li><a href="library.html" class="nav__dropdown-link" role="menuitem">CAD Library</a></li>
+            <li><a href="custom.html" class="nav__dropdown-link" role="menuitem">Custom Works</a></li>
             <li class="nav__dropdown-divider" aria-hidden="true"></li>
+            <li><a href="mission.html" class="nav__dropdown-link" role="menuitem">Mission fit</a></li>
+            <li><a href="compare.html" class="nav__dropdown-link" role="menuitem">Compare systems</a></li>
             <li><a href="#products" class="nav__dropdown-link" role="menuitem">View all</a></li>
           </ul>
         </li>
@@ -81,74 +88,102 @@
       </div>
     </section>
 
-    <section class="systems" id="products">
-      <div class="container">
-        <div class="section__header animate-in">
+    <section class="arsenal" id="products">
+      <div class="container arsenal__intro animate-in">
+        <div class="arsenal__intro-copy">
           <span class="section__eyebrow">Portfolio</span>
           <h2 class="section__title">Our systems</h2>
+          <p class="arsenal__lead">Click a platform for the full brief — or start from the mission and work back.</p>
+        </div>
+        <div class="arsenal__actions">
+          <a href="mission.html" class="btn btn--primary arsenal__compare">Mission fit</a>
+          <a href="compare.html" class="btn btn--outline arsenal__compare">Compare systems</a>
         </div>
       </div>
-      <div class="systems__grid">
-        <a href="beaver.html" class="system-card system-card--dev system-card--flagship animate-in">
-          <span class="system-card__arrow" aria-hidden="true">→</span>
-          <div class="system-card__placeholder">
-            <img src="TTMNewLogo.png" alt="">
-            <div class="system-card__badges">
-              <span class="product-badge product-badge--flagship">Flagship</span>
-              <span class="product-badge product-badge--dev">In development</span>
-            </div>
+
+      <div class="arsenal__mosaic">
+        <a href="beaver.html" class="arsenal-tile arsenal-tile--beaver animate-in">
+          <div class="arsenal-tile__media arsenal-tile__media--dev">
+            <img src="TTMNewLogo.png" alt="" class="arsenal-tile__logo">
           </div>
-          <div class="system-card__overlay"></div>
-          <div class="system-card__content">
-            <span class="system-card__category">Small Arms</span>
-            <h3 class="system-card__name">TTM Beaver</h3>
+          <div class="arsenal-tile__overlay"></div>
+          <div class="arsenal-tile__label">
+            <span class="arsenal-tile__meta">Flagship · In development</span>
+            <h3 class="arsenal-tile__name">TTM Beaver</h3>
           </div>
         </a>
-        <a href="sigspear.html" class="system-card animate-in">
-          <span class="system-card__arrow" aria-hidden="true">→</span>
-          <img src="Sigspear5.png" alt="" class="system-card__img">
-          <div class="system-card__overlay"></div>
-          <div class="system-card__content">
-            <span class="system-card__category">Small Arms</span>
-            <h3 class="system-card__name">SIG SPEAR</h3>
+
+        <a href="sigspear.html" class="arsenal-tile arsenal-tile--spear animate-in">
+          <img src="Sigspear5.png" alt="" class="arsenal-tile__img">
+          <div class="arsenal-tile__overlay"></div>
+          <div class="arsenal-tile__label">
+            <span class="arsenal-tile__meta">Small Arms</span>
+            <h3 class="arsenal-tile__name">SIG SPEAR</h3>
           </div>
         </a>
-        <a href="t90m.html" class="system-card animate-in">
-          <span class="system-card__arrow" aria-hidden="true">→</span>
-          <img src="T90M%20Render.png" alt="" class="system-card__img">
-          <div class="system-card__overlay"></div>
-          <div class="system-card__content">
-            <span class="system-card__category">Armor</span>
-            <h3 class="system-card__name">T-90M</h3>
+
+        <a href="t90m.html" class="arsenal-tile arsenal-tile--t90m animate-in">
+          <img src="T90M%20Render.png" alt="" class="arsenal-tile__img">
+          <div class="arsenal-tile__overlay"></div>
+          <div class="arsenal-tile__label">
+            <span class="arsenal-tile__meta">Armor</span>
+            <h3 class="arsenal-tile__name">T-90M</h3>
           </div>
         </a>
-        <a href="cmmg-mk47.html" class="system-card animate-in">
-          <span class="system-card__arrow" aria-hidden="true">→</span>
-          <img src="TTM%20CMMG%20MK47/Main%20CMMG.png" alt="" class="system-card__img">
-          <div class="system-card__overlay"></div>
-          <div class="system-card__content">
-            <span class="system-card__category">Small Arms</span>
-            <h3 class="system-card__name">CMMG MK47</h3>
+
+        <a href="cmmg-mk47.html" class="arsenal-tile arsenal-tile--mk47 animate-in">
+          <img src="TTM%20CMMG%20MK47/Main%20CMMG.png" alt="" class="arsenal-tile__img">
+          <div class="arsenal-tile__overlay"></div>
+          <div class="arsenal-tile__label">
+            <span class="arsenal-tile__meta">Small Arms</span>
+            <h3 class="arsenal-tile__name">CMMG MK47</h3>
           </div>
         </a>
-        <a href="mp7.html" class="system-card animate-in">
-          <span class="system-card__arrow" aria-hidden="true">→</span>
-          <img src="TTM%20MP7/MP7%20Side1%20.png" alt="" class="system-card__img">
-          <div class="system-card__overlay"></div>
-          <div class="system-card__content">
-            <span class="system-card__category">Small Arms</span>
-            <h3 class="system-card__name">MP7</h3>
+
+        <a href="m4a1.html" class="arsenal-tile arsenal-tile--m4a1 animate-in">
+          <img src="M4A1.png" alt="" class="arsenal-tile__img">
+          <div class="arsenal-tile__overlay"></div>
+          <div class="arsenal-tile__label">
+            <span class="arsenal-tile__meta">Small Arms</span>
+            <h3 class="arsenal-tile__name">M4A1</h3>
+          </div>
+        </a>
+
+        <a href="mp7.html" class="arsenal-tile arsenal-tile--mp7 animate-in">
+          <img src="TTM%20MP7/MP7%20Side1%20.png" alt="" class="arsenal-tile__img">
+          <div class="arsenal-tile__overlay"></div>
+          <div class="arsenal-tile__label">
+            <span class="arsenal-tile__meta">Small Arms</span>
+            <h3 class="arsenal-tile__name">MP7</h3>
+          </div>
+        </a>
+
+        <a href="an94.html" class="arsenal-tile arsenal-tile--an94 animate-in">
+          <img src="AN94.png" alt="" class="arsenal-tile__img">
+          <div class="arsenal-tile__overlay"></div>
+          <div class="arsenal-tile__label">
+            <span class="arsenal-tile__meta">Small Arms</span>
+            <h3 class="arsenal-tile__name">AN-94</h3>
+          </div>
+        </a>
+
+        <a href="ruger-precision.html" class="arsenal-tile arsenal-tile--ruger animate-in">
+          <img src="Ruger%20Precison%20.png" alt="" class="arsenal-tile__img">
+          <div class="arsenal-tile__overlay"></div>
+          <div class="arsenal-tile__label">
+            <span class="arsenal-tile__meta">Small Arms</span>
+            <h3 class="arsenal-tile__name">Ruger Precision</h3>
           </div>
         </a>
       </div>
     </section>
 
-    <section class="mission-strip">
+    <section class="mission-strip" id="merch">
       <div class="container">
-        <blockquote class="mission-strip__quote animate-in">
-          <p>We don't outsource the hard parts. We engineer them, we build them, and we stand behind them.</p>
-          <cite>— Tomer Tamir Machinery</cite>
-        </blockquote>
+        <div class="merch-strip animate-in">
+          <span class="merch-strip__eyebrow">TTM store</span>
+          <p class="merch-strip__title">Merch: Coming soon</p>
+        </div>
       </div>
     </section>
 
@@ -161,7 +196,7 @@
             <p class="about__lead">Tomer Tamir Machinery specializes in precision manufacturing and mechanical design. Our headquarters houses a full workshop floor where we engineer, prototype, and manufacture cutting-edge systems under one roof.</p>
             <ul class="about__stats">
               <li><span class="about__stat-num" data-target="100">0</span><span class="about__stat-label">% In-House</span></li>
-              <li><span class="about__stat-num" data-target="5">0</span><span class="about__stat-label">Core Systems</span></li>
+              <li><span class="about__stat-num" data-target="8">0</span><span class="about__stat-label">Core Systems</span></li>
               <li><span class="about__stat-num" data-target="1">0</span><span class="about__stat-label">HQ & Workshop</span></li>
             </ul>
           </div>
@@ -182,7 +217,7 @@
           <div class="workshop__item animate-in"><img src="T90M Tracks.png" alt="T-90M tracks"></div>
           <div class="workshop__item animate-in"><img src="T90M Engine Pistons.png" alt="Engine pistons"></div>
           <div class="workshop__item animate-in"><img src="TTM%20CMMG%20MK47/CMMG%20With%20Internals.png" alt="CMMG internals"></div>
-          <div class="workshop__item animate-in"><img src="TTM%20MP7/MP7%20Side2.png" alt="MP7"></div>
+          <div class="workshop__item animate-in"><img src="M4A1%20Internals.png" alt="M4A1 internals"></div>
         </div>
       </div>
     </section>
@@ -218,8 +253,63 @@
             <div><span class="ok">●</span> CNC-02 &nbsp;RUNNING &nbsp;<span class="dim">SPR-BRL-0117</span></div>
             <div><span class="warn">●</span> MILL-01 MAINT &nbsp;&nbsp;&nbsp;<span class="dim">due 07/04</span></div>
             <div><span class="dim">$</span> forge programs --active</div>
-            <div>BEAVER &nbsp;&nbsp;<span class="warn">DEVELOPMENT</span> &nbsp;<span class="dim">lead: y.shapiro</span></div>
+            <div>BEAVER &nbsp;&nbsp;<span class="warn">DEVELOPMENT</span> &nbsp;<span class="dim">lead: yoni</span></div>
             <div>T-90M &nbsp;&nbsp;&nbsp;<span class="ok">DEPLOYED</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">field: UKR</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="lib-strip" id="library">
+      <div class="container">
+        <div class="lib-strip__grid">
+          <div class="animate-in">
+            <span class="section__eyebrow">Engineering archive · Access by request</span>
+            <h2 class="section__title lib-strip__title">CAD Reference Library</h2>
+            <p class="lib-strip__desc">A complete, high-detail CAD archive of 30+ firearm platforms — every entry modeled part-by-part, from receiver architecture and bolt carrier groups down to pins, springs, and fire-control components. Each platform is documented as a finished exterior study paired with a full internal cutaway, and the entire collection is maintained as a single controlled archive, revised as new studies are completed.</p>
+            <ul class="lib-strip__stats" aria-label="Library at a glance">
+              <li><span class="lib-strip__stat-num">30+</span><span class="lib-strip__stat-label">Platforms in full CAD</span></li>
+              <li><span class="lib-strip__stat-num">2×</span><span class="lib-strip__stat-label">Exterior + cutaway per entry</span></li>
+              <li><span class="lib-strip__stat-num">4</span><span class="lib-strip__stat-label">Classes — sidearms to MGs</span></li>
+            </ul>
+            <div class="hero__actions">
+              <a href="library.html" class="btn btn--primary">View the library</a>
+              <a href="library.html#request" class="btn btn--outline">Request access</a>
+            </div>
+          </div>
+          <div class="lib-strip__preview animate-in" aria-hidden="true">
+            <img src="library/hk416.png" alt="" loading="lazy">
+            <img src="library/p90.png" alt="" loading="lazy">
+            <img src="library/fn2000.png" alt="" loading="lazy">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="custom-strip" id="custom">
+      <div class="container">
+        <div class="custom-strip__grid">
+          <div class="animate-in">
+            <span class="section__eyebrow">Special commissions · By vetting only</span>
+            <h2 class="section__title">TTM Custom Works</h2>
+            <p class="custom-strip__desc">One-off rifles and sidearms, engineered and built to a single client's specification. This is not a product line — it is a commissioning program. Every build starts with a clearance review, and every specification is negotiated directly with our engineers.</p>
+            <ul class="custom-strip__points">
+              <li>Custom rifles and handguns, designed from the receiver up</li>
+              <li>Client-specified caliber, architecture, furniture, and finish</li>
+              <li>Not commercially available — eligibility reviewed per request</li>
+            </ul>
+            <div class="hero__actions">
+              <a href="custom.html" class="btn btn--invert">Explore Custom Works</a>
+              <a href="custom.html#inquiry" class="btn btn--invert-ghost">Submit an inquiry</a>
+            </div>
+          </div>
+          <div class="custom-strip__panel animate-in" aria-hidden="true">
+            <div class="custom-strip__panel-head">Commission docket — CW-0031</div>
+            <div><span class="dim">CLIENT</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="redacted">████████████</span></div>
+            <div><span class="dim">PLATFORM</span>&nbsp;&nbsp;&nbsp;Precision rifle · 6.5 CM</div>
+            <div><span class="dim">RECEIVER</span>&nbsp;&nbsp;&nbsp;Billet 7075-T6 · in-house</div>
+            <div><span class="dim">STATUS</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="warn">BUILD — STAGE 3 / 5</span></div>
+            <div><span class="dim">CLEARANCE</span>&nbsp;&nbsp;<span class="ok">APPROVED · TIER II</span></div>
           </div>
         </div>
       </div>
@@ -365,7 +455,15 @@
           </div>
           <div class="faq__item">
             <dt><button type="button" class="faq__trigger" aria-expanded="false">What systems does TTM build?</button></dt>
-            <dd class="faq__answer">TTM Beaver, SIG SPEAR, T-90M, CMMG MK47, and MP7 — all engineered and manufactured at TTM.</dd>
+            <dd class="faq__answer">TTM Beaver, SIG SPEAR, T-90M, CMMG MK47, MP7, M4A1, AN-94, and Ruger Precision — all engineered and manufactured at TTM.</dd>
+          </div>
+          <div class="faq__item">
+            <dt><button type="button" class="faq__trigger" aria-expanded="false">Can I order a custom rifle or handgun?</button></dt>
+            <dd class="faq__answer">Not off the shelf. Custom builds go through <a href="custom.html">Custom Works</a> — a restricted commissioning program. Inquiries are vetted individually; most are declined.</dd>
+          </div>
+          <div class="faq__item">
+            <dt><button type="button" class="faq__trigger" aria-expanded="false">How do I access the CAD Library?</button></dt>
+            <dd class="faq__answer">Preview entries are public on the <a href="library.html">library page</a>. The full archive is issued by request as a controlled document — submit an access request and we review each one.</dd>
           </div>
           <div class="faq__item">
             <dt><button type="button" class="faq__trigger" aria-expanded="false">How do I apply?</button></dt>
@@ -419,6 +517,13 @@
             <a href="t90m.html">T-90M</a>
             <a href="cmmg-mk47.html">CMMG MK47</a>
             <a href="mp7.html">MP7</a>
+            <a href="m4a1.html">M4A1</a>
+            <a href="an94.html">AN-94</a>
+            <a href="ruger-precision.html">Ruger Precision</a>
+            <a href="library.html">CAD Library</a>
+            <a href="custom.html">Custom Works</a>
+            <a href="mission.html">Mission fit</a>
+            <a href="compare.html">Compare systems</a>
           </div>
           <div class="footer__col">
             <h4>Company</h4>
@@ -444,6 +549,6 @@
     <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/></svg>
   </a>
 
-  <script src="script.js?v=8"></script>
+  <script src="script.js?v=18"></script>
 </body>
 </html>

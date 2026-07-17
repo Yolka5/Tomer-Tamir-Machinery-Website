@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="icon" href="TTMNewLogo.png" type="image/png">
-  <link rel="stylesheet" href="styles.css?v=8">
+  <link rel="stylesheet" href="styles.css?v=18">
 </head>
 <body class="subpage">
   <div class="scroll-progress" id="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar"></div></div>
@@ -32,7 +32,14 @@
             <li><a href="t90m.html" class="nav__dropdown-link" role="menuitem">T-90M</a></li>
             <li><a href="cmmg-mk47.html" class="nav__dropdown-link" role="menuitem">CMMG MK47</a></li>
             <li><a href="mp7.html" class="nav__dropdown-link" role="menuitem">MP7</a></li>
+            <li><a href="m4a1.html" class="nav__dropdown-link" role="menuitem">M4A1</a></li>
+            <li><a href="an94.html" class="nav__dropdown-link" role="menuitem">AN-94</a></li>
+            <li><a href="ruger-precision.html" class="nav__dropdown-link" role="menuitem">Ruger Precision</a></li>
+            <li><a href="library.html" class="nav__dropdown-link" role="menuitem">CAD Library</a></li>
+            <li><a href="custom.html" class="nav__dropdown-link" role="menuitem">Custom Works</a></li>
             <li class="nav__dropdown-divider" aria-hidden="true"></li>
+            <li><a href="mission.html" class="nav__dropdown-link" role="menuitem">Mission fit</a></li>
+            <li><a href="compare.html" class="nav__dropdown-link" role="menuitem">Compare systems</a></li>
             <li><a href="index.html#products" class="nav__dropdown-link" role="menuitem">View all</a></li>
           </ul>
         </li>
@@ -65,6 +72,26 @@
       </div>
     </section>
 
+    <section class="section" id="explore-3d">
+      <div class="container">
+        <div class="section__header animate-in">
+          <span class="section__eyebrow">Interactive</span>
+          <h2 class="section__title">Explore the turret in 3D</h2>
+          <p class="section__lead">Full turret assembly, straight from our CAD. Loads only when you ask for it — about 8 MB.</p>
+        </div>
+        <div class="viewer3d-wrap animate-in">
+          <span class="viewer3d-wip">Work in progress</span>
+          <div class="viewer3d" data-model="models/t90m-turret.glb" data-name="T-90M turret">
+            <img src="T90M%20Render.png" alt="T-90M render" class="viewer3d__poster">
+            <div class="viewer3d__overlay">
+              <button type="button" class="btn btn--primary viewer3d__load">Load 3D model · 8 MB</button>
+              <span class="viewer3d__hint">Drag to rotate · Scroll to zoom</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section section--subtle">
       <div class="container">
         <div class="section__header animate-in">
@@ -91,16 +118,17 @@
           <div class="specs-block">
             <h3>Technical specifications</h3>
             <ul class="specs-list">
-              <li>Weight: 48 tons</li>
-              <li>Main armament: 125 mm smoothbore cannon</li>
-              <li>Secondary: 7.62 mm coaxial MG, 12.7 mm AA MG</li>
-              <li>Engine: V-92S2F diesel, 1,130 HP</li>
-              <li>Transmission: 7-speed automatic</li>
-              <li>Top speed: 60 km/h (road), 45 km/h (cross-country)</li>
-              <li>Range: 550 km</li>
-              <li>Armor: Composite + Relikt ERA</li>
-              <li>Crew: 3 (commander, gunner, driver)</li>
-              <li>Fire control: Integrated thermal, laser rangefinder</li>
+              <li>Combat weight: ~46–48 tons</li>
+              <li>Main armament: 125 mm 2A46M-5 smoothbore</li>
+              <li>Secondary: 7.62 mm PKTM coax · 12.7 mm Kord AA MG</li>
+              <li>Ammunition: APFSDS, HE-FRAG, HEAT · ATGM capability</li>
+              <li>Engine: V-92S2F diesel, 1,130 hp</li>
+              <li>Transmission: Automatic (upgraded T-90M drivetrain)</li>
+              <li>Top speed: ~60 km/h road · ~45 km/h cross-country</li>
+              <li>Operational range: ~550 km</li>
+              <li>Protection: Composite armor + Relikt ERA · soft-kill APS suite</li>
+              <li>Crew: 3 (commander, gunner, driver) · autoloader</li>
+              <li>Fire control: Thermal sights, laser rangefinder, ballistic computer</li>
               <li>Status: Deployed in Ukraine</li>
             </ul>
           </div>
@@ -122,6 +150,6 @@
     </div>
   </footer>
 
-  <script src="script.js?v=8"></script>
+  <script src="script.js?v=16"></script>
 </body>
 </html>
