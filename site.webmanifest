@@ -1,0 +1,23 @@
+{
+  "name": "Tomer Tamir Machinery",
+  "short_name": "TTM",
+  "description": "Precision engineering and manufacturing — built in-house.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8f8f9",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "TTMNewLogo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
