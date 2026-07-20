@@ -16,12 +16,12 @@
   <link rel="canonical" href="https://tomertamirmachinery.netlify.app/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Russo+One&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="icon" href="TTMNewLogo.png" type="image/png" sizes="any">
   <link rel="apple-touch-icon" href="TTMNewLogo.png">
   <link rel="manifest" href="site.webmanifest">
-  <link rel="stylesheet" href="styles.css?v=22">
-  <link rel="stylesheet" href="forge.css?v=1">
+  <link rel="stylesheet" href="styles.css?v=28">
+  <link rel="stylesheet" href="forge.css?v=2">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -90,32 +90,110 @@
   </header>
 
   <main>
-    <section class="hero" id="hero">
-      <div class="hero__media">
-        <div class="hero__slides">
-          <img src="T90M%20Render.png" alt="" class="hero__slide hero__slide--active">
-          <img src="Sigspear5.png" alt="" class="hero__slide">
-          <img src="TTM%20CMMG%20MK47/Main%20CMMG.png" alt="" class="hero__slide">
-          <img src="TTM%20MP7/MP7%20Side1%20.png" alt="" class="hero__slide">
+    <section class="hero-pin" id="hero">
+      <div class="hero-pin__viewport" id="hero-viewport">
+
+        <div class="hero-pin__intro" id="hero-pin-intro">
+          <div class="hero-orbit" id="hero-orbit" aria-label="Featured systems">
+            <div class="hero-orbit__ring" id="hero-orbit-ring">
+              <a href="beaver.html" class="hero-orbit__tile" style="--i:0" data-name="TTM Beaver" data-color="#1a6b52">
+                <img src="TTMNewLogo.png" alt="" class="hero-orbit__img hero-orbit__img--logo">
+              </a>
+              <a href="sigspear.html" class="hero-orbit__tile" style="--i:1" data-name="SIG SPEAR" data-color="#9a6b1a">
+                <img src="Sigspear5.png" alt="" class="hero-orbit__img">
+              </a>
+              <a href="t90m.html" class="hero-orbit__tile" style="--i:2" data-name="T-90M" data-color="#3f6b3f">
+                <img src="T90M%20Render.png" alt="" class="hero-orbit__img">
+              </a>
+              <a href="cmmg-mk47.html" class="hero-orbit__tile" style="--i:3" data-name="CMMG MK47" data-color="#8a3030">
+                <img src="TTM%20CMMG%20MK47/Main%20CMMG.png" alt="" class="hero-orbit__img">
+              </a>
+              <a href="m4a1.html" class="hero-orbit__tile" style="--i:4" data-name="M4A1" data-color="#2f5578">
+                <img src="M4A1.png" alt="" class="hero-orbit__img">
+              </a>
+              <a href="mp7.html" class="hero-orbit__tile" style="--i:5" data-name="MP7" data-color="#6a4e38">
+                <img src="TTM%20MP7/MP7%20Side1%20.png" alt="" class="hero-orbit__img">
+              </a>
+              <a href="an94.html" class="hero-orbit__tile" style="--i:6" data-name="AN-94" data-color="#4d5d72">
+                <img src="AN94.png" alt="" class="hero-orbit__img">
+              </a>
+              <a href="ruger-precision.html" class="hero-orbit__tile" style="--i:7" data-name="Ruger Precision" data-color="#7d5735">
+                <img src="Ruger%20Precison%20.png" alt="" class="hero-orbit__img">
+              </a>
+            </div>
+            <div class="hero-orbit__center">
+              <p class="hero-orbit__eyebrow hero-animate" style="--i:0">Tomer Tamir Machinery</p>
+              <h1 class="hero-orbit__title hero-animate" style="--i:1">
+                <span class="hero-orbit__label">Product:</span>
+                <span class="hero-orbit__name" id="hero-orbit-name" data-default="Systems">Systems</span>
+              </h1>
+              <p class="hero-orbit__subtitle hero-animate" style="--i:2">Hover a platform — eight systems, built in-house.</p>
+              <div class="hero__actions hero-animate" style="--i:3">
+                <a href="#products" class="btn btn--primary">View systems</a>
+                <a href="#contact" class="btn btn--outline">Contact</a>
+              </div>
+            </div>
+          </div>
+          <div class="hero__scroll"><span>Scroll</span><div class="hero__scroll-line"></div></div>
+          <div class="hero__dots" id="hero-dots" aria-label="Hero slideshow">
+            <button type="button" class="hero__dot hero__dot--active" data-slide="0" aria-label="Slide 1"></button>
+            <button type="button" class="hero__dot" data-slide="1" aria-label="Slide 2"></button>
+            <button type="button" class="hero__dot" data-slide="2" aria-label="Slide 3"></button>
+            <button type="button" class="hero__dot" data-slide="3" aria-label="Slide 4"></button>
+          </div>
         </div>
-        <div class="hero__overlay"></div>
-        <div class="hero__spotlight" id="hero-spotlight" aria-hidden="true"></div>
-      </div>
-      <div class="hero__content container">
-        <p class="hero__eyebrow hero-animate" style="--i:0">Tomer Tamir Machinery</p>
-        <h1 class="hero__title hero-animate" style="--i:1">Precision systems. Built in-house.</h1>
-        <p class="hero__subtitle hero-animate" style="--i:2">Integrated design, engineering, and manufacturing — from concept through validation to deployment.</p>
-        <div class="hero__actions hero-animate" style="--i:3">
-          <a href="#products" class="btn btn--primary">View systems</a>
-          <a href="#contact" class="btn btn--outline">Contact</a>
+
+        <div class="hero-card" id="hero-card">
+          <div class="hero-card__layer hero-card__layer-2" id="hero-card-layer-2" aria-hidden="true"></div>
+          <div class="hero-card__layer hero-card__layer-1" id="hero-card-layer-1" aria-hidden="true"></div>
+          <div class="hero-card__frame" id="hero-card-frame">
+            <div class="hero__media">
+              <div class="hero__slides">
+                <img src="T90M%20Render.png" alt="" class="hero__slide hero__slide--active">
+                <img src="Sigspear5.png" alt="" class="hero__slide">
+                <img src="TTM%20CMMG%20MK47/Main%20CMMG.png" alt="" class="hero__slide">
+                <img src="TTM%20MP7/MP7%20Side1%20.png" alt="" class="hero__slide">
+              </div>
+              <div class="hero__overlay"></div>
+              <div class="hero__spotlight" id="hero-spotlight" aria-hidden="true"></div>
+            </div>
+          </div>
+          <div class="hero-card__border" id="hero-card-border" aria-hidden="true">
+            <span class="hero-card__corner hero-card__corner--tl"></span>
+            <span class="hero-card__corner hero-card__corner--tr"></span>
+            <span class="hero-card__corner hero-card__corner--bl"></span>
+            <span class="hero-card__corner hero-card__corner--br"></span>
+          </div>
+          <div class="hero-card__glass" id="hero-card-glass" aria-hidden="true">
+            <span class="hero-card__glass-ticks"></span>
+            <div class="hero-card__traces" id="hero-card-traces"></div>
+            <span class="hero-card__glass-tag hero-card__glass-tag--tl">TTM-0042</span>
+            <span class="hero-card__glass-tag hero-card__glass-tag--br">REV C</span>
+          </div>
         </div>
-      </div>
-      <div class="hero__scroll"><span>Scroll</span><div class="hero__scroll-line"></div></div>
-      <div class="hero__dots" id="hero-dots" aria-label="Hero slideshow">
-        <button type="button" class="hero__dot hero__dot--active" data-slide="0" aria-label="Slide 1"></button>
-        <button type="button" class="hero__dot" data-slide="1" aria-label="Slide 2"></button>
-        <button type="button" class="hero__dot" data-slide="2" aria-label="Slide 3"></button>
-        <button type="button" class="hero__dot" data-slide="3" aria-label="Slide 4"></button>
+
+        <div class="hero-pin__reveal container" id="hero-pin-reveal">
+          <div class="hero-pin__reveal-inner">
+            <div class="reveal-mask reveal-mask--block"><span class="section__eyebrow reveal-mask__el" data-reveal-start="0">In the details</span></div>
+            <h2 class="section__title"><span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.08">Every</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.13">system,</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.18">machined</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.23">by</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.27">our</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.31">own</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.35">hands.</span></span></h2>
+            <div class="reveal-mask reveal-mask--block"><p class="hero-pin__reveal-desc reveal-mask__el" data-reveal-start="0.46">No outsourced castings, no white-labeled parts. From receiver blanks to final assembly, every platform on this page passes through our own workshop floor before it ships.</p></div>
+            <div class="reveal-mask reveal-mask--block"><div class="hero__actions reveal-mask__el" data-reveal-start="0.56">
+              <a href="#products" class="btn btn--outline">See what we build</a>
+            </div></div>
+          </div>
+        </div>
+
+        <div class="hero-pin__reveal hero-pin__reveal--alt container" id="hero-pin-reveal-2">
+          <div class="hero-pin__reveal-inner">
+            <div class="reveal-mask reveal-mask--block"><span class="section__eyebrow reveal-mask__el" data-reveal-start="0">Zero compromise</span></div>
+            <h2 class="section__title"><span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.08">Engineered</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.15">first.</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.22">Manufactured</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.29">to</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.34">match.</span></span></h2>
+            <div class="reveal-mask reveal-mask--block"><p class="hero-pin__reveal-desc reveal-mask__el" data-reveal-start="0.46">Every dimension is modeled, toleranced, and validated in-house before a single chip comes off the mill — so what ships is exactly what was designed.</p></div>
+            <div class="reveal-mask reveal-mask--block"><div class="hero__actions reveal-mask__el" data-reveal-start="0.56">
+              <a href="#process" class="btn btn--outline">See our process</a>
+            </div></div>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -278,14 +356,8 @@
               <a href="login.html" class="btn btn--forge-ghost">Employee login</a>
             </div>
           </div>
-          <div class="forge-strip__panel animate-in" aria-hidden="true">
-            <div><span class="dim">$</span> forge status --floor</div>
-            <div><span class="ok">●</span> CNC-01 &nbsp;RUNNING &nbsp;<span class="dim">BVR-RCVR-0042</span></div>
-            <div><span class="ok">●</span> CNC-02 &nbsp;RUNNING &nbsp;<span class="dim">SPR-BRL-0117</span></div>
-            <div><span class="warn">●</span> MILL-01 MAINT &nbsp;&nbsp;&nbsp;<span class="dim">due 07/04</span></div>
-            <div><span class="dim">$</span> forge programs --active</div>
-            <div>BEAVER &nbsp;&nbsp;<span class="warn">DEVELOPMENT</span> &nbsp;<span class="dim">lead: yoni</span></div>
-            <div>T-90M &nbsp;&nbsp;&nbsp;<span class="ok">DEPLOYED</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">field: UKR</span></div>
+          <div class="forge-strip__panel animate-in" id="forge-terminal" aria-hidden="true">
+            <div class="forge-strip__panel-body" id="forge-terminal-body"></div>
           </div>
         </div>
       </div>
@@ -580,6 +652,6 @@
     <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/></svg>
   </a>
 
-  <script src="script.js?v=18"></script>
+  <script src="script.js?v=24"></script>
 </body>
 </html>

@@ -28,6 +28,105 @@
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  /* ===== Global smooth scroll =====
+     Native mouse-wheel scrolling jumps the page in fixed OS-defined steps,
+     which is what made scroll-linked motion (the hero pin, parallax) feel
+     stepped/clanky no matter how much easing was layered on top of it.
+     This intercepts wheel input, feeds it into a virtual target, and eases
+     the real scroll position toward that target every frame — so every
+     "scroll" event the rest of the page reacts to already arrives smooth.
+     Keyboard, scrollbar-drag, and touch scrolling are left native; touch
+     already has its own momentum and doesn't need this. */
+  var smoothScrollTo = null;
+
+  (function initSmoothScroll() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+
+    var current = window.scrollY;
+    var target = current;
+    var looping = false;
+    var EASE = 0.01;
+
+    function maxScroll() {
+      return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    }
+
+    function clampScroll(y) {
+      return Math.max(0, Math.min(maxScroll(), y));
+    }
+
+    function isInsideScrollable(node) {
+      while (node && node !== document.documentElement) {
+        if (node.nodeType === 1) {
+          if (node.matches && node.matches('model-viewer, .viewer3d, [data-scroll-ignore]')) return true;
+          var style = window.getComputedStyle(node);
+          if ((style.overflowY === 'auto' || style.overflowY === 'scroll') && node.scrollHeight > node.clientHeight + 2) {
+            return true;
+          }
+        }
+        node = node.parentNode;
+      }
+      return false;
+    }
+
+    /* behavior:'instant' is required here — html has scroll-behavior:smooth
+       for anchor-link jumps, which would otherwise make the browser layer
+       its own smoothing on top of every per-frame position we set,
+       fighting our easing and making the motion arrive late/erratic. */
+    function setScroll(y) {
+      window.scrollTo({ top: y, left: 0, behavior: 'instant' });
+    }
+
+    function loop() {
+      current += (target - current) * EASE;
+      if (Math.abs(target - current) < 0.4) {
+        current = target;
+        looping = false;
+      }
+      setScroll(current);
+      if (looping) requestAnimationFrame(loop);
+    }
+
+    function startLoop() {
+      if (!looping) {
+        looping = true;
+        requestAnimationFrame(loop);
+      }
+    }
+
+    window.addEventListener('wheel', function (e) {
+      if (e.ctrlKey || e.defaultPrevented) return;
+      if (isInsideScrollable(e.target)) return;
+
+      if (!looping) current = target = window.scrollY;
+
+      var delta = e.deltaY;
+      if (e.deltaMode === 1) delta *= 18;
+      else if (e.deltaMode === 2) delta *= window.innerHeight;
+
+      target = clampScroll(target + delta);
+      e.preventDefault();
+      startLoop();
+    }, { passive: false });
+
+    window.addEventListener('resize', function () {
+      target = clampScroll(target);
+    }, { passive: true });
+
+    smoothScrollTo = function (y, opts) {
+      var clamped = clampScroll(y);
+      if (opts && opts.instant) {
+        current = target = clamped;
+        setScroll(current);
+        return;
+      }
+      if (!looping) current = window.scrollY;
+      target = clamped;
+      startLoop();
+    };
+  })();
+
   function toggleMenu() {
     if (!navMenu) return;
     navMenu.classList.toggle('open');
@@ -209,20 +308,639 @@
       const target = document.querySelector(href);
       if (target) {
         e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (smoothScrollTo) {
+          smoothScrollTo(target.getBoundingClientRect().top + window.scrollY);
+        } else {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       }
     });
   });
 
-  var heroMedia = document.querySelector('.hero__media');
-  if (heroMedia) {
+  /* ===== Hero cinematic scroll pin =====
+     Scroll acts as a timeline: the slider shrinks into a bordered 3D "3D
+     element" card with ghost depth-layers behind it, tilts with the mouse,
+     then swings side to side as two separate text beats stagger in and
+     hand off past it. This never touches the slide fade/cycle logic below
+     — it only transforms the new wrapper elements around the untouched
+     slider. */
+  (function initHeroPin() {
+    var section = document.getElementById('hero');
+    var viewport = document.getElementById('hero-viewport');
+    var intro = document.getElementById('hero-pin-intro');
+    var card = document.getElementById('hero-card');
+    var frame = document.getElementById('hero-card-frame');
+    var border = document.getElementById('hero-card-border');
+    var layer1 = document.getElementById('hero-card-layer-1');
+    var layer2 = document.getElementById('hero-card-layer-2');
+    var glass = document.getElementById('hero-card-glass');
+    var tracesWrap = document.getElementById('hero-card-traces');
+    var reveal1 = document.getElementById('hero-pin-reveal');
+    var reveal2 = document.getElementById('hero-pin-reveal-2');
+    if (!section || !viewport || !intro || !card || !frame || !border || !reveal1 || !reveal2) return;
+
+    var overlay = card.querySelector('.hero__overlay');
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var mqDesktop = window.matchMedia('(min-width: 861px)');
+
+    /* Timeline (fractions of the pin's scrollable range):
+       0 ───────── shrink+tilt ───────── HOLD1 ── move ── HOLD2 ── move ── HOLD3 ───────── 1
+       shrink into a floating card, a beat to feel the tilt, slide right for
+       text #1, a beat to read it, swing left for text #2, then linger. */
+    var SHRINK_END = 0.14;
+    var HOLD1_END = 0.20;
+    var MOVE1_END = 0.40;
+    var HOLD2_END = 0.48;
+    var MOVE2_END = 0.68;
+
+    /* Text handoff — a posT boundary (0=center, 1=text#1, 2=text#2) where
+       reveal #1 finishes clearing out and reveal #2 starts staggering in.
+       Splitting it here (rather than 50/50) gives #1 a quick, snappy exit
+       and gives #2 the bulk of the room for its own word cascade. */
+    var SPLIT = 1.25;
+    var REVEAL_DURATION = 0.34;
+
+    /* Cushioned "physics" state — the card's rendered scale/position/base
+       rotation each chase their own target with independent decay, instead
+       of being a rigid function of the (already-eased) scroll value. That
+       extra stage of lag is what makes the card feel like it has weight
+       and settles into place rather than snapping to wherever scroll says
+       it should be. */
+    var PHYSICS_EASE = 0.08;
+    var curScale = 1, curMoveX = 0, curLiftY = 0, curBaseRotY = 0;
+
+    var raw = 0;
+    var smooth = 0;
+    var mouseX = 0, mouseY = 0;
+    var mouseSmoothX = 0, mouseSmoothY = 0;
+    var active = false;
+    var ticking = false;
+
+    function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+    function lerp(a, b, t) { return a + (b - a) * t; }
+    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+    function easeInOutCubic(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+
+    function collectMasks(root) {
+      var list = [];
+      root.querySelectorAll('[data-reveal-start]').forEach(function (el) {
+        list.push({ el: el, start: parseFloat(el.getAttribute('data-reveal-start')) || 0 });
+      });
+      return list;
+    }
+
+    var reveal1Masks = collectMasks(reveal1);
+    var reveal2Masks = collectMasks(reveal2);
+
+    /* ===== Schematic traces =====
+       Runs Sobel edge detection over each (untouched) slider image once,
+       producing a transparent canvas with dark graphite contour lines —
+       a "technical drawing" of the render. The canvases live on the front
+       glass sheet and cross-fade in sync with the slide cycle by watching
+       the slides' class changes, so the slider logic itself stays intact. */
+    var tracesBuilt = false;
+
+    function buildTrace(img, index, canvases, onDone) {
+      try {
+        var maxW = 720;
+        var s = Math.min(1, maxW / img.naturalWidth);
+        var w = Math.max(2, Math.round(img.naturalWidth * s));
+        var h = Math.max(2, Math.round(img.naturalHeight * s));
+        var c = document.createElement('canvas');
+        c.width = w;
+        c.height = h;
+        var ctx = c.getContext('2d', { willReadFrequently: true });
+        /* Composite onto white first so transparent-PNG renders don't
+           produce a giant edge at the alpha boundary of every pixel. */
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(img, 0, 0, w, h);
+        var data = ctx.getImageData(0, 0, w, h).data;
+        var gray = new Float32Array(w * h);
+        for (var p = 0, q = 0; p < gray.length; p++, q += 4) {
+          gray[p] = data[q] * 0.299 + data[q + 1] * 0.587 + data[q + 2] * 0.114;
+        }
+        var out = ctx.createImageData(w, h);
+        var od = out.data;
+        for (var y = 1; y < h - 1; y++) {
+          for (var x = 1; x < w - 1; x++) {
+            var i0 = y * w + x;
+            var gx =
+              -gray[i0 - w - 1] - 2 * gray[i0 - 1] - gray[i0 + w - 1] +
+              gray[i0 - w + 1] + 2 * gray[i0 + 1] + gray[i0 + w + 1];
+            var gy =
+              -gray[i0 - w - 1] - 2 * gray[i0 - w] - gray[i0 - w + 1] +
+              gray[i0 + w - 1] + 2 * gray[i0 + w] + gray[i0 + w + 1];
+            var mag = Math.sqrt(gx * gx + gy * gy);
+            var a = (mag - 70) / 180;
+            if (a > 0) {
+              if (a > 1) a = 1;
+              var o = i0 * 4;
+              /* Adaptive linework: light contours over dark image regions,
+                 dark graphite over light ones — so the trace stays legible
+                 on the dark T-90M render and the white product renders
+                 alike. */
+              if (gray[i0] < 110) {
+                od[o] = 235;
+                od[o + 1] = 238;
+                od[o + 2] = 242;
+              } else {
+                od[o] = 28;
+                od[o + 1] = 30;
+                od[o + 2] = 34;
+              }
+              od[o + 3] = Math.round(a * 165);
+            }
+          }
+        }
+        ctx.putImageData(out, 0, 0);
+        c.className = 'hero-card__trace-img';
+        canvases[index] = c;
+        tracesWrap.appendChild(c);
+        onDone();
+      } catch (err) {
+        /* Tainted canvas / decode failure — glass just stays traceless. */
+      }
+    }
+
+    function ensureTraces() {
+      if (tracesBuilt || !glass || !tracesWrap) return;
+      tracesBuilt = true;
+
+      var slides = Array.prototype.slice.call(document.querySelectorAll('.hero__slides .hero__slide'));
+      if (!slides.length) return;
+      var canvases = new Array(slides.length);
+
+      function syncActive() {
+        var idx = 0;
+        for (var i = 0; i < slides.length; i++) {
+          if (slides[i].classList.contains('hero__slide--active')) { idx = i; break; }
+        }
+        for (var j = 0; j < canvases.length; j++) {
+          if (canvases[j]) canvases[j].classList.toggle('is-active', j === idx);
+        }
+      }
+
+      slides.forEach(function (img, i) {
+        function schedule() {
+          /* Stagger the pixel work so four Sobel passes never land in the
+             same frame. */
+          setTimeout(function () { buildTrace(img, i, canvases, syncActive); }, 80 + i * 200);
+        }
+        if (img.complete && img.naturalWidth) schedule();
+        else img.addEventListener('load', schedule, { once: true });
+      });
+
+      var mo = new MutationObserver(syncActive);
+      slides.forEach(function (s) {
+        mo.observe(s, { attributes: true, attributeFilter: ['class'] });
+      });
+    }
+
+    function computeRaw() {
+      var rect = section.getBoundingClientRect();
+      var total = section.offsetHeight - window.innerHeight;
+      if (total <= 0) return 0;
+      return clamp(-rect.top / total, 0, 1);
+    }
+
+    /* Continuous 0→1→2 position driver: 0 = centered, 1 = slid right
+       (text #1), 2 = slid left (text #2). Piecewise-eased between holds. */
+    function computePosT(t) {
+      if (t <= HOLD1_END) return 0;
+      if (t < MOVE1_END) return easeInOutCubic((t - HOLD1_END) / (MOVE1_END - HOLD1_END));
+      if (t <= HOLD2_END) return 1;
+      if (t < MOVE2_END) return 1 + easeInOutCubic((t - HOLD2_END) / (MOVE2_END - HOLD2_END));
+      return 2;
+    }
+
+    /* Gate #1: rises 0→1 as the card arrives at position 1 (posT 0→1),
+       then falls back to 0 quickly once it leaves (posT 1→SPLIT) — fully
+       clear before reveal #2 is allowed to start. */
+    function computeGate1(posT) {
+      if (posT <= 1) return posT;
+      return clamp(1 - (posT - 1) / (SPLIT - 1), 0, 1);
+    }
+
+    /* Gate #2: stays 0 until the card has crossed the split point, then
+       rises 0→1 as it arrives at position 2 (posT SPLIT→2). */
+    function computeGate2(posT) {
+      return clamp((posT - SPLIT) / (2 - SPLIT), 0, 1);
+    }
+
+    function applyMasks(masks, gate) {
+      for (var i = 0; i < masks.length; i++) {
+        var t = easeOutCubic(clamp((gate - masks[i].start) / REVEAL_DURATION, 0, 1));
+        masks[i].el.style.transform = 'translateY(' + ((1 - t) * 100).toFixed(2) + '%)';
+        masks[i].el.style.opacity = t.toFixed(3);
+      }
+    }
+
+    function computeTargets() {
+      var shrinkT = easeOutCubic(clamp(smooth / SHRINK_END, 0, 1));
+      var posT = computePosT(smooth);
+
+      var vw = window.innerWidth, vh = window.innerHeight;
+      var targetW = Math.min(vw * 0.42, 560);
+      var targetH = Math.min(vh * 0.58, 560);
+      var scaleTarget = Math.min(targetW / vw, targetH / vh);
+      var offset = vw * 0.19;
+
+      return {
+        shrinkT: shrinkT,
+        posT: posT,
+        scale: lerp(1, scaleTarget, shrinkT),
+        moveX: posT <= 1 ? lerp(0, offset, posT) : lerp(offset, -offset, posT - 1),
+        liftY: lerp(0, -vh * 0.045, shrinkT),
+        baseRotY: posT <= 1 ? lerp(0, -7, posT) : lerp(-7, 7, posT - 1)
+      };
+    }
+
+    function render(targets) {
+      var shrinkT = targets.shrinkT;
+      var tiltIntensity = shrinkT;
+
+      /* Mouse contribution rides on top of the cushioned base rotation,
+         already smoothed via mouseSmoothX/Y — no extra lag stacked on
+         top, so the tilt still tracks the cursor directly. */
+      var rotY = curBaseRotY + mouseSmoothX * 8 * tiltIntensity;
+      var rotX = clamp(-mouseSmoothY * 5 * tiltIntensity, -8, 8);
+
+      var radius = lerp(0, 28, shrinkT);
+
+      card.style.transform =
+        'translate3d(' + curMoveX.toFixed(2) + 'px,' + curLiftY.toFixed(2) + 'px,0) ' +
+        'rotateX(' + rotX.toFixed(2) + 'deg) rotateY(' + rotY.toFixed(2) + 'deg) ' +
+        'scale(' + curScale.toFixed(4) + ')';
+
+      frame.style.borderRadius = radius.toFixed(1) + 'px';
+      border.style.borderRadius = radius.toFixed(1) + 'px';
+      border.style.opacity = shrinkT.toFixed(3);
+
+      /* Depth is faked with plain 2D offsets driven by the mouse (bigger
+         multiplier = "further back") rather than real translateZ inside a
+         preserve-3d group — nesting real 3D depth-sorted, backdrop-filtered
+         siblings under a rotating card is unreliable across engines (it
+         can flip which layer paints on top past certain tilt angles). This
+         reads the same to the eye and never breaks.
+         Each sheet also drifts diagonally down-left as the card shrinks, so
+         the stack fans out like a spread deck: photo top-right, sheets
+         cascading behind it, schematic glass floating in front between them.
+         (Raw px values are ~3.4x the visual result — children of .hero-card
+         render at ~0.29 scale once shrunk.) */
+      if (layer1) {
+        layer1.style.borderRadius = radius.toFixed(1) + 'px';
+        layer1.style.opacity = (shrinkT * 0.85).toFixed(3);
+        layer1.style.transform =
+          'translate3d(' + (lerp(0, -70, shrinkT) + mouseSmoothX * 26 * tiltIntensity).toFixed(1) + 'px,' +
+          (lerp(0, 50, shrinkT) + mouseSmoothY * 16 * tiltIntensity).toFixed(1) + 'px,0) rotateZ(-1.1deg)';
+      }
+      if (layer2) {
+        layer2.style.borderRadius = radius.toFixed(1) + 'px';
+        layer2.style.opacity = (shrinkT * 0.65).toFixed(3);
+        layer2.style.transform =
+          'translate3d(' + (lerp(0, -150, shrinkT) + mouseSmoothX * 54 * tiltIntensity).toFixed(1) + 'px,' +
+          (lerp(0, 105, shrinkT) + mouseSmoothY * 34 * tiltIntensity).toFixed(1) + 'px,0) rotateZ(1.7deg)';
+      }
+      if (glass) {
+        /* Negative mouse multipliers: the front sheet parallaxes opposite
+           to the back sheets, which is what sells "in front of the photo".
+           Base offsets are pushed further from the photo so the schematic
+           outline reads as a distinct floating layer, not a skin. */
+        var glassX = lerp(0, -155, shrinkT) + mouseSmoothX * -92 * tiltIntensity;
+        var glassY = lerp(0, 118, shrinkT) + mouseSmoothY * -58 * tiltIntensity;
+        glass.style.borderRadius = radius.toFixed(1) + 'px';
+        glass.style.opacity = (shrinkT * 0.95).toFixed(3);
+        glass.style.visibility = shrinkT < 0.02 ? 'hidden' : 'visible';
+        glass.style.transform =
+          'translate3d(' + glassX.toFixed(1) + 'px,' + glassY.toFixed(1) + 'px,0) rotateZ(-0.5deg)';
+      }
+
+      if (overlay) overlay.style.opacity = (1 - shrinkT).toFixed(3);
+
+      var introOpacity = clamp(1 - smooth / (SHRINK_END * 0.72), 0, 1);
+      intro.style.opacity = introOpacity.toFixed(3);
+      intro.style.transform = 'translateY(' + (-(1 - introOpacity) * 34).toFixed(1) + 'px)';
+      intro.style.visibility = introOpacity < 0.02 ? 'hidden' : 'visible';
+      intro.style.pointerEvents = introOpacity < 0.6 ? 'none' : 'auto';
+
+      var gate1 = computeGate1(targets.posT);
+      var gate2 = computeGate2(targets.posT);
+
+      reveal1.style.visibility = gate1 < 0.02 ? 'hidden' : 'visible';
+      reveal1.style.pointerEvents = gate1 > 0.6 ? 'auto' : 'none';
+      applyMasks(reveal1Masks, gate1);
+
+      reveal2.style.visibility = gate2 < 0.02 ? 'hidden' : 'visible';
+      reveal2.style.pointerEvents = gate2 > 0.6 ? 'auto' : 'none';
+      applyMasks(reveal2Masks, gate2);
+    }
+
+    function resetStyles() {
+      [intro, card, frame, border, layer1, layer2, glass, reveal1, reveal2].forEach(function (el) {
+        if (!el) return;
+        el.style.transform = '';
+        el.style.opacity = '';
+        el.style.visibility = '';
+        el.style.pointerEvents = '';
+        el.style.borderRadius = '';
+      });
+      reveal1Masks.concat(reveal2Masks).forEach(function (m) {
+        m.el.style.transform = '';
+        m.el.style.opacity = '';
+      });
+      if (overlay) overlay.style.opacity = '';
+      curScale = 1; curMoveX = 0; curLiftY = 0; curBaseRotY = 0;
+    }
+
+    function frameTick() {
+      ticking = false;
+      if (!active) return;
+
+      raw = computeRaw();
+      smooth = lerp(smooth, raw, 0.16);
+      mouseSmoothX = lerp(mouseSmoothX, mouseX, 0.09);
+      mouseSmoothY = lerp(mouseSmoothY, mouseY, 0.09);
+
+      var targets = computeTargets();
+      curScale += (targets.scale - curScale) * PHYSICS_EASE;
+      curMoveX += (targets.moveX - curMoveX) * PHYSICS_EASE;
+      curLiftY += (targets.liftY - curLiftY) * PHYSICS_EASE;
+      curBaseRotY += (targets.baseRotY - curBaseRotY) * PHYSICS_EASE;
+
+      render(targets);
+
+      var unsettled =
+        Math.abs(raw - smooth) > 0.0005 ||
+        Math.abs(mouseX - mouseSmoothX) > 0.0005 ||
+        Math.abs(mouseY - mouseSmoothY) > 0.0005 ||
+        Math.abs(targets.scale - curScale) > 0.0003 ||
+        Math.abs(targets.moveX - curMoveX) > 0.05 ||
+        Math.abs(targets.liftY - curLiftY) > 0.05 ||
+        Math.abs(targets.baseRotY - curBaseRotY) > 0.01;
+      if (unsettled) requestTick();
+    }
+
+    function requestTick() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(frameTick);
+      }
+    }
+
+    function updateActive() {
+      var shouldBeActive = mqDesktop.matches && !reduceMotion;
+      if (shouldBeActive === active) return;
+      active = shouldBeActive;
+      if (!active) resetStyles();
+      else {
+        ensureTraces();
+        requestTick();
+      }
+    }
+
     window.addEventListener('scroll', function () {
-      var scrolled = window.scrollY;
-      if (scrolled < window.innerHeight) {
-        heroMedia.style.transform = 'translateY(' + (scrolled * 0.22) + 'px)';
+      if (active) requestTick();
+    }, { passive: true });
+
+    window.addEventListener('mousemove', function (e) {
+      if (!active) return;
+      mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+      requestTick();
+    }, { passive: true });
+
+    window.addEventListener('resize', function () {
+      updateActive();
+      if (active) requestTick();
+    }, { passive: true });
+
+    if (mqDesktop.addEventListener) mqDesktop.addEventListener('change', updateActive);
+
+    updateActive();
+  })();
+
+  /* ===== Hero product orbit =====
+     Eight featured systems sit on an ellipse around the center label.
+     Hovering a tile swaps "Product: X" with that system's name + color,
+     with the same ease-out / spring language used elsewhere on the site. */
+  (function initHeroOrbit() {
+    var orbit = document.getElementById('hero-orbit');
+    var ring = document.getElementById('hero-orbit-ring');
+    var nameEl = document.getElementById('hero-orbit-name');
+    if (!orbit || !ring || !nameEl) return;
+
+    var tiles = Array.prototype.slice.call(ring.querySelectorAll('.hero-orbit__tile'));
+    if (!tiles.length) return;
+
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var mqDesktop = window.matchMedia('(min-width: 861px)');
+    var defaultName = nameEl.getAttribute('data-default') || 'Systems';
+    var defaultColor = '';
+    var currentName = defaultName;
+    var swapTimer = null;
+    var raf = 0;
+    var t0 = performance.now();
+    var mouseX = 0;
+    var mouseY = 0;
+    var smoothX = 0;
+    var smoothY = 0;
+
+    function setProduct(name, color) {
+      if (name === currentName) return;
+      currentName = name;
+      clearTimeout(swapTimer);
+      nameEl.classList.add('is-swap');
+      swapTimer = setTimeout(function () {
+        nameEl.textContent = name;
+        if (color) {
+          nameEl.style.color = color;
+          orbit.style.setProperty('--orbit-color', color);
+        } else {
+          nameEl.style.color = '';
+          orbit.style.removeProperty('--orbit-color');
+        }
+        nameEl.classList.remove('is-swap');
+      }, 160);
+    }
+
+    function layout() {
+      if (!mqDesktop.matches) {
+        tiles.forEach(function (tile) {
+          tile.style.transform = '';
+          tile.style.width = '';
+        });
+        return;
+      }
+
+      var vw = window.innerWidth;
+      var vh = window.innerHeight;
+      var radiusX = Math.min(vw * 0.34, 460);
+      var radiusY = Math.min(vh * 0.30, 270);
+      var n = tiles.length;
+
+      tiles.forEach(function (tile, i) {
+        var angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+        var sizeBoost = (i % 3 === 0) ? 1.08 : (i % 2 === 0 ? 0.94 : 1);
+        tile.dataset.angle = String(angle);
+        tile.dataset.rx = String(radiusX);
+        tile.dataset.ry = String(radiusY);
+        tile.dataset.boost = String(sizeBoost);
+        tile.style.width = 'clamp(' + Math.round(68 * sizeBoost) + 'px, ' + (9.2 * sizeBoost).toFixed(2) + 'vw, ' + Math.round(128 * sizeBoost) + 'px)';
+
+        if (reduceMotion) {
+          var x = Math.cos(angle) * radiusX;
+          var y = Math.sin(angle) * radiusY;
+          tile.style.transform =
+            'translate(calc(-50% + ' + x.toFixed(1) + 'px), calc(-50% + ' + y.toFixed(1) + 'px)) scale(' + sizeBoost.toFixed(3) + ')';
+        }
+      });
+    }
+
+    function tick(now) {
+      raf = 0;
+      if (!mqDesktop.matches || reduceMotion) return;
+
+      smoothX += (mouseX - smoothX) * 0.08;
+      smoothY += (mouseY - smoothY) * 0.08;
+      var elapsed = (now - t0) / 1000;
+
+      tiles.forEach(function (tile, i) {
+        var angle = parseFloat(tile.dataset.angle) || 0;
+        var rx = parseFloat(tile.dataset.rx) || 0;
+        var ry = parseFloat(tile.dataset.ry) || 0;
+        var boost = parseFloat(tile.dataset.boost) || 1;
+        var floatY = Math.sin(elapsed * 1.15 + i * 0.85) * 7;
+        var floatX = Math.cos(elapsed * 0.9 + i * 0.7) * 4;
+        var paraX = smoothX * (18 + (i % 4) * 4);
+        var paraY = smoothY * (12 + (i % 3) * 3);
+        var x = Math.cos(angle) * rx + floatX + paraX;
+        var y = Math.sin(angle) * ry + floatY + paraY;
+        var hot = tile.classList.contains('is-hot');
+        var scale = hot ? 1.12 * boost : boost;
+        tile.style.transform =
+          'translate(calc(-50% + ' + x.toFixed(1) + 'px), calc(-50% + ' + y.toFixed(1) + 'px)) scale(' + scale.toFixed(3) + ')';
+      });
+
+      raf = requestAnimationFrame(tick);
+    }
+
+    function startMotion() {
+      if (reduceMotion || !mqDesktop.matches) return;
+      if (!raf) raf = requestAnimationFrame(tick);
+    }
+
+    function stopMotion() {
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+    }
+
+    tiles.forEach(function (tile) {
+      var color = tile.getAttribute('data-color') || '#0a0a0a';
+      tile.style.setProperty('--orbit-color', color);
+
+      tile.addEventListener('mouseenter', function () {
+        tiles.forEach(function (t) { t.classList.toggle('is-hot', t === tile); });
+        setProduct(tile.getAttribute('data-name') || defaultName, color);
+      });
+
+      tile.addEventListener('focus', function () {
+        tiles.forEach(function (t) { t.classList.toggle('is-hot', t === tile); });
+        setProduct(tile.getAttribute('data-name') || defaultName, color);
+      });
+
+      tile.addEventListener('mouseleave', function () {
+        tile.classList.remove('is-hot');
+        if (!ring.querySelector('.hero-orbit__tile.is-hot')) {
+          setProduct(defaultName, defaultColor);
+        }
+      });
+
+      tile.addEventListener('blur', function () {
+        tile.classList.remove('is-hot');
+        if (!ring.querySelector('.hero-orbit__tile.is-hot')) {
+          setProduct(defaultName, defaultColor);
+        }
+      });
+    });
+
+    ring.addEventListener('mouseleave', function () {
+      tiles.forEach(function (t) { t.classList.remove('is-hot'); });
+      setProduct(defaultName, defaultColor);
+    });
+
+    window.addEventListener('mousemove', function (e) {
+      if (!mqDesktop.matches) return;
+      mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+    }, { passive: true });
+
+    window.addEventListener('resize', function () {
+      layout();
+      if (mqDesktop.matches && !reduceMotion) startMotion();
+      else {
+        stopMotion();
+        tiles.forEach(function (tile) {
+          tile.style.transform = '';
+          tile.style.width = '';
+        });
       }
     }, { passive: true });
-  }
+
+    if (mqDesktop.addEventListener) {
+      mqDesktop.addEventListener('change', function () {
+        layout();
+        if (mqDesktop.matches && !reduceMotion) startMotion();
+        else stopMotion();
+      });
+    }
+
+    layout();
+    startMotion();
+  })();
+
+  /* ===== About section parallax alignment =====
+     The image drifts slightly faster than the text, so it visually
+     "catches up" and lines up with the text block exactly as the
+     section crosses the vertical center of the screen. */
+  (function initAboutParallax() {
+    var grid = document.querySelector('.about__grid');
+    var visual = document.querySelector('.about__visual');
+    if (!grid || !visual) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var target = 0;
+    var current = 0;
+    var ticking = false;
+
+    function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+    function computeTarget() {
+      var rect = grid.getBoundingClientRect();
+      var viewportCenter = window.innerHeight / 2;
+      var elCenter = rect.top + rect.height / 2;
+      return clamp((elCenter - viewportCenter) * 0.18, -70, 70);
+    }
+
+    function frameTick() {
+      ticking = false;
+      target = computeTarget();
+      current += (target - current) * 0.16;
+      visual.style.transform = 'translateY(' + current.toFixed(1) + 'px)';
+      if (Math.abs(target - current) > 0.3) requestTick();
+    }
+
+    function requestTick() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(frameTick);
+      }
+    }
+
+    window.addEventListener('scroll', requestTick, { passive: true });
+    window.addEventListener('resize', requestTick, { passive: true });
+    requestTick();
+  })();
 
   var heroSlides = document.querySelectorAll('.hero__slide');
   var heroDots = document.querySelectorAll('.hero__dot');
@@ -335,6 +1053,10 @@
     window.addEventListener('scroll', updateBackToTop, { passive: true });
     updateBackToTop();
     backToTop.addEventListener('click', function () {
+      if (smoothScrollTo) {
+        smoothScrollTo(0);
+        return;
+      }
       var hero = document.getElementById('hero');
       if (hero) hero.scrollIntoView({ behavior: 'smooth' });
       else window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -357,7 +1079,7 @@
   }
 
   /* Hero cursor spotlight */
-  var hero = document.getElementById('hero');
+  var hero = document.getElementById('hero-viewport');
   var spotlight = document.getElementById('hero-spotlight');
   if (hero && spotlight && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     hero.addEventListener('mousemove', function (e) {
@@ -1118,6 +1840,100 @@
 
     renderProfiles();
     renderResult();
+  })();
+
+  /* ===== Forge terminal typewriter ===== */
+  (function initForgeTerminal() {
+    var panel = document.getElementById('forge-terminal');
+    var body = document.getElementById('forge-terminal-body');
+    if (!panel || !body) return;
+
+    var lines = [
+      { html: '<span class="dim">$</span> forge status --floor' },
+      { html: '<span class="ok">●</span> CNC-01  RUNNING  <span class="dim">BVR-RCVR-0042</span>' },
+      { html: '<span class="ok">●</span> CNC-02  RUNNING  <span class="dim">SPR-BRL-0117</span>' },
+      { html: '<span class="warn">●</span> MILL-01 MAINT    <span class="dim">due 07/04</span>' },
+      { html: '<span class="dim">$</span> forge programs --active' },
+      { html: 'BEAVER   <span class="warn">DEVELOPMENT</span>  <span class="dim">lead: yoni</span>' },
+      { html: 'T-90M    <span class="ok">DEPLOYED</span>      <span class="dim">field: UKR</span>' }
+    ];
+
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var started = false;
+
+    function finish() {
+      body.innerHTML = lines.map(function (l) { return '<div>' + l.html + '</div>'; }).join('') +
+        '<span class="forge-strip__cursor" aria-hidden="true"></span>';
+      panel.classList.remove('is-typing');
+    }
+
+    function typeLines() {
+      if (reduceMotion) {
+        finish();
+        return;
+      }
+      panel.classList.add('is-typing');
+      var lineIndex = 0;
+      var charIndex = 0;
+      var plain = lines.map(function (l) {
+        return l.html.replace(/<[^>]+>/g, '');
+      });
+      body.innerHTML = '<span class="forge-strip__cursor" aria-hidden="true"></span>';
+
+      function renderPartial() {
+        var html = '';
+        for (var i = 0; i < lineIndex; i++) {
+          html += '<div>' + lines[i].html + '</div>';
+        }
+        if (lineIndex < lines.length) {
+          var visible = plain[lineIndex].slice(0, charIndex);
+          // Show raw typed chars for current line (simple), then swap to full HTML when done
+          html += '<div>' + escapeHtml(visible) + '<span class="forge-strip__cursor" aria-hidden="true"></span></div>';
+        } else {
+          html += '<span class="forge-strip__cursor" aria-hidden="true"></span>';
+        }
+        body.innerHTML = html;
+      }
+
+      function escapeHtml(str) {
+        return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
+      function tick() {
+        if (lineIndex >= lines.length) {
+          finish();
+          return;
+        }
+        charIndex += 1;
+        if (charIndex > plain[lineIndex].length) {
+          // commit full styled line
+          var committed = '';
+          for (var i = 0; i <= lineIndex; i++) {
+            committed += '<div>' + lines[i].html + '</div>';
+          }
+          body.innerHTML = committed + '<span class="forge-strip__cursor" aria-hidden="true"></span>';
+          lineIndex += 1;
+          charIndex = 0;
+          setTimeout(tick, 180);
+          return;
+        }
+        renderPartial();
+        setTimeout(tick, 16 + Math.random() * 22);
+      }
+
+      tick();
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting || started) return;
+        started = true;
+        typeLines();
+        observer.disconnect();
+      });
+    }, { threshold: 0.4 });
+
+    observer.observe(panel);
   })();
 
   /* Page transitions */
