@@ -736,7 +736,7 @@
     var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var mqDesktop = window.matchMedia('(min-width: 861px)');
     var defaultName = nameEl.getAttribute('data-default') || 'Systems';
-    var defaultColor = '';
+    var defaultColor = '#0a0a0a';
     var currentName = defaultName;
     var swapTimer = null;
     var raf = 0;
@@ -746,6 +746,8 @@
     var smoothX = 0;
     var smoothY = 0;
 
+    nameEl.style.setProperty('--orbit-color', defaultColor);
+
     function setProduct(name, color) {
       if (name === currentName) return;
       currentName = name;
@@ -753,13 +755,10 @@
       nameEl.classList.add('is-swap');
       swapTimer = setTimeout(function () {
         nameEl.textContent = name;
-        if (color) {
-          nameEl.style.color = color;
-          orbit.style.setProperty('--orbit-color', color);
-        } else {
-          nameEl.style.color = '';
-          orbit.style.removeProperty('--orbit-color');
-        }
+        var next = color || defaultColor;
+        nameEl.style.color = next;
+        nameEl.style.setProperty('--orbit-color', next);
+        orbit.style.setProperty('--orbit-color', next);
         nameEl.classList.remove('is-swap');
       }, 160);
     }
@@ -773,10 +772,9 @@
         return;
       }
 
-      var vw = window.innerWidth;
-      var vh = window.innerHeight;
-      var radiusX = Math.min(vw * 0.34, 460);
-      var radiusY = Math.min(vh * 0.30, 270);
+      var rect = orbit.getBoundingClientRect();
+      var radiusX = Math.min(rect.width * 0.36, 440);
+      var radiusY = Math.min(rect.height * 0.34, 260);
       var n = tiles.length;
 
       tiles.forEach(function (tile, i) {
@@ -871,8 +869,10 @@
 
     window.addEventListener('mousemove', function (e) {
       if (!mqDesktop.matches) return;
-      mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-      mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+      var rect = orbit.getBoundingClientRect();
+      if (rect.width < 1 || rect.height < 1) return;
+      mouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouseY = ((e.clientY - rect.top) / rect.height) * 2 - 1;
     }, { passive: true });
 
     window.addEventListener('resize', function () {
