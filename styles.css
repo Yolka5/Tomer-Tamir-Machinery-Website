@@ -595,9 +595,9 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* Ghost sheets fanned out behind the frame — hairline-bordered glass panels
    drifted diagonally by JS as the card shrinks, then parallaxed by the mouse.
-   NOTE: children of .hero-card render at ~0.29 scale once shrunk, so border
-   widths, fonts, and pattern spacings here are authored ~3x their intended
-   visual size. */
+   NOTE: children of .hero-card render smaller once shrunk, so border
+   widths, fonts, and pattern spacings here are authored larger than their
+   intended on-screen size. */
 .hero-card__layer {
   position: absolute;
   inset: 0;
@@ -623,10 +623,7 @@ img { max-width: 100%; height: auto; display: block; }
     repeating-linear-gradient(90deg, rgba(20, 20, 22, 0.07) 0 3px, transparent 3px 96px);
 }
 
-/* Front schematic glass — floats in front of the photo carrying traced
-   outlines of the current slide (canvases injected by JS), dashed guide
-   lines, edge ticks, and small mono tags. Dark graphite linework instead of
-   scale.com's white, since our page background is light. */
+/* Front glass plate — same depth as before, without schematic outlines */
 .hero-card__glass {
   position: absolute;
   inset: 0;
@@ -641,70 +638,6 @@ img { max-width: 100%; height: auto; display: block; }
   will-change: transform, opacity;
 }
 
-/* Dashed crosshair guides (gradient dashes instead of border-style so the
-   dash length survives the card's downscale) */
-.hero-card__glass::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 26%;
-  height: 3px;
-  background: repeating-linear-gradient(90deg, rgba(10, 10, 12, 0.22) 0 20px, transparent 20px 46px);
-}
-
-.hero-card__glass::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 17%;
-  width: 3px;
-  background: repeating-linear-gradient(0deg, rgba(10, 10, 12, 0.22) 0 20px, transparent 20px 46px);
-}
-
-.hero-card__glass-ticks {
-  position: absolute;
-  top: 16px;
-  left: 44px;
-  right: 44px;
-  height: 20px;
-  background: repeating-linear-gradient(90deg, rgba(10, 10, 12, 0.32) 0 3px, transparent 3px 110px);
-}
-
-.hero-card__traces {
-  position: absolute;
-  inset: 0;
-}
-
-.hero-card__trace-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 40%;
-  opacity: 0;
-  transition: opacity 1.4s var(--ease-out);
-}
-
-.hero-card__trace-img.is-active {
-  opacity: 1;
-}
-
-.hero-card__glass-tag {
-  position: absolute;
-  font-family: var(--font-mono);
-  font-size: 30px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(10, 10, 12, 0.4);
-}
-
-.hero-card__glass-tag--tl { top: 44px; left: 44px; }
-.hero-card__glass-tag--br { bottom: 40px; right: 44px; }
-
 /* Phase 2 — side copy that rises in as the card slides aside.
    Visibility is driven entirely by the text masks inside (see below) —
    this wrapper just gates hit-testing once JS takes over on desktop. */
@@ -718,7 +651,7 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .hero-pin__reveal-inner {
-  max-width: min(560px, 42vw);
+  max-width: min(440px, 34vw);
 }
 
 /* Phase 3 — mirror composition: card swings to the other side for a second beat */
@@ -801,8 +734,8 @@ img { max-width: 100%; height: auto; display: block; }
   .hero-card {
     position: relative;
     inset: auto;
-    height: min(58vw, 420px);
-    margin: 0 1.5rem 3rem;
+    height: min(72vw, 520px);
+    margin: 0 1.25rem 3rem;
     border-radius: 18px;
   }
 
@@ -3833,8 +3766,8 @@ body.subpage { padding-top: var(--nav-h); }
   .hero-card {
     position: relative;
     inset: auto;
-    height: min(58vw, 420px);
-    margin: 0 1.5rem 3rem;
+    height: min(72vw, 520px);
+    margin: 0 1.25rem 3rem;
     border-radius: 18px;
   }
 

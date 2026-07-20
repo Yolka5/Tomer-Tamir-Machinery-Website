@@ -334,7 +334,6 @@
     var layer1 = document.getElementById('hero-card-layer-1');
     var layer2 = document.getElementById('hero-card-layer-2');
     var glass = document.getElementById('hero-card-glass');
-    var tracesWrap = document.getElementById('hero-card-traces');
     var reveal1 = document.getElementById('hero-pin-reveal');
     var reveal2 = document.getElementById('hero-pin-reveal-2');
     if (!section || !viewport || !intro || !card || !frame || !border || !reveal1 || !reveal2) return;
@@ -392,111 +391,6 @@
     var reveal1Masks = collectMasks(reveal1);
     var reveal2Masks = collectMasks(reveal2);
 
-    /* ===== Schematic traces =====
-       Runs Sobel edge detection over each (untouched) slider image once,
-       producing a transparent canvas with dark graphite contour lines —
-       a "technical drawing" of the render. The canvases live on the front
-       glass sheet and cross-fade in sync with the slide cycle by watching
-       the slides' class changes, so the slider logic itself stays intact. */
-    var tracesBuilt = false;
-
-    function buildTrace(img, index, canvases, onDone) {
-      try {
-        var maxW = 720;
-        var s = Math.min(1, maxW / img.naturalWidth);
-        var w = Math.max(2, Math.round(img.naturalWidth * s));
-        var h = Math.max(2, Math.round(img.naturalHeight * s));
-        var c = document.createElement('canvas');
-        c.width = w;
-        c.height = h;
-        var ctx = c.getContext('2d', { willReadFrequently: true });
-        /* Composite onto white first so transparent-PNG renders don't
-           produce a giant edge at the alpha boundary of every pixel. */
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(0, 0, w, h);
-        ctx.drawImage(img, 0, 0, w, h);
-        var data = ctx.getImageData(0, 0, w, h).data;
-        var gray = new Float32Array(w * h);
-        for (var p = 0, q = 0; p < gray.length; p++, q += 4) {
-          gray[p] = data[q] * 0.299 + data[q + 1] * 0.587 + data[q + 2] * 0.114;
-        }
-        var out = ctx.createImageData(w, h);
-        var od = out.data;
-        for (var y = 1; y < h - 1; y++) {
-          for (var x = 1; x < w - 1; x++) {
-            var i0 = y * w + x;
-            var gx =
-              -gray[i0 - w - 1] - 2 * gray[i0 - 1] - gray[i0 + w - 1] +
-              gray[i0 - w + 1] + 2 * gray[i0 + 1] + gray[i0 + w + 1];
-            var gy =
-              -gray[i0 - w - 1] - 2 * gray[i0 - w] - gray[i0 - w + 1] +
-              gray[i0 + w - 1] + 2 * gray[i0 + w] + gray[i0 + w + 1];
-            var mag = Math.sqrt(gx * gx + gy * gy);
-            var a = (mag - 70) / 180;
-            if (a > 0) {
-              if (a > 1) a = 1;
-              var o = i0 * 4;
-              /* Adaptive linework: light contours over dark image regions,
-                 dark graphite over light ones — so the trace stays legible
-                 on the dark T-90M render and the white product renders
-                 alike. */
-              if (gray[i0] < 110) {
-                od[o] = 235;
-                od[o + 1] = 238;
-                od[o + 2] = 242;
-              } else {
-                od[o] = 28;
-                od[o + 1] = 30;
-                od[o + 2] = 34;
-              }
-              od[o + 3] = Math.round(a * 165);
-            }
-          }
-        }
-        ctx.putImageData(out, 0, 0);
-        c.className = 'hero-card__trace-img';
-        canvases[index] = c;
-        tracesWrap.appendChild(c);
-        onDone();
-      } catch (err) {
-        /* Tainted canvas / decode failure — glass just stays traceless. */
-      }
-    }
-
-    function ensureTraces() {
-      if (tracesBuilt || !glass || !tracesWrap) return;
-      tracesBuilt = true;
-
-      var slides = Array.prototype.slice.call(document.querySelectorAll('.hero__slides .hero__slide'));
-      if (!slides.length) return;
-      var canvases = new Array(slides.length);
-
-      function syncActive() {
-        var idx = 0;
-        for (var i = 0; i < slides.length; i++) {
-          if (slides[i].classList.contains('hero__slide--active')) { idx = i; break; }
-        }
-        for (var j = 0; j < canvases.length; j++) {
-          if (canvases[j]) canvases[j].classList.toggle('is-active', j === idx);
-        }
-      }
-
-      slides.forEach(function (img, i) {
-        function schedule() {
-          /* Stagger the pixel work so four Sobel passes never land in the
-             same frame. */
-          setTimeout(function () { buildTrace(img, i, canvases, syncActive); }, 80 + i * 200);
-        }
-        if (img.complete && img.naturalWidth) schedule();
-        else img.addEventListener('load', schedule, { once: true });
-      });
-
-      var mo = new MutationObserver(syncActive);
-      slides.forEach(function (s) {
-        mo.observe(s, { attributes: true, attributeFilter: ['class'] });
-      });
-    }
-
     function computeRaw() {
       var rect = section.getBoundingClientRect();
       var total = section.offsetHeight - window.innerHeight;
@@ -541,10 +435,12 @@
       var posT = computePosT(smooth);
 
       var vw = window.innerWidth, vh = window.innerHeight;
-      var targetW = Math.min(vw * 0.42, 560);
-      var targetH = Math.min(vh * 0.58, 560);
+      /* Scale-like presence: card stays the hero of the composition once
+         shrunk — roughly half the viewport, not a small inset thumbnail. */
+      var targetW = Math.min(vw * 0.54, 780);
+      var targetH = Math.min(vh * 0.72, 780);
       var scaleTarget = Math.min(targetW / vw, targetH / vh);
-      var offset = vw * 0.19;
+      var offset = vw * 0.155;
 
       return {
         shrinkT: shrinkT,
@@ -585,9 +481,7 @@
          reads the same to the eye and never breaks.
          Each sheet also drifts diagonally down-left as the card shrinks, so
          the stack fans out like a spread deck: photo top-right, sheets
-         cascading behind it, schematic glass floating in front between them.
-         (Raw px values are ~3.4x the visual result — children of .hero-card
-         render at ~0.29 scale once shrunk.) */
+         cascading behind it, glass floating in front between them. */
       if (layer1) {
         layer1.style.borderRadius = radius.toFixed(1) + 'px';
         layer1.style.opacity = (shrinkT * 0.85).toFixed(3);
@@ -604,9 +498,7 @@
       }
       if (glass) {
         /* Negative mouse multipliers: the front sheet parallaxes opposite
-           to the back sheets, which is what sells "in front of the photo".
-           Base offsets are pushed further from the photo so the schematic
-           outline reads as a distinct floating layer, not a skin. */
+           to the back sheets, which is what sells "in front of the photo". */
         var glassX = lerp(0, -155, shrinkT) + mouseSmoothX * -92 * tiltIntensity;
         var glassY = lerp(0, 118, shrinkT) + mouseSmoothY * -58 * tiltIntensity;
         glass.style.borderRadius = radius.toFixed(1) + 'px';
@@ -694,7 +586,6 @@
       active = shouldBeActive;
       if (!active) resetStyles();
       else {
-        ensureTraces();
         requestTick();
       }
     }
@@ -741,12 +632,21 @@
     var swapTimer = null;
     var raf = 0;
     var t0 = performance.now();
+    var lastTs = 0;
+    var spin = 0;
+    var spinning = true;
+    /* One full revolution ~90s — Scale-slow, readable while browsing */
+    var SPIN_RATE = (Math.PI * 2) / 90;
     var mouseX = 0;
     var mouseY = 0;
     var smoothX = 0;
     var smoothY = 0;
 
     nameEl.style.setProperty('--orbit-color', defaultColor);
+
+    function setSpinning(on) {
+      spinning = on;
+    }
 
     function setProduct(name, color) {
       if (name === currentName) return;
@@ -799,12 +699,18 @@
       raf = 0;
       if (!mqDesktop.matches || reduceMotion) return;
 
+      if (!lastTs) lastTs = now;
+      var dt = Math.min(0.05, (now - lastTs) / 1000);
+      lastTs = now;
+      if (spinning) spin += SPIN_RATE * dt;
+
       smoothX += (mouseX - smoothX) * 0.08;
       smoothY += (mouseY - smoothY) * 0.08;
       var elapsed = (now - t0) / 1000;
 
       tiles.forEach(function (tile, i) {
-        var angle = parseFloat(tile.dataset.angle) || 0;
+        var base = parseFloat(tile.dataset.angle) || 0;
+        var angle = base + spin;
         var rx = parseFloat(tile.dataset.rx) || 0;
         var ry = parseFloat(tile.dataset.ry) || 0;
         var boost = parseFloat(tile.dataset.boost) || 1;
@@ -825,12 +731,14 @@
 
     function startMotion() {
       if (reduceMotion || !mqDesktop.matches) return;
+      lastTs = 0;
       if (!raf) raf = requestAnimationFrame(tick);
     }
 
     function stopMotion() {
       if (raf) cancelAnimationFrame(raf);
       raf = 0;
+      lastTs = 0;
     }
 
     tiles.forEach(function (tile) {
@@ -838,11 +746,13 @@
       tile.style.setProperty('--orbit-color', color);
 
       tile.addEventListener('mouseenter', function () {
+        setSpinning(false);
         tiles.forEach(function (t) { t.classList.toggle('is-hot', t === tile); });
         setProduct(tile.getAttribute('data-name') || defaultName, color);
       });
 
       tile.addEventListener('focus', function () {
+        setSpinning(false);
         tiles.forEach(function (t) { t.classList.toggle('is-hot', t === tile); });
         setProduct(tile.getAttribute('data-name') || defaultName, color);
       });
@@ -850,6 +760,7 @@
       tile.addEventListener('mouseleave', function () {
         tile.classList.remove('is-hot');
         if (!ring.querySelector('.hero-orbit__tile.is-hot')) {
+          setSpinning(true);
           setProduct(defaultName, defaultColor);
         }
       });
@@ -857,6 +768,7 @@
       tile.addEventListener('blur', function () {
         tile.classList.remove('is-hot');
         if (!ring.querySelector('.hero-orbit__tile.is-hot')) {
+          setSpinning(true);
           setProduct(defaultName, defaultColor);
         }
       });
@@ -864,6 +776,7 @@
 
     ring.addEventListener('mouseleave', function () {
       tiles.forEach(function (t) { t.classList.remove('is-hot'); });
+      setSpinning(true);
       setProduct(defaultName, defaultColor);
     });
 
