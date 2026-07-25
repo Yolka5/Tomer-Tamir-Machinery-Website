@@ -110,7 +110,10 @@
     'uniform vec4 uStA;',
     'uniform vec4 uStB;',
     'uniform float uMix, uAspect, uRadius, uBorderW, uOverlay, uBorder, uOpacity, uSpotAmt;',
-    'uniform vec2 uSpot;',
+    /* AWARD-6:#1 bleed lets the product soft-overflow the rounded frame.
+       AWARD-6:#2 uMatSpec / uLight drive a machined-metal edge response. */
+    'uniform float uBleed, uMatSpec;',
+    'uniform vec2 uSpot, uLight;',
     SDF,
     'void main(){',
     '  vec3 a = texture(uTexA, vUv * uStA.xy + uStA.zw).rgb;',
@@ -119,6 +122,12 @@
     /* Cursor spotlight, the GL twin of .hero__spotlight. */
     '  float sd2 = distance(vec2(vUv.x * uAspect, vUv.y), vec2(uSpot.x * uAspect, uSpot.y));',
     '  col += uSpotAmt * exp(-sd2 * sd2 * 5.0) * 0.17;',
+    /* AWARD-6:#2 — kept very quiet after feedback; glass sheen stays, photo
+       specular is barely there so it doesn't read as a plastic material pass. */
+    '  vec2 n = normalize(vec2((vUv.x - 0.5) * uAspect, vUv.y - 0.5) + 1e-4);',
+    '  float ndl = clamp(dot(n, normalize(uLight)), 0.0, 1.0);',
+    '  float spec = pow(ndl, 40.0) * uMatSpec * 0.22;',
+    '  col += vec3(spec);',
     /* Bottom-up white wash that melts the full-bleed photo into the page.
        Same stops as .hero__overlay: #fff at the bottom, 0.9 at 28%, 0.25 at
        the top. Fades out as the card lifts off the page. */
@@ -129,7 +138,8 @@
     '  vec2 p = vec2((vUv.x - 0.5) * uAspect, vUv.y - 0.5);',
     '  float d = sdRound(p, vec2(0.5 * uAspect, 0.5), uRadius);',
     '  float aa = max(fwidth(d), 1e-5);',
-    '  float mask = 1.0 - smoothstep(-aa, aa, d);',
+    /* AWARD-6:#1 — soft bleed past the frame instead of a hard clip. */
+    '  float mask = 1.0 - smoothstep(-aa - uBleed, aa + uBleed * 0.35, d);',
     '  float rim = mask * smoothstep(-uBorderW - aa, -uBorderW + aa, d) * uBorder;',
     '  col = mix(col, vec3(0.05, 0.05, 0.06), rim * 0.5);',
     '  float al = mask * uOpacity;',
@@ -164,21 +174,36 @@
     '  float edge = smoothstep(-uBorderW - aa, -uBorderW + aa, d);',
     '  vec3 col; float a;',
     '  if (uStyle == 1) {',
-    '    col = vec3(1.0);',
-    '    a = 0.30;',
+    /* Ghost sheets: hairline frames only — no milky fill. */
+    '    col = vec3(0.06, 0.06, 0.07);',
+    '    a = edge * 0.55;',
+    '    a *= mask * uOpacity;',
+    '    frag = vec4(col * a, a);',
+    '    return;',
     '  } else {',
-    /* Diagonal falloff mirroring the old linear-gradient(150deg, ...) fill. */
-    '    float g = clamp(vUv.x * 0.55 + (1.0 - vUv.y) * 0.83, 0.0, 1.0);',
+    /* AWARD-6:#2 redesign — technical viewport, not frosted glass slab.
+       Near-clear fill + crisp rim + corner ticks. */
     '    col = vec3(1.0);',
-    '    a = mix(0.22, 0.03, smoothstep(0.0, 0.55, g));',
-    /* Specular band that slides with tilt + time; the plate catching light is
-       most of what makes it read as a physical sheet rather than a tint. */
+    '    a = 0.03;',
     '    float t = vUv.x * 0.8 + (1.0 - vUv.y) * 0.5;',
     '    float s = t - uSheen;',
-    '    a += exp(-s * s * 22.0) * 0.34;',
+    '    a += exp(-s * s * 40.0) * 0.12;',
+    '    float bw = uBorderW * 1.15;',
+    '    float rim = smoothstep(-bw - aa, -bw + aa, d);',
+    '    col = mix(col, vec3(0.08, 0.08, 0.09), rim);',
+    '    a = mix(a, 0.72, rim);',
+    /* Corner brackets inside the plate. */
+    '    vec2 q = abs(p);',
+    '    vec2 halfB = vec2(0.5 * uAspect, 0.5) - uRadius * 0.15;',
+    '    float cornerLen = 0.085;',
+    '    float inX = step(halfB.x - cornerLen, q.x) * step(q.x, halfB.x);',
+    '    float inY = step(halfB.y - cornerLen, q.y) * step(q.y, halfB.y);',
+    '    float nearX = 1.0 - smoothstep(0.0, aa * 2.0, abs(q.x - halfB.x));',
+    '    float nearY = 1.0 - smoothstep(0.0, aa * 2.0, abs(q.y - halfB.y));',
+    '    float tick = clamp(inX * nearY + inY * nearX, 0.0, 1.0) * mask;',
+    '    col = mix(col, vec3(0.06), tick);',
+    '    a = max(a, tick * 0.9);',
     '  }',
-    '  col = mix(col, vec3(0.04, 0.04, 0.05), edge * mask * 0.75);',
-    '  a = mix(a, 0.30, edge * mask);',
     '  a *= mask * uOpacity;',
     '  frag = vec4(col * a, a);',
     '}'
@@ -257,7 +282,9 @@
   function buildResources() {
     photoProg = program(FRAG_PHOTO, [
       'uMVP', 'uTexA', 'uTexB', 'uStA', 'uStB', 'uMix', 'uAspect',
-      'uRadius', 'uBorderW', 'uOverlay', 'uBorder', 'uOpacity', 'uSpot', 'uSpotAmt'
+      'uRadius', 'uBorderW', 'uOverlay', 'uBorder', 'uOpacity', 'uSpot', 'uSpotAmt',
+      /* AWARD-6:#1+#2 */
+      'uBleed', 'uMatSpec', 'uLight'
     ]);
     plateProg = program(FRAG_PLATE, [
       'uMVP', 'uAspect', 'uRadius', 'uBorderW', 'uOpacity', 'uSheen', 'uStyle', 'uInset', 'uBlur'
@@ -315,23 +342,29 @@
      the deck fans apart in space as it lifts off the page. */
   /* Painter's order — no depth buffer, so the array order is the draw order.
      The shadow sits between the ghost sheets and the photo so the card casts
-     onto the sheets behind it, the way the DOM box-shadow did. */
+     onto the sheets behind it, the way the DOM box-shadow did.
+     AWARD-6:#1 — extra soft page contact shadow under the stack.
+     AWARD-6:#3 — id tags drive the scroll-story opacity stagger. */
   var SHADOW_GROW = 1.5;
   var LAYERS = [
-    { style: 1, x: -150, y: 105, z: -430, rz: 1.7, op: 0.65, grow: 1 },
-    { style: 1, x: -70, y: 50, z: -230, rz: -1.1, op: 0.85, grow: 1 },
-    { style: 0, x: 0, y: 46, z: -40, rz: 0, op: 0.62, grow: SHADOW_GROW },
-    { style: -1, x: 0, y: 0, z: 0, rz: 0, op: 1, grow: 1 },
-    { style: 2, x: -155, y: 118, z: 210, rz: -0.5, op: 0.95, grow: 1 }
+    { id: 'pageShadow', style: 0, x: 10, y: 48, z: -55, rz: 0, op: 0.28, grow: 1.55 },
+    { id: 'ghost2', style: 1, x: -92, y: 64, z: -360, rz: 1.2, op: 0.9, grow: 1 },
+    { id: 'ghost1', style: 1, x: -44, y: 32, z: -190, rz: -0.8, op: 0.95, grow: 1 },
+    { id: 'cardShadow', style: 0, x: 0, y: 28, z: -28, rz: 0, op: 0.42, grow: SHADOW_GROW },
+    { id: 'photo', style: -1, x: 0, y: 0, z: 0, rz: 0, op: 1, grow: 1 },
+    /* Glass hugs the photo — slight forward Z + small offset, not a floating slab. */
+    { id: 'glass', style: 2, x: -18, y: 14, z: 95, rz: -0.3, op: 1, grow: 1.01 }
   ];
 
   var FOV = 30 * Math.PI / 180;
 
   /* ---------- state ---------- */
-  var st = { shrinkT: 0, scale: 1, moveX: 0, liftY: 0, rotX: 0, rotY: 0, radius: 0 };
-  var mouseX = 0, spotX = 0.5, spotY = 0.5, spotAmt = 0, hovered = false;
+  var st = { shrinkT: 0, scale: 1, moveX: 0, liftY: 0, rotX: 0, rotY: 0, radius: 0, posT: 0 };
+  var mouseX = 0, mouseY = 0, spotX = 0.5, spotY = 0.5, spotAmt = 0, hovered = false;
   var curIdx = 0, prevIdx = 0, mix = 1;
   var intro = 0;
+  /* AWARD-6:#4 — stamp overshoot settles after the shrink kick. */
+  var stamp = 0, stampVel = 0, prevShrink = 0;
   var ready = false, running = false, onScreen = false, lost = false;
   var vw = 0, vh = 0;
   var start = performance.now(), lastT = 0;
@@ -348,6 +381,8 @@
       st.rotX = next.rotX;
       st.rotY = next.rotY;
       st.radius = next.radius;
+      /* AWARD-6:#3 */
+      if (typeof next.posT === 'number') st.posT = next.posT;
     }
   };
   window.__ttmHero3D = api;
@@ -370,6 +405,22 @@
     canvas.style.height = h + 'px';
   }
 
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+  function clamp01(v) { return Math.max(0, Math.min(1, v)); }
+
+  /* AWARD-6:#3 — staged reveal as the card lifts off the page. */
+  function storyPhases(shrink) {
+    return {
+      pageShadow: clamp01((shrink - 0.02) / 0.18),
+      ghost2: easeOutCubic(clamp01((shrink - 0.08) / 0.28)),
+      ghost1: easeOutCubic(clamp01((shrink - 0.18) / 0.30)),
+      cardShadow: clamp01((shrink - 0.12) / 0.22),
+      /* AWARD-6:#4 glass snaps late and hard after the wash clears. */
+      glass: easeOutCubic(clamp01((shrink - 0.42) / 0.22)),
+      callout: easeOutCubic(clamp01((shrink - 0.62) / 0.28))
+    };
+  }
+
   function draw(now, dt) {
     if (lost || !photoProg) return;
     var t = (now - start) / 1000;
@@ -379,6 +430,18 @@
     var s = st.scale;
     var shrink = st.shrinkT;
     var aspect = vw / vh;
+    var story = storyPhases(shrink);
+
+    /* AWARD-6:#4 — kick the stamp spring when shrink first surges. */
+    var dShrink = shrink - prevShrink;
+    if (dShrink > 0.004 && shrink > 0.05 && shrink < 0.85) {
+      stampVel += dShrink * 14;
+    }
+    prevShrink = shrink;
+    stampVel += (0 - stamp) * 18 * dt;
+    stampVel *= Math.exp(-dt * 9);
+    stamp += stampVel * dt;
+    if (Math.abs(stamp) < 0.0005 && Math.abs(stampVel) < 0.001) { stamp = 0; stampVel = 0; }
 
     /* Camera distance chosen so the plane at z=0 with scale 1 exactly fills
        the viewport — keeps GL geometry in the same pixel space the scroll
@@ -389,9 +452,11 @@
     mMul(mVP, mProj, mView);
 
     /* Idle life: a slow breath on rotation and depth so the stage never sits
-       perfectly still, scaled by shrinkT so the full-bleed photo stays calm. */
-    var breathX = Math.sin(t * 0.31) * 0.4 * shrink;
-    var breathY = Math.sin(t * 0.23 + 1.3) * 0.55 * shrink;
+       perfectly still, scaled by shrinkT so the full-bleed photo stays calm.
+       AWARD-6:#6 — tiny breath even at rest so the product feels alive on load. */
+    var breathAmp = 0.12 + shrink * 0.88;
+    var breathX = Math.sin(t * 0.31) * 0.4 * breathAmp;
+    var breathY = Math.sin(t * 0.23 + 1.3) * 0.55 * breathAmp;
     var bob = Math.sin(t * 0.19) * 16 * shrink;
 
     var rotX = (st.rotX + breathX) * Math.PI / 180;
@@ -409,7 +474,13 @@
     var planeH = vh * s * introScale;
     var radius = st.radius / (vh * s);
     var borderW = 3 / (vh * s);
-    var sheen = 0.65 + Math.sin(t * 0.22) * 0.5 + mouseX * 0.3;
+    /* AWARD-6:#2 — sheen tracks cursor so glass feels hand-lit. */
+    var sheen = 0.65 + Math.sin(t * 0.22) * 0.35 + mouseX * 0.38 - mouseY * 0.18;
+    var lightX = mouseX * 0.65 + Math.sin(t * 0.27) * 0.2;
+    var lightY = -mouseY * 0.55 + 0.35;
+
+    /* AWARD-6:#4 — wash clears faster once glass is arriving (coolant dissolve). */
+    var overlay = (1 - shrink) * (1 - story.glass * 0.55);
 
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(0, 0, 0, 0);
@@ -420,12 +491,34 @@
 
     for (var i = 0; i < LAYERS.length; i++) {
       var L = LAYERS[i];
-      var op = L.style === -1 ? 1 : L.op * shrink;
+      var phase = 1;
+      if (L.id === 'pageShadow') phase = story.pageShadow;
+      else if (L.id === 'ghost2') phase = story.ghost2;
+      else if (L.id === 'ghost1') phase = story.ghost1;
+      else if (L.id === 'cardShadow') phase = story.cardShadow;
+      else if (L.id === 'glass') phase = story.glass;
+
+      var op = L.style === -1 ? 1 : L.op * phase;
       if (op < 0.004) continue;
 
-      mTrans(mModel, L.x * s, -L.y * s, L.z * shrink);
-      if (L.rz) mMul(mModel, mModel, mRotZ(mTmp, L.rz * Math.PI / 180 * shrink));
-      mMul(mModel, mModel, mScale(mTmp2, planeW * L.grow, planeH * L.grow, 1));
+      /* AWARD-6:#1 — photo slightly overscales the frame so it breaks out. */
+      var grow = L.grow;
+      if (L.id === 'photo') grow = 1 + 0.075 * shrink;
+      /* AWARD-6:#4 — ghosts stamp outward then settle. */
+      if (L.id === 'ghost1' || L.id === 'ghost2') {
+        grow *= 1 + stamp * (L.id === 'ghost2' ? 0.08 : 0.05);
+      }
+      if (L.id === 'glass') {
+        grow *= 1 + Math.max(0, stamp) * 0.03 + (1 - phase) * 0.04;
+      }
+
+      var zMul = shrink;
+      if (L.id === 'ghost2') zMul = shrink * (0.7 + 0.3 * phase);
+      if (L.id === 'ghost1') zMul = shrink * (0.75 + 0.25 * phase);
+
+      mTrans(mModel, L.x * s * phase, -L.y * s * phase, L.z * zMul);
+      if (L.rz) mMul(mModel, mModel, mRotZ(mTmp, L.rz * Math.PI / 180 * phase));
+      mMul(mModel, mModel, mScale(mTmp2, planeW * grow, planeH * grow, 1));
       mMul(mModel, mRig, mModel);
       mMul(mMVP, mVP, mModel);
 
@@ -445,11 +538,15 @@
         gl.uniform1f(u.uAspect, aspect);
         gl.uniform1f(u.uRadius, radius);
         gl.uniform1f(u.uBorderW, borderW * 0.5);
-        gl.uniform1f(u.uOverlay, 1 - shrink);
+        gl.uniform1f(u.uOverlay, overlay);
         gl.uniform1f(u.uBorder, shrink);
         gl.uniform1f(u.uOpacity, 1);
         gl.uniform2f(u.uSpot, spotX, spotY);
         gl.uniform1f(u.uSpotAmt, spotAmt);
+        /* AWARD-6:#1+#2 */
+        gl.uniform1f(u.uBleed, (0.01 + 0.028 * shrink) / Math.max(s, 0.2));
+        gl.uniform1f(u.uMatSpec, 0.08 + 0.22 * shrink);
+        gl.uniform2f(u.uLight, lightX, lightY);
       } else {
         gl.useProgram(plateProg.p);
         var v = plateProg.u;
@@ -461,11 +558,21 @@
         gl.uniform1f(v.uSheen, sheen);
         gl.uniform1i(v.uStyle, L.style);
         gl.uniform1f(v.uInset, 1 / L.grow);
-        gl.uniform1f(v.uBlur, 0.13 / L.grow);
+        gl.uniform1f(v.uBlur, (L.id === 'pageShadow' ? 0.2 : 0.13) / L.grow);
       }
       gl.drawArrays(gl.TRIANGLES, 0, 6);
     }
     gl.bindVertexArray(null);
+
+    /* AWARD-6:#3 — drive the DOM callout from the same story clock. */
+    if (window.__ttmHeroAward && window.__ttmHeroAward.syncStory) {
+      window.__ttmHeroAward.syncStory({
+        callout: story.callout,
+        slide: curIdx,
+        posT: st.posT,
+        shrinkT: shrink
+      });
+    }
   }
 
   /* Everything below advances on elapsed time, not per-frame constants — this
@@ -486,6 +593,7 @@
   window.addEventListener('mousemove', function (e) {
     var r = viewport.getBoundingClientRect();
     mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+    mouseY = (e.clientY / window.innerHeight) * 2 - 1;
     spotX = (e.clientX - r.left) / Math.max(1, r.width);
     spotY = 1 - (e.clientY - r.top) / Math.max(1, r.height);
   }, { passive: true });

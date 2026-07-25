@@ -14,8 +14,8 @@
     var note = document.createElement('p');
     note.className = 'footer__disclaimer';
     note.textContent =
-      'This website is a joke and should not be taken seriously. It is not a commercial offering, ' +
-      'does not represent real products or services for sale, and is not affiliated with any third-party manufacturers or governments.';
+      'TTM is a personal engineering and design portfolio. This website presents fictional and ' +
+      'conceptual work for creative showcase purposes; it is not a commercial offering and is not affiliated with any manufacturer or government.';
     el.appendChild(note);
   });
 
@@ -477,7 +477,9 @@
           liftY: curLiftY,
           rotX: rotX,
           rotY: rotY,
-          radius: radius
+          radius: radius,
+          /* AWARD-6:#3 */
+          posT: targets.posT
         });
         renderChrome(targets);
         return;
@@ -1872,6 +1874,242 @@
     }, { threshold: 0.4 });
 
     observer.observe(panel);
+  })();
+
+  /* ===== Premium product-page story =====
+     Progressive enhancement: all content stays visible without JavaScript or
+     when reduced motion is requested. */
+  (function initProductStory() {
+    if (!document.body.classList.contains('product-page')) return;
+
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    var main = document.querySelector('main');
+    if (!main) return;
+
+    document.documentElement.classList.add('product-story-ready');
+
+    var revealObserver = null;
+    if (!reduceMotion) {
+      revealObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-revealed');
+          revealObserver.unobserve(entry.target);
+        });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.12 });
+    }
+
+    function prepareReveal(el, delay) {
+      if (!el || el.classList.contains('product-reveal')) return;
+      el.classList.add('product-reveal');
+      if (delay) el.style.setProperty('--product-reveal-delay', delay + 'ms');
+      if (reduceMotion) {
+        el.classList.add('is-revealed');
+      } else {
+        revealObserver.observe(el);
+      }
+    }
+
+    /* Give headings and their supporting copy an intentional, line-by-line
+       entrance instead of moving the entire section as one static block. */
+    main.querySelectorAll('.section__header').forEach(function (header) {
+      Array.prototype.forEach.call(header.children, function (child, index) {
+        prepareReveal(child, index * 85);
+      });
+    });
+
+    var heroGrid = main.querySelector('.product-hero__grid');
+    if (heroGrid) {
+      heroGrid.classList.add('product-hero__grid--enhanced');
+      var heroVisual = heroGrid.querySelector('.product-hero__img, .product-hero__placeholder');
+      var heroCopy = heroGrid.children.length > 1 ? heroGrid.children[1] : null;
+
+      if (heroVisual && heroVisual.classList.contains('product-hero__img')) {
+        var shell = document.createElement('div');
+        shell.className = 'product-hero__visual-shell product-reveal';
+        heroVisual.parentNode.insertBefore(shell, heroVisual);
+        shell.appendChild(heroVisual);
+        if (reduceMotion) shell.classList.add('is-revealed');
+        else revealObserver.observe(shell);
+
+        if (finePointer && !reduceMotion) {
+          shell.addEventListener('mousemove', function (event) {
+            var rect = shell.getBoundingClientRect();
+            var x = (event.clientX - rect.left) / rect.width - 0.5;
+            var y = (event.clientY - rect.top) / rect.height - 0.5;
+            shell.style.setProperty('--product-rx', (-y * 5).toFixed(2) + 'deg');
+            shell.style.setProperty('--product-ry', (x * 7).toFixed(2) + 'deg');
+            shell.style.setProperty('--product-light-x', ((x + 0.5) * 100).toFixed(1) + '%');
+            shell.style.setProperty('--product-light-y', ((y + 0.5) * 100).toFixed(1) + '%');
+          });
+          shell.addEventListener('mouseleave', function () {
+            shell.style.setProperty('--product-rx', '0deg');
+            shell.style.setProperty('--product-ry', '0deg');
+            shell.style.setProperty('--product-light-x', '50%');
+            shell.style.setProperty('--product-light-y', '35%');
+          });
+        }
+      } else {
+        prepareReveal(heroVisual, 0);
+      }
+
+      if (heroCopy) {
+        Array.prototype.forEach.call(heroCopy.children, function (child, index) {
+          prepareReveal(child, 120 + index * 75);
+        });
+      }
+    }
+
+    /* Reveal information at the component level so specifications and prose
+       arrive as a readable sequence while scrolling. */
+    var revealGroups = [
+      '.specs-grid .specs-block',
+      '.specs-list li',
+      '.dossier__panel',
+      '.dossier__list li',
+      '.product-prose > *',
+      '.beaver-hero__copy > *',
+      '.beaver-hero__stats li',
+      '.beaver-compare__row'
+    ];
+    main.querySelectorAll(revealGroups.join(',')).forEach(function (el, index) {
+      prepareReveal(el, (index % 5) * 55);
+    });
+
+    /* Cursor-responsive glass lighting on information panels. */
+    if (finePointer && !reduceMotion) {
+      main.querySelectorAll('.specs-block, .dossier__panel, .beaver-pillar').forEach(function (panel) {
+        panel.classList.add('product-reactive-panel');
+        panel.addEventListener('mousemove', function (event) {
+          var rect = panel.getBoundingClientRect();
+          panel.style.setProperty('--panel-x', (((event.clientX - rect.left) / rect.width) * 100).toFixed(1) + '%');
+          panel.style.setProperty('--panel-y', (((event.clientY - rect.top) / rect.height) * 100).toFixed(1) + '%');
+        });
+      });
+    }
+
+    /* Click-to-focus gallery: a lightweight, keyboard-accessible image stage. */
+    var galleryItems = Array.prototype.slice.call(main.querySelectorAll('.product-gallery__item'));
+    if (galleryItems.length) {
+      var lightbox = document.createElement('div');
+      lightbox.className = 'product-lightbox';
+      lightbox.setAttribute('role', 'dialog');
+      lightbox.setAttribute('aria-modal', 'true');
+      lightbox.setAttribute('aria-label', 'Platform image viewer');
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightbox.innerHTML =
+        '<button class="product-lightbox__close" type="button" aria-label="Close image viewer">×</button>' +
+        '<button class="product-lightbox__nav product-lightbox__nav--prev" type="button" aria-label="Previous image">←</button>' +
+        '<figure class="product-lightbox__stage"><img alt=""><figcaption></figcaption></figure>' +
+        '<button class="product-lightbox__nav product-lightbox__nav--next" type="button" aria-label="Next image">→</button>';
+      document.body.appendChild(lightbox);
+
+      var lightboxImg = lightbox.querySelector('img');
+      var lightboxCaption = lightbox.querySelector('figcaption');
+      var lightboxClose = lightbox.querySelector('.product-lightbox__close');
+      var activeIndex = 0;
+      var previousFocus = null;
+
+      function showImage(index) {
+        activeIndex = (index + galleryItems.length) % galleryItems.length;
+        var source = galleryItems[activeIndex].querySelector('img');
+        if (!source) return;
+        lightboxImg.src = source.currentSrc || source.src;
+        lightboxImg.alt = source.alt || 'Platform image';
+        lightboxCaption.textContent =
+          (source.alt || 'Platform image') + ' · ' + (activeIndex + 1) + ' / ' + galleryItems.length;
+      }
+
+      function openLightbox(index, trigger) {
+        previousFocus = trigger;
+        showImage(index);
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('lightbox-open');
+        lightboxClose.focus();
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('is-open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('lightbox-open');
+        if (previousFocus) previousFocus.focus();
+      }
+
+      galleryItems.forEach(function (item, index) {
+        item.classList.add('product-gallery__item--interactive');
+        item.setAttribute('role', 'button');
+        item.setAttribute('tabindex', '0');
+        item.setAttribute('aria-label', 'Open ' + ((item.querySelector('img') || {}).alt || 'platform image'));
+        item.addEventListener('click', function () { openLightbox(index, item); });
+        item.addEventListener('keydown', function (event) {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openLightbox(index, item);
+          }
+        });
+      });
+
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightbox.querySelector('.product-lightbox__nav--prev').addEventListener('click', function () {
+        showImage(activeIndex - 1);
+      });
+      lightbox.querySelector('.product-lightbox__nav--next').addEventListener('click', function () {
+        showImage(activeIndex + 1);
+      });
+      lightbox.addEventListener('click', function (event) {
+        if (event.target === lightbox) closeLightbox();
+      });
+      document.addEventListener('keydown', function (event) {
+        if (!lightbox.classList.contains('is-open')) return;
+        if (event.key === 'Escape') closeLightbox();
+        if (event.key === 'ArrowLeft') showImage(activeIndex - 1);
+        if (event.key === 'ArrowRight') showImage(activeIndex + 1);
+      });
+    }
+
+    /* Compact section navigator: marks where the reader is in the product
+       story and provides direct, smooth jumps between chapters. */
+    var chapters = Array.prototype.slice.call(main.querySelectorAll('section')).filter(function (section, index) {
+      return index === 0 || section.querySelector('.section__title, .beaver-hero__title');
+    });
+    if (chapters.length > 2) {
+      var rail = document.createElement('nav');
+      rail.className = 'product-story-rail';
+      rail.setAttribute('aria-label', 'Product page sections');
+      var railList = document.createElement('ol');
+      rail.appendChild(railList);
+
+      chapters.forEach(function (section, index) {
+        if (!section.id) section.id = 'product-chapter-' + (index + 1);
+        var heading = section.querySelector('h1, h2');
+        var label = heading ? heading.textContent.trim() : 'Overview';
+        var item = document.createElement('li');
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.setAttribute('aria-label', 'Jump to ' + label);
+        button.innerHTML = '<span>' + String(index + 1).padStart(2, '0') + '</span><i></i>';
+        button.addEventListener('click', function () {
+          section.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+        });
+        item.appendChild(button);
+        railList.appendChild(item);
+      });
+      document.body.appendChild(rail);
+
+      var chapterButtons = rail.querySelectorAll('button');
+      var chapterObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          chapters.forEach(function (chapter, index) {
+            chapterButtons[index].classList.toggle('is-current', chapter === entry.target);
+          });
+        });
+      }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
+      chapters.forEach(function (chapter) { chapterObserver.observe(chapter); });
+      chapterButtons[0].classList.add('is-current');
+    }
   })();
 
   /* Page transitions */

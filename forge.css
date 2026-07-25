@@ -162,21 +162,77 @@
 }
 
 .forge-strip__panel {
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
+  position: relative;
+  padding: 1.35rem 1.4rem 1.5rem;
+  background: #070708;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.4);
-  font-family: 'Ubuntu Mono', 'Consolas', monospace;
-  font-size: 0.8125rem;
+  border-radius: 16px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 40px rgba(0, 0, 0, 0.55),
+    0 24px 56px rgba(0, 0, 0, 0.5);
+  font-family: 'JetBrains Mono', 'Ubuntu Mono', 'Consolas', monospace;
+  font-size: 0.78rem;
   color: #c9c9cd;
-  line-height: 1.9;
+  line-height: 1.85;
+  overflow: hidden;
+  min-height: 12.5rem;
+}
+
+.forge-strip__panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.028) 0,
+    rgba(255, 255, 255, 0.028) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  opacity: 0.55;
+  mix-blend-mode: soft-light;
+}
+
+.forge-strip__panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.35) 100%);
+}
+
+.forge-strip__panel-body {
+  position: relative;
+  z-index: 1;
+  white-space: pre-wrap;
 }
 
 .forge-strip__panel .ok { color: #7ee2a8; }
 .forge-strip__panel .warn { color: #f0d47e; }
 .forge-strip__panel .dim { color: #6b6b73; }
+
+.forge-strip__cursor {
+  display: inline-block;
+  width: 0.55ch;
+  height: 1.05em;
+  margin-left: 0.15rem;
+  vertical-align: text-bottom;
+  background: #c9c9cd;
+  animation: forge-blink 1s steps(1) infinite;
+}
+
+@keyframes forge-blink {
+  50% { opacity: 0; }
+}
+
+.forge-strip__panel.is-typing .forge-strip__cursor { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .forge-strip__cursor { animation: none; }
+  .forge-strip__panel::before { opacity: 0.25; }
+}
 
 @media (max-width: 900px) {
   .forge-modules__grid { grid-template-columns: 1fr; }

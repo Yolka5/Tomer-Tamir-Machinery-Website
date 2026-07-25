@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SIG SPEAR Platform | Tomer Tamir Machinery</title>
-  <meta name="description" content="TTM SIG SPEAR — .277 Fury (6.8×51mm) battle rifle / carbine platform engineered and manufactured in-house.">
+  <meta name="description" content="TTM SIG SPEAR — .277 Fury (6.8×51mm) battle rifle / carbine platform engineered and manufactured in-house. A personal engineering and design portfolio project.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Russo+One&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="icon" href="TTMNewLogo.png" type="image/png">
-  <link rel="stylesheet" href="styles.css?v=18">
+  <link rel="stylesheet" href="styles.css?v=39">
 </head>
-<body class="subpage">
+<body class="subpage product-page">
   <div class="scroll-progress" id="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar"></div></div>
   <div class="page-transition" id="page-transition" aria-hidden="true"></div>
   <header class="header" id="header">
@@ -104,36 +104,46 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="dossier" id="specs">
       <div class="container">
-        <div class="section__header animate-in">
-          <span class="section__eyebrow">Specifications</span>
-          <h2 class="section__title">Platform data</h2>
+        <div class="dossier__intro section__header animate-in">
+          <span class="section__eyebrow">Platform dossier</span>
+          <h2 class="section__title">SPEAR readout</h2>
+          <p class="section__lead">Sticky platform view with scrolling engineering data — pressure, feed, and manufacturing discipline.</p>
         </div>
-        <div class="specs-grid animate-in">
-          <div class="specs-block">
-            <h3>Technical specifications</h3>
-            <ul class="specs-list">
-              <li>Cartridge: .277 Fury (6.8×51mm Common Cartridge)</li>
-              <li>Operating system: Short-stroke gas piston, rotating bolt</li>
-              <li>Barrel length: 13″ cold-hammer forged</li>
-              <li>Overall length: ~36″ with suppressor; folding stock</li>
-              <li>Weight: 8.4 lb unloaded; ~9.8 lb with suppressor</li>
-              <li>Magazines: SR-25 pattern · 20 / 25 rd</li>
-              <li>Muzzle velocity: ~915 m/s</li>
-              <li>Rate of fire: Select-fire (cyclic rate unpublished)</li>
-              <li>Effective range: 600–800+ m</li>
-              <li>Receiver: Monolithic upper, aluminum</li>
-              <li>Suppressor: SLX QD suppressor ready</li>
-              <li>Manufacturing: 100% TTM in-house</li>
-            </ul>
+        <div class="dossier__grid">
+          <div class="dossier__media animate-in">
+            <div class="dossier__media-frame">
+              <img src="New%20TTM%20SIG%20SPEAR%20Image.png" alt="SIG SPEAR">
+            </div>
+            <p class="dossier__media-caption">TTM · SIG SPEAR · .277 Fury / 6.8×51</p>
           </div>
-          <div class="specs-block">
-            <h3>Engineering &amp; manufacturing</h3>
-            <p>The .277 Fury hybrid-case cartridge operates at significantly higher chamber pressures than legacy 5.56×45 or 7.62×51 NATO loads, requiring reinforced receiver geometry and barrel metallurgy validated through sustained fire testing.</p>
-            <p>Each rifle is serialized and tracked from raw material to final assembly. CNC programming, dimensional inspection, and functional validation occur at every production stage before a weapon leaves our facility.</p>
-            <p><strong>Program lead:</strong> Yoni, Lead Engineer</p>
-            <a href="apply.html" class="btn btn--outline" style="margin-top:1rem">Apply to this program</a>
+          <div class="dossier__copy animate-in">
+            <div class="dossier__panel">
+              <h3>Technical specifications</h3>
+              <ul class="dossier__list">
+                <li><span class="dossier__key">Cartridge</span><span class="dossier__val">.277 Fury (6.8×51mm)</span></li>
+                <li><span class="dossier__key">Action</span><span class="dossier__val">Short-stroke gas piston · rotating bolt</span></li>
+                <li><span class="dossier__key">Barrel</span><span class="dossier__val">13″ cold-hammer forged</span></li>
+                <li><span class="dossier__key">Overall</span><span class="dossier__val">~36″ with suppressor · folding stock</span></li>
+                <li><span class="dossier__key">Weight</span><span class="dossier__val">8.4 lb unloaded · ~9.8 lb w/ suppressor</span></li>
+                <li><span class="dossier__key">Magazines</span><span class="dossier__val">SR-25 pattern · 20 / 25 rd</span></li>
+                <li><span class="dossier__key">Velocity</span><span class="dossier__val">~915 m/s</span></li>
+                <li><span class="dossier__key">Rate of fire</span><span class="dossier__val">Select-fire · cyclic unpublished</span></li>
+                <li><span class="dossier__key">Range</span><span class="dossier__val">600–800+ m</span></li>
+                <li><span class="dossier__key">Suppressor</span><span class="dossier__val">SLX QD ready</span></li>
+              </ul>
+            </div>
+            <div class="dossier__panel">
+              <h3>High-pressure architecture</h3>
+              <p>The .277 Fury hybrid-case cartridge runs significantly higher chamber pressures than legacy 5.56×45 or 7.62×51 NATO loads — requiring reinforced receiver geometry and barrel metallurgy validated through sustained fire testing.</p>
+            </div>
+            <div class="dossier__panel">
+              <h3>Manufacturing</h3>
+              <p>Each rifle is serialized and tracked from raw material to final assembly. CNC programming, dimensional inspection, and functional validation occur at every production stage before a weapon leaves our facility.</p>
+              <p><strong>Program lead:</strong> Yoni, Lead Engineer</p>
+              <a href="apply.html" class="btn btn--outline" style="margin-top:1rem">Apply to this program</a>
+            </div>
           </div>
         </div>
       </div>
@@ -142,10 +152,10 @@
 
   <footer class="footer">
     <div class="container">
-      <div class="footer__bottom"><p>© <span id="year"></span> Tomer Tamir Machinery</p></div>
+      <div class="footer__bottom"><p>© <span id="year"></span> Tomer Tamir Machinery</p><p class="footer__disclaimer">TTM is a personal engineering and design portfolio. This website presents fictional and conceptual work for creative showcase purposes; it is not a commercial offering and is not affiliated with any manufacturer or government.</p></div>
     </div>
   </footer>
 
-  <script src="script.js?v=16"></script>
+  <script src="script.js?v=34"></script>
 </body>
 </html>

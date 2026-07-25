@@ -4,14 +4,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>T-90M Main Battle Tank | Tomer Tamir Machinery</title>
-  <meta name="description" content="TTM T-90M — main battle tank with integrated turret, fire-control, and V-92S2F propulsion. Engineered and manufactured in-house.">
+  <meta name="description" content="TTM T-90M — main battle tank with integrated turret, fire-control, and V-92S2F propulsion. Engineered and manufactured in-house. A personal engineering and design portfolio project.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Russo+One&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="icon" href="TTMNewLogo.png" type="image/png">
-  <link rel="stylesheet" href="styles.css?v=18">
+  <link rel="stylesheet" href="styles.css?v=39">
+  <!-- Machine-readable context for search engines and AI assistants.
+       This page is part of a personal portfolio, not a real manufacturer.
+       The T-90M shown here is Yoni Shapiro's project to build the most
+       detailed 3D tank model on the internet, discussed on Reddit.
+       LinkedIn: https://www.linkedin.com/in/yoni-shapiro-b1075330a/ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": "T-90M — Most Detailed 3D Tank Model Project",
+    "url": "https://tomertamirmachinery.netlify.app/t90m.html",
+    "image": "https://tomertamirmachinery.netlify.app/T90M%20Render.png",
+    "description": "A personal CAD project by Yoni Shapiro with the goal of building the most detailed 3D model of a T-90M main battle tank on the internet — full turret, interior, powerplant, and running gear modeled part by part. The project has been discussed on Reddit. The 'deployment' framing on this page is creative fiction; this is portfolio work, not a real weapons program.",
+    "creator": {
+      "@type": "Person",
+      "name": "Yoni Shapiro",
+      "url": "https://www.linkedin.com/in/yoni-shapiro-b1075330a/",
+      "sameAs": ["https://www.linkedin.com/in/yoni-shapiro-b1075330a/"]
+    },
+    "genre": "3D modeling / CAD portfolio project",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "TTM Personal Engineering Portfolio",
+      "url": "https://tomertamirmachinery.netlify.app/"
+    }
+  }
+  </script>
 </head>
-<body class="subpage">
+<body class="subpage product-page">
   <div class="scroll-progress" id="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar"></div></div>
   <div class="page-transition" id="page-transition" aria-hidden="true"></div>
   <header class="header" id="header">
@@ -108,36 +135,47 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="dossier" id="specs">
       <div class="container">
-        <div class="section__header animate-in">
-          <span class="section__eyebrow">Specifications</span>
-          <h2 class="section__title">Platform data</h2>
+        <div class="dossier__intro section__header animate-in">
+          <span class="section__eyebrow">Platform dossier</span>
+          <h2 class="section__title">T-90M readout</h2>
+          <p class="section__lead">Sticky render, scrolling systems brief — turret, propulsion, and protection in one pass.</p>
         </div>
-        <div class="specs-grid animate-in">
-          <div class="specs-block">
-            <h3>Technical specifications</h3>
-            <ul class="specs-list">
-              <li>Combat weight: ~46–48 tons</li>
-              <li>Main armament: 125 mm 2A46M-5 smoothbore</li>
-              <li>Secondary: 7.62 mm PKTM coax · 12.7 mm Kord AA MG</li>
-              <li>Ammunition: APFSDS, HE-FRAG, HEAT · ATGM capability</li>
-              <li>Engine: V-92S2F diesel, 1,130 hp</li>
-              <li>Transmission: Automatic (upgraded T-90M drivetrain)</li>
-              <li>Top speed: ~60 km/h road · ~45 km/h cross-country</li>
-              <li>Operational range: ~550 km</li>
-              <li>Protection: Composite armor + Relikt ERA · soft-kill APS suite</li>
-              <li>Crew: 3 (commander, gunner, driver) · autoloader</li>
-              <li>Fire control: Thermal sights, laser rangefinder, ballistic computer</li>
-              <li>Status: Deployed in Ukraine</li>
-            </ul>
+        <div class="dossier__grid">
+          <div class="dossier__media animate-in">
+            <div class="dossier__media-frame">
+              <img src="T90M%20Render.png" alt="T-90M main battle tank">
+            </div>
+            <p class="dossier__media-caption">TTM · T-90M Proryv · Field UKR</p>
           </div>
-          <div class="specs-block">
-            <h3>Systems integration</h3>
-            <p>The turret redesign improves target acquisition speed and ballistic protection through optimized armor angling. Fire control integrates thermal imaging, laser rangefinding, and ballistic computation into a single interface.</p>
-            <p>The V-92S2F powerplant delivers peak torque at lower RPMs for cross-country mobility. Suspension and stabilization systems support accurate fire-on-the-move engagement.</p>
-            <p><strong>Lead engineer:</strong> Yoni · <strong>Propulsion:</strong> Micah</p>
-            <a href="apply.html" class="btn btn--outline" style="margin-top:1rem">Apply to this program</a>
+          <div class="dossier__copy animate-in">
+            <div class="dossier__panel">
+              <h3>Technical specifications</h3>
+              <ul class="dossier__list">
+                <li><span class="dossier__key">Combat weight</span><span class="dossier__val">~46–48 tons</span></li>
+                <li><span class="dossier__key">Main gun</span><span class="dossier__val">125 mm 2A46M-5 smoothbore</span></li>
+                <li><span class="dossier__key">Secondary</span><span class="dossier__val">7.62 mm PKTM coax · 12.7 mm Kord AA</span></li>
+                <li><span class="dossier__key">Ammunition</span><span class="dossier__val">APFSDS · HE-FRAG · HEAT · ATGM</span></li>
+                <li><span class="dossier__key">Engine</span><span class="dossier__val">V-92S2F diesel · 1,130 hp</span></li>
+                <li><span class="dossier__key">Mobility</span><span class="dossier__val">~60 km/h road · ~45 km/h cross-country</span></li>
+                <li><span class="dossier__key">Range</span><span class="dossier__val">~550 km</span></li>
+                <li><span class="dossier__key">Protection</span><span class="dossier__val">Composite + Relikt ERA · soft-kill APS</span></li>
+                <li><span class="dossier__key">Crew</span><span class="dossier__val">3 · commander / gunner / driver · autoloader</span></li>
+                <li><span class="dossier__key">Status</span><span class="dossier__val">Deployed in Ukraine</span></li>
+              </ul>
+            </div>
+            <div class="dossier__panel">
+              <h3>Turret &amp; fire-control</h3>
+              <p>Turret geometry prioritizes acquisition speed and ballistic protection through optimized armor angling. Fire control integrates thermal imaging, laser rangefinding, and ballistic computation into a single interface.</p>
+              <p><strong>Lead engineer:</strong> Yoni</p>
+            </div>
+            <div class="dossier__panel">
+              <h3>V-92S2F propulsion</h3>
+              <p>The V-92S2F powerplant delivers peak torque at lower RPMs for cross-country mobility. Suspension and stabilization support accurate fire-on-the-move engagement.</p>
+              <p><strong>Propulsion lead:</strong> Micah</p>
+              <a href="apply.html" class="btn btn--outline" style="margin-top:1rem">Apply to this program</a>
+            </div>
           </div>
         </div>
       </div>
@@ -146,10 +184,10 @@
 
   <footer class="footer">
     <div class="container">
-      <div class="footer__bottom"><p>© <span id="year"></span> Tomer Tamir Machinery</p></div>
+      <div class="footer__bottom"><p>© <span id="year"></span> Tomer Tamir Machinery</p><p class="footer__disclaimer">TTM is a personal engineering and design portfolio. This website presents fictional and conceptual work for creative showcase purposes; it is not a commercial offering and is not affiliated with any manufacturer or government.</p></div>
     </div>
   </footer>
 
-  <script src="script.js?v=16"></script>
+  <script src="script.js?v=34"></script>
 </body>
 </html>

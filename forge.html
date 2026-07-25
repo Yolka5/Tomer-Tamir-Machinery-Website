@@ -7,10 +7,10 @@
   <meta name="description" content="TTM FORGE OS — the manufacturing operating system for TTM's closed in-house ecosystem. Production tracking, machine telemetry, and full traceability.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Ubuntu+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Russo+One&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="icon" href="TTMNewLogo.png" type="image/png">
-  <link rel="stylesheet" href="styles.css?v=18">
-  <link rel="stylesheet" href="forge.css?v=1">
+  <link rel="stylesheet" href="styles.css?v=39">
+  <link rel="stylesheet" href="forge.css?v=2">
 </head>
 <body class="subpage">
   <div class="scroll-progress" id="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar"></div></div>
@@ -120,15 +120,8 @@
             <p class="forge-strip__desc">Off-the-shelf manufacturing software is built for someone else's factory. FORGE OS is tailored to our HQ — our machines, our programs, our workflow. No outsourced code in the loop, matching the same in-house standard we hold for hardware.</p>
             <a href="login.html" class="btn btn--forge">Access the system</a>
           </div>
-          <div class="forge-strip__panel animate-in" aria-hidden="true">
-            <div><span class="dim">$</span> forge status --floor</div>
-            <div><span class="ok">●</span> CNC-01 &nbsp;RUNNING &nbsp;<span class="dim">BVR-RCVR-0042</span></div>
-            <div><span class="ok">●</span> CNC-02 &nbsp;RUNNING &nbsp;<span class="dim">SPR-BRL-0117</span></div>
-            <div><span class="warn">●</span> MILL-01 MAINT &nbsp;&nbsp;&nbsp;<span class="dim">due 07/04</span></div>
-            <div><span class="dim">…</span></div>
-            <div><span class="dim">$</span> forge programs --active</div>
-            <div>BEAVER &nbsp;&nbsp;<span class="warn">DEVELOPMENT</span> &nbsp;<span class="dim">lead: y.shapiro</span></div>
-            <div>T-90M &nbsp;&nbsp;&nbsp;<span class="ok">DEPLOYED</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class="dim">field: UKR</span></div>
+          <div class="forge-strip__panel animate-in" id="forge-terminal" aria-hidden="true">
+            <div class="forge-strip__panel-body" id="forge-terminal-body"></div>
           </div>
         </div>
       </div>
@@ -167,10 +160,10 @@
 
   <footer class="footer">
     <div class="container">
-      <div class="footer__bottom"><p>© <span id="year"></span> Tomer Tamir Machinery</p></div>
+      <div class="footer__bottom"><p>© <span id="year"></span> Tomer Tamir Machinery</p><p class="footer__disclaimer">TTM is a personal engineering and design portfolio. This website presents fictional and conceptual work for creative showcase purposes; it is not a commercial offering and is not affiliated with any manufacturer or government.</p></div>
     </div>
   </footer>
 
-  <script src="script.js?v=16"></script>
+  <script src="script.js?v=34"></script>
 </body>
 </html>

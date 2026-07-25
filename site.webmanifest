@@ -1,7 +1,7 @@
 {
-  "name": "Tomer Tamir Machinery",
+  "name": "TTM Personal Engineering Portfolio",
   "short_name": "TTM",
-  "description": "Precision engineering and manufacturing — built in-house.",
+  "description": "A personal engineering and design portfolio featuring fictional concepts, CAD studies, and interactive product stories.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f8f8f9",
