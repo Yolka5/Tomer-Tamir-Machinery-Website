@@ -464,6 +464,25 @@
 
       var radius = lerp(0, 28, shrinkT);
 
+      /* When the WebGL stage is up it owns the card entirely — same timeline
+         values, but resolved by a projection matrix against layers at real Z
+         depths instead of the faked 2D offsets below. hero3d.js keeps its own
+         rAF running, so it stays animated after scroll settles. */
+      var stage = window.__ttmHero3D;
+      if (stage && stage.ready) {
+        stage.push({
+          shrinkT: shrinkT,
+          scale: curScale,
+          moveX: curMoveX,
+          liftY: curLiftY,
+          rotX: rotX,
+          rotY: rotY,
+          radius: radius
+        });
+        renderChrome(targets);
+        return;
+      }
+
       card.style.transform =
         'translate3d(' + curMoveX.toFixed(2) + 'px,' + curLiftY.toFixed(2) + 'px,0) ' +
         'rotateX(' + rotX.toFixed(2) + 'deg) rotateY(' + rotY.toFixed(2) + 'deg) ' +
@@ -510,6 +529,12 @@
 
       if (overlay) overlay.style.opacity = (1 - shrinkT).toFixed(3);
 
+      renderChrome(targets);
+    }
+
+    /* Intro copy + the two scroll-in text blocks. Shared by both the DOM and
+       WebGL paths — only the card itself differs between them. */
+    function renderChrome(targets) {
       var introOpacity = clamp(1 - smooth / (SHRINK_END * 0.72), 0, 1);
       intro.style.opacity = introOpacity.toFixed(3);
       intro.style.transform = 'translateY(' + (-(1 - introOpacity) * 34).toFixed(1) + 'px)';

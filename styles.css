@@ -551,6 +551,23 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 /* The card that shrinks, tilts, and slides aside — wraps the untouched slider */
+/* WebGL hero stage (hero3d.js). Only shown once the context, shaders and
+   textures are all up; until then — and on mobile, under reduced motion, or
+   after a lost context — the DOM card below stays in charge. */
+.hero-gl {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: none;
+  pointer-events: none;
+}
+
+.hero-pin__viewport--gl .hero-gl { display: block; }
+
+/* Kept in the document so the slideshow keeps cycling classes for the GL
+   stage to mirror, and so the <img> textures stay resident. */
+.hero-pin__viewport--gl .hero-card { display: none; }
+
 .hero-card {
   position: absolute;
   inset: 0;
