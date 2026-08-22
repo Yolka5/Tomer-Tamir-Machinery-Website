@@ -66,11 +66,11 @@ try {
 // ── Customise your pass here ──────────────────────────────────────────────────
 const SITE_URL     = 'https://yolka5.github.io/Tomer-Tamir-Machinery-Website/';
 const LOGO_URL     = 'https://raw.githubusercontent.com/Yolka5/Tomer-Tamir-Machinery-Website/main/TTMNewLogo.png';
-const CAD_IMG_URL  = 'https://raw.githubusercontent.com/Yolka5/Tomer-Tamir-Machinery-Website/main/TTM%20Beaver/TTM%20Beaver%20Upper%201.png';
+const CARD_IMG_URL = 'https://raw.githubusercontent.com/Yolka5/Tomer-Tamir-Machinery-Website/main/wallet/wallet-card.png';
 
 // Unique IDs — bump CLASS_ID version or OBJECT_ID suffix to force a new pass.
-const CLASS_ID  = `${issuerId}.ttm_card_v2`;
-const OBJECT_ID = `${issuerId}.ttm_yoni_card_v2`;
+const CLASS_ID  = `${issuerId}.ttm_card_v3`;
+const OBJECT_ID = `${issuerId}.ttm_yoni_card_v3`;
 
 // ── Pass class — no extra rows, clean card layout ─────────────────────────────
 const passClass = {
@@ -94,10 +94,14 @@ const passObject = {
     defaultValue: { language: 'en-US', value: 'Tomer Tamir Machinery' }
   },
 
-  // Branding — logo only, no hero image (cleaner card look)
+  // Branding
   logo: {
     sourceUri: { uri: LOGO_URL },
     contentDescription: { defaultValue: { language: 'en-US', value: 'TTM Logo' } }
+  },
+  heroImage: {
+    sourceUri: { uri: CARD_IMG_URL },
+    contentDescription: { defaultValue: { language: 'en-US', value: 'TTM card' } }
   },
   hexBackgroundColor: '#0c0c0f',
 
