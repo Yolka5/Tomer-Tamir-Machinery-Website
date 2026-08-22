@@ -1300,6 +1300,18 @@ html.award-product-first.award-chrome-in .hero__dots { opacity: 1; }
   filter: saturate(1.05) contrast(1.08);
 }
 
+/* Beaver tile — CAD render on light background */
+.arsenal-tile__img--cad {
+  object-fit: contain;
+  padding: 1.5rem;
+  filter: none;
+  background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.98), rgba(228,228,234,0.92));
+}
+
+.arsenal-tile:hover .arsenal-tile__img--cad {
+  filter: none;
+}
+
 .arsenal-tile__media {
   position: absolute;
   inset: 0;
@@ -2974,6 +2986,717 @@ body.subpage { padding-top: var(--nav-h); }
 }
 
 .beaver-cta__email:hover { color: var(--text); }
+
+/* ===== Beaver hero — actual CAD image ===== */
+.beaver-hero__img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.98), rgba(228, 228, 232, 0.92));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-md);
+}
+
+.beaver-hero__cad {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 1.5rem;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.1));
+  transition: transform 0.7s var(--ease-out);
+}
+
+.beaver-hero__img-wrap:hover .beaver-hero__cad {
+  transform: scale(1.03);
+}
+
+/* ===== Beaver CAD gallery ===== */
+.beaver-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+}
+
+.beaver-gallery__item {
+  position: relative;
+  background: radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.98), rgba(230, 230, 234, 0.90));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow 0.35s, transform 0.35s var(--ease-spring);
+  display: flex;
+  flex-direction: column;
+}
+
+.beaver-gallery__item--wide {
+  grid-column: 1 / -1;
+}
+
+.beaver-gallery__item:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+.beaver-gallery__item img {
+  width: 100%;
+  flex: 1;
+  object-fit: contain;
+  padding: 1.75rem 2.5rem 1rem;
+  min-height: 240px;
+  filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.08));
+}
+
+.beaver-gallery__item--wide img {
+  min-height: 320px;
+}
+
+.beaver-gallery__item figcaption {
+  padding: 0.6rem 1.25rem 0.8rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+}
+
+/* ═══════════════════════════════════════════════════════
+   BEAVER — Shadows Into Light highlight system
+═══════════════════════════════════════════════════════ */
+:root {
+  --hl-color:      #b56a20;   /* amber on light backgrounds */
+  --hl-color-dark: #e09a44;   /* lighter amber on dark backgrounds */
+}
+
+.hl {
+  font-family: 'Shadows Into Light', cursive;
+  color: var(--hl-color);
+  font-size: 1.2em;
+  letter-spacing: 0.01em;
+  display: inline;
+  font-style: normal;
+  font-weight: 400;
+}
+
+/* Lighter on dark sections */
+.beaver-hero .hl,
+.beaver-openeng .hl {
+  color: var(--hl-color-dark);
+}
+
+/* ═══════════════════════════════════════════════════════
+   BEAVER — Open engineering / Milanote section
+═══════════════════════════════════════════════════════ */
+.beaver-openeng {
+  background: #0c0c0f;
+  padding: 4.5rem 0 5rem;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  position: relative;
+  overflow: hidden;
+}
+
+.beaver-openeng::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.065) 1px, transparent 1px);
+  background-size: 30px 30px;
+  pointer-events: none;
+  mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.3) 25%, rgba(0,0,0,0.18) 75%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.3) 25%, rgba(0,0,0,0.18) 75%, transparent 100%);
+}
+
+.beaver-openeng__watermark {
+  position: absolute;
+  right: -2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-display);
+  font-size: clamp(6rem, 18vw, 14rem);
+  line-height: 1;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.025);
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.beaver-openeng__inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+
+.beaver-openeng .section__eyebrow { color: rgba(255,255,255,0.38); }
+
+.beaver-openeng__title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.9rem);
+  color: #ffffff;
+  line-height: 1.12;
+  letter-spacing: 0.03em;
+  margin: 0.55rem 0 1.25rem;
+}
+
+.beaver-openeng__copy > p {
+  color: rgba(255,255,255,0.58);
+  line-height: 1.78;
+  max-width: 54ch;
+}
+
+.beaver-openeng__items {
+  list-style: none;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.beaver-openeng__items li {
+  font-size: 0.8125rem;
+  color: rgba(255,255,255,0.52);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  line-height: 1.5;
+}
+
+.beaver-openeng__item-arrow {
+  color: var(--hl-color-dark);
+  font-family: 'Shadows Into Light', cursive;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  margin-top: -0.05em;
+}
+
+.beaver-openeng__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+
+.beaver-openeng__btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  padding: 1.5rem 2rem 1.4rem;
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  transition: background 0.25s, border-color 0.25s, transform 0.3s var(--ease-spring), box-shadow 0.3s;
+}
+
+.beaver-openeng__btn:hover {
+  background: rgba(255,255,255,0.11);
+  border-color: rgba(255,255,255,0.24);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+}
+
+.beaver-openeng__btn-label {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+}
+
+.beaver-openeng__btn-sub {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.38);
+}
+
+.beaver-openeng__note {
+  font-size: 0.775rem;
+  color: rgba(255,255,255,0.32);
+  line-height: 1.7;
+  max-width: 36ch;
+}
+
+@media (max-width: 860px) {
+  .beaver-openeng__inner {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .beaver-openeng__btn { width: auto; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   BEAVER VISUAL ENHANCEMENT
+   Dark hero · dot grid · decorative numbers · bold trade studies
+═══════════════════════════════════════════════════════ */
+
+/* --- Dark hero --- */
+.beaver-hero {
+  background: #0c0c0f;
+  padding: 4rem 0 5.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+
+.beaver-hero__bg {
+  background:
+    radial-gradient(ellipse 110% 75% at 10% 55%, rgba(255,255,255,0.025) 0%, transparent 52%),
+    radial-gradient(ellipse 65% 50% at 92% 28%, rgba(255,255,255,0.015) 0%, transparent 48%);
+}
+
+.beaver-hero__dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+  background-size: 30px 30px;
+  pointer-events: none;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.12) 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.12) 60%, transparent 100%);
+}
+
+.beaver-hero__watermark {
+  position: absolute;
+  bottom: -1rem;
+  right: -1rem;
+  font-family: var(--font-display);
+  font-size: clamp(7rem, 18vw, 16rem);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.028);
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Hero text on dark */
+.beaver-hero .section__eyebrow { color: rgba(255,255,255,0.38); }
+.beaver-hero__title           { color: #ffffff; }
+.beaver-hero__tagline         { color: rgba(255,255,255,0.45); }
+.beaver-hero__desc            { color: rgba(255,255,255,0.60); }
+
+.beaver-hero__phase {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.10);
+}
+.beaver-hero__phase-label { color: rgba(255,255,255,0.36); }
+.beaver-hero__phase-value { color: rgba(255,255,255,0.92); }
+
+.beaver-hero__stats li {
+  background: rgba(255,255,255,0.055);
+  border-color: rgba(255,255,255,0.08);
+}
+.beaver-hero__stat-k { color: rgba(255,255,255,0.36); }
+.beaver-hero__stat-v { color: #ffffff; }
+
+.beaver-hero__live {
+  color: rgba(255,255,255,0.82);
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255,255,255,0.13);
+}
+.beaver-hero__live-dot {
+  background: rgba(255,255,255,0.85);
+}
+@keyframes beaverLivePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0.28); }
+  50%       { box-shadow: 0 0 0 6px rgba(255,255,255,0); }
+}
+
+/* Image wrap on dark — engineering-drawing look */
+.beaver-hero__img-wrap {
+  background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.97), rgba(218,218,224,0.93));
+  border-color: rgba(255,255,255,0.14);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06),
+    0 32px 80px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.45);
+}
+
+/* Flagship badge on dark */
+.beaver-hero .product-badge--flagship {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.88);
+}
+
+/* Action buttons on dark background */
+.beaver-hero .btn--outline {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.20);
+  color: rgba(255,255,255,0.88);
+}
+.beaver-hero .btn--outline:hover {
+  background: rgba(255,255,255,0.13);
+  border-color: rgba(255,255,255,0.32);
+  color: #fff;
+}
+.beaver-hero .btn--primary {
+  background: #ffffff;
+  color: #0c0c0f;
+  border-color: transparent;
+}
+.beaver-hero .btn--primary:hover {
+  background: rgba(255,255,255,0.88);
+}
+
+/* --- Pillar cards — decorative background number --- */
+.beaver-pillar {
+  position: relative;
+  overflow: hidden;
+}
+
+.beaver-pillar::before {
+  content: attr(data-num);
+  position: absolute;
+  bottom: -0.6rem;
+  right: 0.4rem;
+  font-family: var(--font-display);
+  font-size: 5.5rem;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: rgba(0,0,0,0.055);
+  pointer-events: none;
+  user-select: none;
+}
+
+.beaver-pillar__num {
+  color: rgba(0,0,0,0.3);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  margin-bottom: 0.75rem;
+}
+
+.beaver-pillar__title {
+  font-size: 1.0rem;
+}
+
+/* Left accent bar on pillar hover */
+.beaver-pillar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: rgba(0,0,0,0.08);
+  border-radius: 3px 0 0 3px;
+  transition: background 0.3s;
+}
+.beaver-pillar:hover::after {
+  background: rgba(0,0,0,0.25);
+}
+
+/* --- Trade study enhanced labels --- */
+.beaver-trade__col-label--rejected {
+  color: #8a8a92;
+  background: rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.08);
+  text-decoration: line-through;
+  text-decoration-color: rgba(0,0,0,0.25);
+}
+
+.beaver-trade__col-label--selected {
+  color: #0c0c0f;
+  background: rgba(0,0,0,0.09);
+  border: 1px solid rgba(0,0,0,0.16);
+  font-size: 0.62rem;
+}
+
+/* Selected column highlight */
+.beaver-trade__col--full {
+  background: rgba(0,0,0,0.02);
+  border-top: 1px solid rgba(0,0,0,0.08);
+  position: relative;
+}
+.beaver-trade__col--full::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: rgba(0,0,0,0.18);
+  border-radius: 3px 0 0 3px;
+}
+
+/* Trade header large number refinement */
+.beaver-trade__num {
+  font-size: 3rem;
+  color: rgba(0,0,0,0.07);
+}
+
+/* --- Stronger blockquote in overview --- */
+.product-quote {
+  position: relative;
+}
+.product-quote::before {
+  content: '\201C';
+  position: absolute;
+  left: -0.5rem;
+  top: -1.5rem;
+  font-family: var(--font-display);
+  font-size: 6rem;
+  line-height: 1;
+  color: rgba(0,0,0,0.06);
+  pointer-events: none;
+}
+
+/* --- Section header eyebrow with accent line --- */
+.section__header .section__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.section__header .section__eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 2px;
+  background: currentColor;
+  opacity: 0.4;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* --- Roadmap current item stronger treatment --- */
+.beaver-roadmap__item--done .beaver-roadmap__body h3 { opacity: 0.65; }
+.beaver-roadmap__item--current .beaver-roadmap__body h3 { font-size: 1.15rem; }
+.beaver-roadmap__item--current .beaver-roadmap__body p { color: var(--text); }
+
+/* --- Compare table accent on win cells --- */
+.beaver-compare__cell--win {
+  color: var(--text);
+  font-weight: 600;
+  padding-left: 0.5rem;
+  border-left: 2px solid rgba(0,0,0,0.15);
+}
+
+/* --- Gallery larger wide images --- */
+.beaver-gallery__item--wide img {
+  min-height: 380px;
+  padding: 2rem 3rem 1.25rem;
+}
+
+/* ===== Beaver inline Milanote link ===== */
+.beaver-milanote-link {
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(0, 0, 0, 0.25);
+  transition: text-decoration-color 0.2s;
+}
+
+.beaver-milanote-link:hover {
+  text-decoration-color: var(--text);
+}
+
+.beaver-milanote-link__icon {
+  font-size: 0.85em;
+  opacity: 0.6;
+}
+
+/* ===== Beaver design board button ===== */
+.beaver-board-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+  padding: 0.7rem 1.25rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  background: var(--glass-white-strong);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-xs);
+  transition: box-shadow 0.25s, transform 0.25s var(--ease-spring), background 0.2s;
+  text-decoration: none;
+}
+
+.beaver-board-link:hover {
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
+  background: #fff;
+}
+
+.beaver-board-link__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1a1a1a;
+  flex-shrink: 0;
+}
+
+.beaver-board-link__arrow {
+  font-size: 0.9em;
+  opacity: 0.55;
+}
+
+/* ===== Beaver trade studies ===== */
+.beaver-trades {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.beaver-trade {
+  background: var(--glass-white-strong);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.beaver-trade__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 1.5rem 1.75rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.beaver-trade__num {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: rgba(0, 0, 0, 0.10);
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+}
+
+.beaver-trade__title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.35rem;
+}
+
+.beaver-trade__sub {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.beaver-trade__body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.beaver-trade__col {
+  padding: 1.25rem 1.75rem;
+  border-right: 1px solid var(--border);
+}
+
+.beaver-trade__col:last-child {
+  border-right: none;
+}
+
+.beaver-trade__col--full {
+  grid-column: 1 / -1;
+  border-right: none;
+  border-top: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.015);
+}
+
+.beaver-trade__col-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.9rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-pill);
+  display: inline-block;
+}
+
+.beaver-trade__col-label--rejected {
+  color: #7a7a82;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.beaver-trade__col-label--selected {
+  color: #1a1a1a;
+  background: rgba(0, 0, 0, 0.10);
+}
+
+.beaver-trade__col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.beaver-trade__col ul li {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  line-height: 1.58;
+  padding-left: 1.1rem;
+  position: relative;
+}
+
+.beaver-trade__col ul li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: rgba(0, 0, 0, 0.18);
+  font-size: 0.7rem;
+  top: 0.05em;
+}
+
+.beaver-trade__col--full ul li {
+  color: var(--text);
+}
+
+@media (max-width: 900px) {
+  .beaver-trade__body {
+    grid-template-columns: 1fr;
+  }
+  .beaver-trade__col {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .beaver-trade__col:last-child {
+    border-bottom: none;
+  }
+  .beaver-trade__col--full {
+    border-top: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .beaver-gallery {
+    grid-template-columns: 1fr;
+  }
+  .beaver-gallery__item--wide {
+    grid-column: 1;
+  }
+  .beaver-gallery__item img,
+  .beaver-gallery__item--wide img {
+    min-height: 200px;
+  }
+  .beaver-hero__img-wrap {
+    aspect-ratio: 16/10;
+  }
+  .beaver-trade__header {
+    padding: 1.25rem;
+  }
+  .beaver-trade__col {
+    padding: 1rem 1.25rem;
+  }
+}
 
 /* ===== 3D viewer (click-to-load) ===== */
 .viewer3d-wrap {

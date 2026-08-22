@@ -1042,30 +1042,30 @@
         name: 'TTM Beaver',
         short: 'Beaver',
         href: 'beaver.html',
-        image: 'TTMNewLogo.png',
-        logo: true,
-        class: 'Assault rifle',
-        cartridge: '7.62×39mm',
-        status: 'In development',
-        role: 'General-purpose / modern conflict',
-        magazine: 'Standard AK-pattern (30 rd typical)',
-        feed: 'Rock-and-lock AK magazines',
-        barrel: '14.5″ (target)',
-        twist: '1:9.5″ RH (target)',
-        oal: '34.5″ / 26.2″ collapsed (target)',
-        weight: '7.4 lb unloaded (target)',
+        image: 'TTM%20Beaver/TTM%20Beaver%20Upper%201.png',
+        logo: false,
+        class: 'SOF battle rifle / PDW',
+        cartridge: '6.8 TVCM (polymer casing)',
+        status: 'Original design · Parametric CAD phase',
+        role: 'SOF assault · near-peer CQB · Level 4 armor defeat',
+        magazine: 'DPMS / SR-25 steel pattern',
+        feed: 'SR-25 detachable box magazine',
+        barrel: 'TBD — CAD phase (5.56-class envelope target)',
+        twist: 'TBD (target)',
+        oal: '5.56-class footprint · integrated collapsible stock (target)',
+        weight: '< 7.5 lb unloaded (target)',
         weightLb: 7.4,
-        rof: '600–700 RPM (target)',
-        range: '~400 m',
-        rangeM: 400,
-        velocity: '~715 m/s (M43-class)',
-        gas: 'Refined short-stroke gas piston',
-        receiver: 'Weight-optimized, in-house',
+        rof: 'Select-fire (target)',
+        range: '500 m (Level 4 armor defeat)',
+        rangeM: 500,
+        velocity: 'Optimized for Level 4 defeat @ 500 m',
+        gas: 'Adjustable short-stroke piston · mid-length (9-in.) dwell',
+        receiver: '7075-T6 aluminum · 1.000-in. bore · SR-25 magwell · press-fit steel inserts',
         controls: 'Fully ambidextrous',
         stock: 'Integrated collapsible',
-        suppressor: 'Thread / QD ready',
-        notes: 'Keeps AK ammo/mag logistics; trades long-stroke familiarity for lighter mass and ambi controls. Specs are program targets.',
-        manufacturing: '100% TTM in-house',
+        suppressor: 'Tucked geometry · QD ready',
+        notes: 'Original design from scratch — first TTM original platform. 6.8 TVCM polymer casing: 30% lighter than brass, 65,000 PSI, Level 4 defeat at 500 m in a 5.56-class footprint. Two-piece cylindrical BCG in Maraging Stainless + Carpenter 158 for zero carrier tilt. All specs are engineering targets.',
+        manufacturing: 'TTM in-house · original design',
         lead: 'Yoni',
         provisional: true
       },
@@ -1318,7 +1318,7 @@
     ];
 
     var presets = [
-      { a: 'beaver', b: 'mk47', label: 'Beaver vs MK47' },
+      { a: 'beaver', b: 'sigspear', label: 'Beaver vs SPEAR' },
       { a: 'm4a1', b: 'sigspear', label: 'M4A1 vs SPEAR' },
       { a: 'an94', b: 'm4a1', label: 'AN-94 vs M4A1' },
       { a: 'ruger', b: 'sigspear', label: 'Ruger vs SPEAR' },
@@ -1552,9 +1552,9 @@
         id: 'beaver',
         name: 'TTM Beaver',
         href: 'beaver.html',
-        image: 'TTMNewLogo.png',
-        logo: true,
-        meta: '7.62×39 · In development'
+        image: 'TTM%20Beaver/TTM%20Beaver%20Upper%201.png',
+        logo: false,
+        meta: '6.8 TVCM · SOF battle rifle · Original design'
       },
       sigspear: {
         id: 'sigspear',
@@ -1629,7 +1629,7 @@
         picks: [
           { id: 'mp7', badge: 'Primary', why: 'PDW envelope with retractable stock — built for crews and confined mounts.' },
           { id: 'm4a1', badge: 'Alternate', why: 'When you need rifle ballistics after dismount, still compact enough with a collapsed stock.' },
-          { id: 'beaver', badge: 'Watch', why: 'Target collapsible footprint plus 7.62×39 logistics for theaters already on AK ammo.' }
+          { id: 'beaver', badge: 'Watch', why: 'Target: 5.56-class footprint with 6.8 TVCM Level 4 defeat — if specs land, the strongest vehicle-to-ground transition in the catalog. Provisional.' }
         ],
         compare: ['mp7', 'm4a1']
       },
@@ -1642,7 +1642,7 @@
         picks: [
           { id: 'm4a1', badge: 'Primary', why: 'Best weight-to-capability trade and deepest NATO mag/ammo base for general issue.' },
           { id: 'mk47', badge: 'Alternate', why: 'AR controls with 7.62×39 punch when intermediate barrier performance matters more than 5.56.' },
-          { id: 'beaver', badge: 'Watch', why: 'Program target: AK logistics with modern weight discipline and full ambi controls.' }
+          { id: 'beaver', badge: 'Watch', why: '6.8 TVCM polymer is 30% lighter than brass and defeats Level 4 at 500 m — if specs land, the definitive near-peer patrol rifle. Provisional.' }
         ],
         compare: ['m4a1', 'mk47']
       },
@@ -1660,17 +1660,30 @@
         compare: ['ruger', 'sigspear']
       },
       {
-        id: 'logistics',
-        name: 'Logistics-constrained',
-        blurb: 'Theater already runs 7.62×39 and AK mags.',
-        title: 'Logistics-constrained theater',
-        desc: 'Keep the supply chain you already have. Choose platforms that drink AK magazines and 7.62×39 without forcing a parallel ammo pipeline.',
+        id: 'sof',
+        name: 'SOF assault',
+        blurb: 'Suppressed, compact, Level 4 armor defeat at 500 m.',
+        title: 'SOF assault / near-peer urban warfare',
+        desc: 'Modern near-peer engagements demand compactness, suppressed operation, and the ability to defeat Level 4 body armor at realistic infantry ranges — simultaneously. This is the mission the Beaver was designed for.',
         picks: [
-          { id: 'beaver', badge: 'Primary', why: 'Purpose-built around AK mags and 7.62×39 with modern ergonomics — provisional, but the logistics fit is the point.' },
-          { id: 'mk47', badge: 'Alternate', why: 'Production-ready AR ergonomics on the same AK magazine and cartridge logistics.' },
-          { id: 'm4a1', badge: 'Fallback', why: 'Only if NATO 5.56 is already in the pipe — otherwise you split the supply chain.' }
+          { id: 'beaver', badge: 'Primary', why: 'Purpose-built: 6.8 TVCM polymer in a 5.56-class footprint — defeats Level 4 at 500 m, 30% lighter ammo, zero carrier tilt, fully tucked suppressor geometry. The only platform in the catalog designed specifically for this mission. Provisional.' },
+          { id: 'sigspear', badge: 'Alternate', why: '.277 Fury / 6.8×51 has more reach and terminal performance, at the cost of a heavier, larger platform not optimized for suppressed CQB.' },
+          { id: 'm4a1', badge: 'Fallback', why: '5.56 cannot defeat Level 4 — only viable if body armor defeat is not a requirement.' }
         ],
-        compare: ['beaver', 'mk47']
+        compare: ['beaver', 'sigspear']
+      },
+      {
+        id: 'logistics',
+        name: 'AK-theater logistics',
+        blurb: 'Theater already runs 7.62×39 and AK mags.',
+        title: 'AK-theater logistics',
+        desc: 'Keep the supply chain you already have. Choose platforms that run AK magazines and 7.62×39 without forcing a parallel ammo pipeline.',
+        picks: [
+          { id: 'mk47', badge: 'Primary', why: 'Production-ready AR ergonomics on the same AK magazine and cartridge logistics — the right tool for this specific constraint.' },
+          { id: 'm4a1', badge: 'Fallback', why: 'Only if NATO 5.56 is already in the pipe — otherwise you split the supply chain.' },
+          { id: 'beaver', badge: 'Wrong fit', why: 'The Beaver now uses 6.8 TVCM / SR-25 mags — it no longer fits AK-theater logistics. See SOF Assault for its actual mission profile.' }
+        ],
+        compare: ['mk47', 'm4a1']
       },
       {
         id: 'reach',

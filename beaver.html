@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TTM Beaver | Tomer Tamir Machinery</title>
-  <meta name="description" content="TTM Beaver — purpose-built 7.62×39 rifle platform in active development. Weight-optimized, AK-mag compatible, engineered for modern conflict. A personal engineering and design portfolio project.">
+  <meta name="description" content="TTM Beaver — original next-generation SOF battle rifle firing 6.8 TVCM polymer cartridge. Defeats Level-4 armor at 500 m in a standard 5.56 PDW footprint. Engineered from scratch.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Shadows+Into+Light&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="icon" href="TTMNewLogo.png" type="image/png">
-  <link rel="stylesheet" href="styles.css?v=39">
+  <link rel="stylesheet" href="styles.css?v=40">
 </head>
 <body class="subpage subpage--beaver product-page">
   <div class="scroll-progress" id="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar"></div></div>
@@ -57,195 +57,396 @@
   </header>
 
   <main>
-    <!-- Hero -->
+
+    <!-- ═══ HERO ═══ -->
     <section class="beaver-hero">
       <div class="beaver-hero__bg" aria-hidden="true"></div>
+      <div class="beaver-hero__dots" aria-hidden="true"></div>
+      <span class="beaver-hero__watermark" aria-hidden="true">BVR-001</span>
       <div class="container">
         <div class="beaver-hero__grid animate-in">
           <div class="beaver-hero__visual">
-            <div class="beaver-hero__placeholder">
-              <img src="TTMNewLogo.png" alt="" class="beaver-hero__logo">
-              <div class="beaver-hero__silhouette" aria-hidden="true"></div>
+            <div class="beaver-hero__img-wrap">
+              <img src="TTM%20Beaver/TTM%20Beaver%20Upper%201.png"
+                   alt="TTM Beaver upper receiver — early development CAD render"
+                   class="beaver-hero__cad">
             </div>
             <div class="beaver-hero__visual-badges">
-              <span class="product-badge product-badge--flagship">Flagship program</span>
-              <span class="beaver-hero__live"><span class="beaver-hero__live-dot"></span>Active development</span>
+              <span class="product-badge product-badge--flagship">Original design</span>
+              <span class="beaver-hero__live"><span class="beaver-hero__live-dot"></span>Active CAD development</span>
             </div>
           </div>
           <div class="beaver-hero__copy">
-            <span class="section__eyebrow">Small Arms · Program BVR-001</span>
+            <span class="section__eyebrow">Small Arms · Program BVR-001 · Original Design</span>
             <h1 class="beaver-hero__title">TTM Beaver</h1>
-            <p class="beaver-hero__tagline">7.62×39 · AK magazine compatible · Purpose-built for modern conflict</p>
-            <p class="beaver-hero__desc">A tactical evolution for high-intensity, mobile warfare — battle-proven architecture with modern ergonomics, weight discipline, and supply-chain resilience.</p>
+            <p class="beaver-hero__tagline">6.8 TVCM · Ultra-compact SOF battle rifle · <span class="hl">Built from scratch</span></p>
+            <p class="beaver-hero__desc">Not a clone. Not a derivative. An engineering exercise in extreme systems integration — packing <span class="hl">Level-4</span> armor-piercing power into the footprint of a standard 5.56 PDW. The result of rigorous formal trade studies across every subsystem, from the cartridge to the BCG.</p>
             <div class="beaver-hero__phase">
               <span class="beaver-hero__phase-label">Current phase</span>
-              <span class="beaver-hero__phase-value">Gas system &amp; receiver iteration</span>
+              <span class="beaver-hero__phase-value">Parametric CAD — upper receiver & BCG assembly</span>
             </div>
             <ul class="beaver-hero__stats">
-              <li><span class="beaver-hero__stat-k">Cartridge</span><span class="beaver-hero__stat-v">7.62×39mm</span></li>
-              <li><span class="beaver-hero__stat-k">Magazines</span><span class="beaver-hero__stat-v">AK pattern</span></li>
-              <li><span class="beaver-hero__stat-k">Manufacturing</span><span class="beaver-hero__stat-v">TTM in-house</span></li>
-              <li><span class="beaver-hero__stat-k">Imagery</span><span class="beaver-hero__stat-v">Pre-release</span></li>
+              <li><span class="beaver-hero__stat-k">Cartridge</span><span class="beaver-hero__stat-v"><span class="hl">6.8 TVCM polymer</span></span></li>
+              <li><span class="beaver-hero__stat-k">Armor defeat</span><span class="beaver-hero__stat-v"><span class="hl">Level 4 @ 500 m</span></span></li>
+              <li><span class="beaver-hero__stat-k">Chamber pressure</span><span class="beaver-hero__stat-v"><span class="hl">65,000 PSI</span></span></li>
+              <li><span class="beaver-hero__stat-k">Design origin</span><span class="beaver-hero__stat-v"><span class="hl">Original — from scratch</span></span></li>
             </ul>
             <div class="beaver-hero__actions">
-              <a href="#roadmap" class="btn btn--primary">View roadmap</a>
-              <a href="index.html#products" class="btn btn--outline">← All systems</a>
+              <a href="#trade-studies" class="btn btn--primary">Engineering process</a>
+              <a href="#cad" class="btn btn--outline">CAD renders</a>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Design pillars -->
+    <!-- ═══ FOUR ENGINEERING PILLARS ═══ -->
     <section class="section" id="pillars">
       <div class="container">
         <div class="section__header animate-in">
-          <span class="section__eyebrow">Design philosophy</span>
-          <h2 class="section__title">Four pillars</h2>
-          <p class="section__lead">Every decision on the Beaver program traces back to one of these constraints — what operators actually need in theater, not what looks good on a spec sheet.</p>
+          <span class="section__eyebrow">Systems architecture</span>
+          <h2 class="section__title">Four subsystems. Zero compromises.</h2>
+          <p class="section__lead">The Beaver is not a hybrid of existing platforms. Each subsystem was independently evaluated through a formal trade study, then integrated into a single coherent chassis.</p>
         </div>
         <div class="beaver-pillars">
-          <article class="beaver-pillar animate-in">
+          <article class="beaver-pillar animate-in" data-num="01">
             <span class="beaver-pillar__num">01</span>
-            <h3 class="beaver-pillar__title">Mass budget</h3>
-            <p class="beaver-pillar__desc">Malicious weight reduction — every gram is functional. Less fatigue on long patrols, faster transitions in contact.</p>
+            <h3 class="beaver-pillar__title">Cartridge architecture</h3>
+            <p class="beaver-pillar__desc">6.8 TVCM polymer casing: <span class="hl">30% lighter</span> than brass, thermally insulating, <span class="hl">65,000 PSI</span> chamber pressure, and reliable <span class="hl">Level-4</span> defeat at the realistic 500 m infantry engagement limit.</p>
           </article>
-          <article class="beaver-pillar animate-in">
+          <article class="beaver-pillar animate-in" data-num="02">
             <span class="beaver-pillar__num">02</span>
-            <h3 class="beaver-pillar__title">Mobility</h3>
-            <p class="beaver-pillar__desc">Collapsible stock and a compact envelope for rapid ingress and egress from vehicles, APCs, and tight urban spaces.</p>
+            <h3 class="beaver-pillar__title">BCG kinematics</h3>
+            <p class="beaver-pillar__desc">Two-piece cylindrical carrier in Maraging Stainless Steel + Carpenter 158. Rear half acts as integrated buffer — <span class="hl">zero carrier tilt</span>, perfectly linear recoil in an exceptionally slim envelope.</p>
           </article>
-          <article class="beaver-pillar animate-in">
+          <article class="beaver-pillar animate-in" data-num="03">
             <span class="beaver-pillar__num">03</span>
-            <h3 class="beaver-pillar__title">Logistics</h3>
-            <p class="beaver-pillar__desc">7.62×39mm and standard AK magazines — ammunition commonality and supply-chain resilience where it matters.</p>
+            <h3 class="beaver-pillar__title">Gas architecture</h3>
+            <p class="beaver-pillar__desc">Adjustable short-stroke piston at <span class="hl">mid-length (9-inch) dwell</span>. Op-rod return spring anchored at the upper receiver — thermally isolated from the suppressed gas block, preventing rod buckling under sustained fire.</p>
           </article>
-          <article class="beaver-pillar animate-in">
+          <article class="beaver-pillar animate-in" data-num="04">
             <span class="beaver-pillar__num">04</span>
-            <h3 class="beaver-pillar__title">Serviceability</h3>
-            <p class="beaver-pillar__desc">Simplified barrel connection and a refined short-stroke gas system — breakdown and cleaning without a full armorer shop.</p>
+            <h3 class="beaver-pillar__title">Chassis & receiver</h3>
+            <p class="beaver-pillar__desc">7075-T6 aluminum with a 1.000-inch bore. SR-25 magwell for maximum internal volume. Knurled press-fit steel top-hat inserts on all critical fasteners — <span class="hl">steel-on-steel lockdown</span> at 65,000 PSI.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- Overview -->
+    <!-- ═══ OVERVIEW ═══ -->
     <section class="section section--subtle">
       <div class="container">
         <div class="product-prose animate-in">
           <span class="section__eyebrow">Overview</span>
-          <h2 class="section__title" style="margin-bottom:1rem">Purpose-built for the frontline</h2>
-          <p>The Beaver is not just another rifle. It is a platform engineered for operators who need reliability, mobility, and logistical sanity under sustained operational tempo.</p>
-          <p>A refined short-stroke gas system re-engineers the gas port and piston interface for improved cycle consistency and reduced recoil impulse versus traditional platforms. Fully ambidextrous controls support seamless strong- and weak-side transitions — critical when maneuvering around urban obstacles and debris.</p>
+          <h2 class="section__title" style="margin-bottom:1rem">A major pivot — <span class="hl">built from first principles</span></h2>
+          <p>Every previous TTM program was a rigorous CAD analysis and re-engineering of established military platforms. The TTM Beaver is something fundamentally different. It is the first TTM platform designed entirely from scratch — a next-generation Special Forces rifle developed through the full engineering cycle, from concept definition through formal trade studies to parametric CAD modeling.</p>
+          <p>Using <a href="https://app.milanote.com/1WR0AU1yVYvX2N?p=CM12v9ZTDSi" target="_blank" rel="noopener" class="beaver-milanote-link">Milanote as a master design board <span class="beaver-milanote-link__icon" aria-hidden="true">↗</span></a>, every subsystem — from the cartridge to the bolt carrier — was subjected to a formal trade study. Competing platforms were disassembled on paper: the SIG MCX, HK416, FN ARKA, and Q Boombox were each analyzed to identify where they compromise. The Beaver resolves those conflicts in a single integrated design. The foundational requirement rejected the US military's 800-meter armor-defeat standard — identified as an Afghan theater relic — in favor of the 500-meter realistic infantry engagement limit, which unlocks the lower-pressure, polymer-cased 6.8 TVCM cartridge as the optimal solution.</p>
           <blockquote class="product-quote">
-            <p>The TTM Beaver is the intersection of refined engineering and field-tested necessity. Built for those who need a rifle that works as hard as they do.</p>
+            <p>The TTM Beaver harnesses the extreme compactness of the Q Boombox, the relentless reliability of an HK416 short-stroke gas piston, and the <span class="hl">30% weight reduction</span> of the 6.8 TVCM polymer cartridge — delivering <span class="hl">maximum lethality</span> without compromising the acoustic signature or maneuverability required for modern urban and trench warfare.</p>
           </blockquote>
+          <p>Using advanced materials not widely available until recently — aerospace-grade Maraging Stainless Steel for the BCG and polymer-composite 6.8 TVCM casings — the result is a suppressed, zero-tilt CQB platform capable of defeating Level-4 body armor at 500 meters in the size and weight profile of a standard 5.56 rifle.</p>
         </div>
       </div>
     </section>
 
-    <!-- Roadmap -->
-    <section class="section" id="roadmap">
+    <!-- ═══ OPEN ENGINEERING / MILANOTE ═══ -->
+    <section class="beaver-openeng">
+      <span class="beaver-openeng__watermark" aria-hidden="true">OPEN</span>
+      <div class="container">
+        <div class="beaver-openeng__inner animate-in">
+          <div class="beaver-openeng__copy">
+            <span class="section__eyebrow">Open engineering</span>
+            <h2 class="beaver-openeng__title">Every decision.<br><span class="hl">On record.</span></h2>
+            <p>The TTM Beaver is not designed behind closed doors. The entire engineering process — every trade study, platform comparison, and architectural decision — is documented in an open Milanote board accessible to anyone. This is how TTM approaches original design: <span class="hl">transparent, rigorous, and defensible</span>.</p>
+            <ul class="beaver-openeng__items">
+              <li><span class="beaver-openeng__item-arrow" aria-hidden="true">→</span>Ammunition trade study: .277 Fury vs. <span class="hl">6.8 TVCM polymer</span></li>
+              <li><span class="beaver-openeng__item-arrow" aria-hidden="true">→</span>BCG kinematics: monolithic vs. top op-rod vs. <span class="hl">TTM two-piece cylindrical</span></li>
+              <li><span class="beaver-openeng__item-arrow" aria-hidden="true">→</span>Gas architecture: DI vs. long-stroke vs. <span class="hl">short-stroke piston</span></li>
+              <li><span class="beaver-openeng__item-arrow" aria-hidden="true">→</span>Platform analysis: SIG MCX, HK416, FN ARKA, Q Boombox</li>
+              <li><span class="beaver-openeng__item-arrow" aria-hidden="true">→</span>Mission envelope definition & <span class="hl">500-meter requirement</span> rationale</li>
+            </ul>
+          </div>
+          <div class="beaver-openeng__cta">
+            <a href="https://app.milanote.com/1WR0AU1yVYvX2N?p=CM12v9ZTDSi" target="_blank" rel="noopener" class="beaver-openeng__btn">
+              <span class="beaver-openeng__btn-label">View the design board</span>
+              <span class="beaver-openeng__btn-sub">Milanote · Open access ↗</span>
+            </a>
+            <p class="beaver-openeng__note">All trade study data, platform analysis, and engineering decisions are publicly documented. No paywalls. No NDAs. This is open engineering.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ CAD GALLERY ═══ -->
+    <section class="section" id="cad">
+      <div class="container">
+        <div class="section__header animate-in">
+          <span class="section__eyebrow">Early development renders</span>
+          <h2 class="section__title">CAD progress</h2>
+          <p class="section__lead">Parametric upper receiver and BCG geometry at early development stage. Models are under active iteration — dimensions, features, and assembly interfaces subject to ongoing change.</p>
+        </div>
+        <div class="beaver-gallery animate-in">
+          <figure class="beaver-gallery__item beaver-gallery__item--wide">
+            <img src="TTM%20Beaver/TTM%20Beaver%20Upper%201.png"
+                 alt="TTM Beaver upper receiver — profile view"
+                 loading="lazy">
+            <figcaption>Upper receiver assembly — profile view</figcaption>
+          </figure>
+          <figure class="beaver-gallery__item beaver-gallery__item--wide">
+            <img src="TTM%20Beaver/TTM%20Beaver%20Upper%202.png"
+                 alt="TTM Beaver upper receiver — alternate angle"
+                 loading="lazy">
+            <figcaption>Upper receiver assembly — alternate angle</figcaption>
+          </figure>
+          <figure class="beaver-gallery__item">
+            <img src="TTM%20Beaver/TTM%20Beaver%20Upper%20Exploded%20View.png"
+                 alt="TTM Beaver upper — exploded component view"
+                 loading="lazy">
+            <figcaption>Exploded view — component layout</figcaption>
+          </figure>
+          <figure class="beaver-gallery__item">
+            <img src="TTM%20Beaver/TTM%20Beaver%20Upper%20Exploded%20View%202.png"
+                 alt="TTM Beaver upper — exploded assembly detail"
+                 loading="lazy">
+            <figcaption>Exploded view — assembly detail</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ TRADE STUDIES ═══ -->
+    <section class="section section--subtle" id="trade-studies">
+      <div class="container">
+        <div class="section__header animate-in">
+          <span class="section__eyebrow">Engineering methodology</span>
+          <h2 class="section__title">The trade studies</h2>
+          <p class="section__lead">Every subsystem was evaluated against competing solutions before a single dimension was drawn. These are the decisions that define the Beaver.</p>
+          <a href="https://app.milanote.com/1WR0AU1yVYvX2N?p=CM12v9ZTDSi" target="_blank" rel="noopener" class="beaver-board-link">
+            <span class="beaver-board-link__dot" aria-hidden="true"></span>
+            View master design board on Milanote
+            <span class="beaver-board-link__arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+        <div class="beaver-trades animate-in">
+
+          <!-- Trade 01: Ammunition -->
+          <div class="beaver-trade">
+            <div class="beaver-trade__header">
+              <span class="beaver-trade__num">01</span>
+              <div>
+                <h3 class="beaver-trade__title">Ammunition & the 500-meter requirement</h3>
+                <p class="beaver-trade__sub">Candidates evaluated: .277 Fury vs. 6.8 TVCM polymer</p>
+              </div>
+            </div>
+            <div class="beaver-trade__body">
+              <div class="beaver-trade__col">
+                <h4 class="beaver-trade__col-label beaver-trade__col-label--rejected">Rejected — .277 Fury</h4>
+                <ul>
+                  <li>800 m Level-4 penetration — exceeds the realistic SOF engagement envelope</li>
+                  <li>80,000 PSI chamber pressure: severe thermomechanical stress, accelerated barrel wear</li>
+                  <li>Heavy recoil and excessive acoustic signature — a liability in drone-monitored battlespaces</li>
+                  <li>The 800 m requirement identified as an Afghan theater relic, not a near-peer urban requirement</li>
+                </ul>
+              </div>
+              <div class="beaver-trade__col">
+                <h4 class="beaver-trade__col-label beaver-trade__col-label--selected">Selected — 6.8 TVCM polymer</h4>
+                <ul>
+                  <li>Defeats Level-4 armor at <span class="hl">500 m</span> — the realistic limit of infantry engagements</li>
+                  <li><span class="hl">65,000 PSI</span>: manageable chamber pressure, significantly reduced thermal stress</li>
+                  <li>Polymer casing: <span class="hl">30%</span> ammunition weight reduction vs. brass</li>
+                  <li>Casing acts as a <span class="hl">thermal insulator</span> — ejects heat out of the chamber, enabling sustained suppressive fire</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trade 02: BCG -->
+          <div class="beaver-trade">
+            <div class="beaver-trade__header">
+              <span class="beaver-trade__num">02</span>
+              <div>
+                <h3 class="beaver-trade__title">BCG kinematics & recoil dynamics</h3>
+                <p class="beaver-trade__sub">Candidates evaluated: monolithic carrier · top op-rod · TTM two-piece cylindrical</p>
+              </div>
+            </div>
+            <div class="beaver-trade__body">
+              <div class="beaver-trade__col">
+                <h4 class="beaver-trade__col-label beaver-trade__col-label--rejected">Rejected — Monolithic (SCAR / FN ARKA)</h4>
+                <ul>
+                  <li>Perfectly linear force transfer — a genuine advantage</li>
+                  <li>Requires a massive, bulky upper receiver incompatible with a PDW footprint</li>
+                  <li>No viable path to the compact 5.56-class envelope requirement</li>
+                </ul>
+              </div>
+              <div class="beaver-trade__col">
+                <h4 class="beaver-trade__col-label beaver-trade__col-label--rejected">Rejected — Top op-rod (SIG MCX)</h4>
+                <ul>
+                  <li>Enables folding stock — a genuine compactness advantage</li>
+                  <li>Introduces severe carrier tilt, forcing the bolt upward under recoil</li>
+                  <li>Risks shearing polymer 6.8 TVCM case rims on extraction — a fatal flaw with polymer casings</li>
+                </ul>
+              </div>
+              <div class="beaver-trade__col beaver-trade__col--full">
+                <h4 class="beaver-trade__col-label beaver-trade__col-label--selected">Selected — TTM two-piece cylindrical carrier</h4>
+                <ul>
+                  <li>Aerospace-grade <span class="hl">Maraging Stainless Steel</span> + Carpenter 158 — rated for 65,000 PSI bolt thrust</li>
+                  <li>Rear half of carrier acts directly as the buffer: recoil spring travels <span class="hl">perfectly linearly</span> into a shortened tube</li>
+                  <li><span class="hl">Zero carrier tilt</span>, no folding-stock penalty, and an exceptionally slim upper receiver profile — best of all worlds</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trade 03: Gas system -->
+          <div class="beaver-trade">
+            <div class="beaver-trade__header">
+              <span class="beaver-trade__num">03</span>
+              <div>
+                <h3 class="beaver-trade__title">Gas system architecture</h3>
+                <p class="beaver-trade__sub">Candidates evaluated: direct impingement · long-stroke piston · short-stroke piston</p>
+              </div>
+            </div>
+            <div class="beaver-trade__body">
+              <div class="beaver-trade__col">
+                <h4 class="beaver-trade__col-label beaver-trade__col-label--rejected">Rejected — Direct impingement</h4>
+                <ul>
+                  <li>Immediately ruled out for heavy suppressor use and continuous suppressive fire</li>
+                  <li>Vents hot carbon gas directly into the receiver — unacceptable under sustained suppressed operation</li>
+                </ul>
+              </div>
+              <div class="beaver-trade__col">
+                <h4 class="beaver-trade__col-label beaver-trade__col-label--rejected">Rejected — Long-stroke (AK-pattern / Bren)</h4>
+                <ul>
+                  <li>Proven durability and simplicity in extreme conditions</li>
+                  <li>Massive reciprocating mass increases felt recoil impulse</li>
+                  <li>Tucked suppressor configuration nearly impossible to achieve</li>
+                </ul>
+              </div>
+              <div class="beaver-trade__col beaver-trade__col--full">
+                <h4 class="beaver-trade__col-label beaver-trade__col-label--selected">Selected — Modernized adjustable short-stroke piston</h4>
+                <ul>
+                  <li>Gas port at strict <span class="hl">mid-length (9-inch) dwell</span>: bolt remains locked while the chamber is still at pressure — prevents polymer TVCM case rim failure on extraction</li>
+                  <li>Op-rod return spring anchored at the rear of the upper receiver, <span class="hl">physically isolated</span> from the extreme heat of the suppressed gas block</li>
+                  <li>Prevents rod buckling under sustained suppressed fire and enables <span class="hl">fully tucked suppressor</span> geometry</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ PLATFORM RATIONALE (COMPARE) ═══ -->
+    <section class="section" id="why">
+      <div class="container">
+        <div class="section__header animate-in">
+          <span class="section__eyebrow">Platform rationale</span>
+          <h2 class="section__title">Why not an off-the-shelf platform?</h2>
+          <p class="section__lead">Existing platforms each solve part of the problem. The Beaver is engineered to solve all of it simultaneously — without accepting any of their mechanical penalties.</p>
+        </div>
+        <div class="beaver-compare animate-in">
+          <div class="beaver-compare__head">
+            <span>Capability</span>
+            <span>Existing SOF platforms</span>
+            <span>TTM Beaver</span>
+          </div>
+          <div class="beaver-compare__row">
+            <span class="beaver-compare__label">Armor defeat at 500 m</span>
+            <span class="beaver-compare__cell beaver-compare__cell--muted">5.56 fails Level 4 · .277 Fury carries 80,000 PSI penalty</span>
+            <span class="beaver-compare__cell beaver-compare__cell--win">Level 4 defeat @ 500 m · 65,000 PSI</span>
+          </div>
+          <div class="beaver-compare__row">
+            <span class="beaver-compare__label">Carrier tilt / extraction safety</span>
+            <span class="beaver-compare__cell beaver-compare__cell--muted">MCX top-rod: severe carrier tilt · ARKA monolithic: bulky receiver</span>
+            <span class="beaver-compare__cell beaver-compare__cell--win">Zero carrier tilt — polymer casing protected throughout</span>
+          </div>
+          <div class="beaver-compare__row">
+            <span class="beaver-compare__label">Suppressed operation</span>
+            <span class="beaver-compare__cell beaver-compare__cell--muted">DI: heavy fouling · long-stroke: geometry conflicts with suppressor tuck</span>
+            <span class="beaver-compare__cell beaver-compare__cell--win">Short-stroke piston · heat-isolated return spring · tucked suppressor geometry</span>
+          </div>
+          <div class="beaver-compare__row">
+            <span class="beaver-compare__label">Ammunition weight</span>
+            <span class="beaver-compare__cell beaver-compare__cell--muted">Brass casings — standard load weight</span>
+            <span class="beaver-compare__cell beaver-compare__cell--win">Polymer casing — 30% lighter than brass-cased equivalent</span>
+          </div>
+          <div class="beaver-compare__row">
+            <span class="beaver-compare__label">Platform footprint</span>
+            <span class="beaver-compare__cell beaver-compare__cell--muted">Battle rifle cartridges require enlarged, heavier receivers</span>
+            <span class="beaver-compare__cell beaver-compare__cell--win">5.56-class 1.000-inch bore · SR-25 magwell in standard footprint</span>
+          </div>
+          <div class="beaver-compare__row">
+            <span class="beaver-compare__label">Structural integrity at 65k PSI</span>
+            <span class="beaver-compare__cell beaver-compare__cell--muted">Aluminum threads strip under violent high-pressure recoil vibration</span>
+            <span class="beaver-compare__cell beaver-compare__cell--win">Press-fit steel top-hat inserts — steel-on-steel lockdown throughout</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ ROADMAP ═══ -->
+    <section class="section section--subtle" id="roadmap">
       <div class="container">
         <div class="section__header animate-in">
           <span class="section__eyebrow">Program status</span>
           <h2 class="section__title">Development roadmap</h2>
-          <p class="section__lead">Public milestones for the Beaver program. Final specifications and imagery publish at production validation.</p>
+          <p class="section__lead">From concept definition to final parametric CAD — the complete engineering lifecycle, documented at every step.</p>
         </div>
         <ol class="beaver-roadmap">
           <li class="beaver-roadmap__item beaver-roadmap__item--done animate-in">
             <span class="beaver-roadmap__marker" aria-hidden="true"></span>
             <div class="beaver-roadmap__body">
               <span class="beaver-roadmap__status">Complete</span>
-              <h3>Requirements &amp; architecture</h3>
-              <p>Operator constraints defined — weight targets, cartridge selection, magazine compatibility, and ergonomics baseline locked.</p>
+              <h3>Systems architecture & trade studies</h3>
+              <p>Mission requirements defined. Formal trade studies conducted across ammunition, BCG kinematics, gas architecture, and chassis design. All platform-level decisions locked using the Milanote master design board.</p>
+            </div>
+          </li>
+          <li class="beaver-roadmap__item beaver-roadmap__item--done animate-in">
+            <span class="beaver-roadmap__marker" aria-hidden="true"></span>
+            <div class="beaver-roadmap__body">
+              <span class="beaver-roadmap__status">Complete</span>
+              <h3>Cartridge & ammunition selection</h3>
+              <p>6.8 TVCM polymer cartridge selected over .277 Fury. 65,000 PSI pressure cycle validated against bolt thrust, chamber geometry, and polymer case extraction dwell requirements.</p>
+            </div>
+          </li>
+          <li class="beaver-roadmap__item beaver-roadmap__item--done animate-in">
+            <span class="beaver-roadmap__marker" aria-hidden="true"></span>
+            <div class="beaver-roadmap__body">
+              <span class="beaver-roadmap__status">Complete</span>
+              <h3>BCG & gas system architecture locked</h3>
+              <p>Two-piece cylindrical carrier geometry established. Mid-length (9-inch) gas port dwell confirmed. Material specifications — Maraging Stainless Steel + Carpenter 158 — and spring isolation geometry finalized.</p>
             </div>
           </li>
           <li class="beaver-roadmap__item beaver-roadmap__item--current animate-in">
             <span class="beaver-roadmap__marker" aria-hidden="true"></span>
             <div class="beaver-roadmap__body">
               <span class="beaver-roadmap__status">In progress</span>
-              <h3>Receiver &amp; gas system iteration</h3>
-              <p>Short-stroke gas port tuning, piston interface refinement, and receiver geometry validation on the workshop floor.</p>
+              <h3>Parametric CAD — upper receiver & BCG assembly</h3>
+              <p>Upper receiver bore geometry, BCG interface, gas block mounting, op-rod housing, and rail system being modeled parametrically. Early development renders now available above.</p>
             </div>
           </li>
           <li class="beaver-roadmap__item beaver-roadmap__item--next animate-in">
             <span class="beaver-roadmap__marker" aria-hidden="true"></span>
             <div class="beaver-roadmap__body">
               <span class="beaver-roadmap__status">Up next</span>
-              <h3>Ergonomics &amp; controls validation</h3>
-              <p>Ambidextrous control layout, stock mechanism, and operator handling trials across gear configurations.</p>
+              <h3>Lower receiver, magwell & controls CAD</h3>
+              <p>SR-25 magwell dimensioning, ambidextrous control layout, integrated collapsible stock interface, and press-fit insert locations to be parametrically modeled.</p>
             </div>
           </li>
           <li class="beaver-roadmap__item beaver-roadmap__item--next animate-in">
             <span class="beaver-roadmap__marker" aria-hidden="true"></span>
             <div class="beaver-roadmap__body">
               <span class="beaver-roadmap__status">Planned</span>
-              <h3>Production validation</h3>
-              <p>Manufacturing tolerances, serialization, and Forge OS traceability integrated into the production line.</p>
-            </div>
-          </li>
-          <li class="beaver-roadmap__item beaver-roadmap__item--next animate-in">
-            <span class="beaver-roadmap__marker" aria-hidden="true"></span>
-            <div class="beaver-roadmap__body">
-              <span class="beaver-roadmap__status">Planned</span>
-              <h3>Field evaluation</h3>
-              <p>Controlled field trials, feedback integration, and public release of imagery and finalized specifications.</p>
+              <h3>Full assembly integration & validation</h3>
+              <p>Complete parametric assembly, interference checks, tolerance stack analysis, and publication of final specifications and full CAD renders.</p>
             </div>
           </li>
         </ol>
       </div>
     </section>
 
-    <!-- Why this platform -->
-    <section class="section section--subtle" id="why">
-      <div class="container">
-        <div class="section__header animate-in">
-          <span class="section__eyebrow">Platform rationale</span>
-          <h2 class="section__title">Why not just run a standard AK?</h2>
-          <p class="section__lead">Theater already has 7.62×39 and AK magazines in the supply chain. The Beaver keeps that logistics advantage — and fixes what legacy platforms compromise.</p>
-        </div>
-        <div class="beaver-compare animate-in">
-          <div class="beaver-compare__head">
-            <span></span>
-            <span>Legacy AK-pattern</span>
-            <span>TTM Beaver</span>
-          </div>
-          <div class="beaver-compare__row">
-            <span class="beaver-compare__label">Weight discipline</span>
-            <span class="beaver-compare__cell beaver-compare__cell--muted">Unoptimized mass</span>
-            <span class="beaver-compare__cell beaver-compare__cell--win">Functional gram budget</span>
-          </div>
-          <div class="beaver-compare__row">
-            <span class="beaver-compare__label">Vehicle / CQB footprint</span>
-            <span class="beaver-compare__cell beaver-compare__cell--muted">Fixed or basic stock</span>
-            <span class="beaver-compare__cell beaver-compare__cell--win">Integrated collapsible stock</span>
-          </div>
-          <div class="beaver-compare__row">
-            <span class="beaver-compare__label">Ambidextrous use</span>
-            <span class="beaver-compare__cell beaver-compare__cell--muted">Right-biased controls</span>
-            <span class="beaver-compare__cell beaver-compare__cell--win">Fully ambidextrous layout</span>
-          </div>
-          <div class="beaver-compare__row">
-            <span class="beaver-compare__label">Gas system consistency</span>
-            <span class="beaver-compare__cell beaver-compare__cell--muted">Traditional long-stroke variance</span>
-            <span class="beaver-compare__cell beaver-compare__cell--win">Refined short-stroke tuning</span>
-          </div>
-          <div class="beaver-compare__row">
-            <span class="beaver-compare__label">Field breakdown</span>
-            <span class="beaver-compare__cell beaver-compare__cell--muted">Armorer-dependent service</span>
-            <span class="beaver-compare__cell beaver-compare__cell--win">Simplified barrel connection</span>
-          </div>
-          <div class="beaver-compare__row">
-            <span class="beaver-compare__label">Ammo &amp; magazines</span>
-            <span class="beaver-compare__cell beaver-compare__cell--tie">7.62×39 · AK mags</span>
-            <span class="beaver-compare__cell beaver-compare__cell--tie">7.62×39 · AK mags</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Specs -->
+    <!-- ═══ SPECS ═══ -->
     <section class="section" id="specs">
       <div class="container">
         <div class="section__header animate-in">
@@ -256,40 +457,40 @@
           <div class="specs-block">
             <h3>Technical direction</h3>
             <ul class="specs-list">
-              <li>Cartridge: 7.62×39mm</li>
-              <li>Magazines: Standard AK-pattern (30 rd typical)</li>
-              <li>Operating system: Refined short-stroke gas piston</li>
-              <li>Barrel: 14.5″ target · simplified field-service connection</li>
-              <li>Overall length: 34.5″ / 26.2″ collapsed (target)</li>
-              <li>Weight: 7.4 lb unloaded (target)</li>
-              <li>Rate of fire: 600–700 RPM (target)</li>
-              <li>Muzzle velocity: ~715 m/s (M43-class)</li>
-              <li>Effective range: ~400 m</li>
-              <li>Controls: Fully ambidextrous</li>
+              <li>Cartridge: 6.8 TVCM (polymer casing)</li>
+              <li>Magazine: DPMS/SR-25 steel pattern</li>
+              <li>Chamber pressure: 65,000 PSI</li>
+              <li>Armor defeat: Level 4 @ 500 m</li>
+              <li>Operating system: Adjustable short-stroke gas piston</li>
+              <li>Gas port dwell: Mid-length (9-inch) geometry</li>
+              <li>BCG material: Maraging Stainless Steel + Carpenter 158</li>
+              <li>Upper receiver bore: 1.000 inch (5.56-class footprint)</li>
+              <li>Receiver material: 7075-T6 aluminum</li>
+              <li>Critical fasteners: Knurled press-fit steel top-hat inserts</li>
+              <li>Ammunition weight savings: ~30% vs. brass-cased equivalent</li>
               <li>Stock: Integrated collapsible system</li>
-              <li>Status: In active development — specs provisional</li>
-              <li>Manufacturing: TTM in-house</li>
-              <li>Traceability: Forge OS program tracking</li>
+              <li>Controls: Fully ambidextrous</li>
+              <li>Status: Original design — specifications under active development</li>
             </ul>
           </div>
           <div class="specs-block">
-            <h3>Program leadership</h3>
-            <p>Yoni leads the Beaver program — integrating weight-reduction targets, gas-system refinement, and operator ergonomics into a single development roadmap.</p>
-            <p>Imagery and final specifications will be published as the program reaches production validation.</p>
-            <p class="beaver-forge-line"><span class="dim">forge programs --active</span><br>BEAVER &nbsp;<span class="warn">DEVELOPMENT</span></p>
+            <h3>Program notes</h3>
+            <p>The TTM Beaver is the first TTM platform designed entirely from scratch. All prior programs — the SIG SPEAR, CMMG MK47, MP7, and others — involved rigorous re-engineering and CAD analysis of existing platforms. The Beaver applies the same methodology to an original weapons system.</p>
+            <p>Specifications represent engineering targets derived from the formal trade study process. Final dimensions will be published upon assembly completion and integration validation.</p>
+            <p class="beaver-forge-line"><span class="dim">forge programs --active</span><br>BEAVER &nbsp;<span class="warn">ORIGINAL DESIGN</span></p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CTA -->
+    <!-- ═══ CTA ═══ -->
     <section class="beaver-cta" id="inquire">
       <div class="container">
         <div class="beaver-cta__grid animate-in">
           <div>
             <span class="section__eyebrow">Get involved</span>
             <h2 class="section__title">Program inquiries</h2>
-            <p class="beaver-cta__desc">Partnerships, technical questions, or joining the build team — reach out directly or apply for an engineering role on the Beaver program.</p>
+            <p class="beaver-cta__desc">Partnerships, technical questions, or joining the build team — reach out directly or apply for an engineering role on the Beaver program. This is a ground-up design effort; serious contributors welcome.</p>
           </div>
           <div class="beaver-cta__actions">
             <a href="apply.html?position=mechanical-engineer&amp;program=beaver" class="btn btn--primary">Apply to the program</a>
@@ -299,6 +500,7 @@
         </div>
       </div>
     </section>
+
   </main>
 
   <footer class="footer">
