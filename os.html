@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Ubuntu:wght@400;500;700&family=Ubuntu+Mono&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0c0c0f">
   <link rel="icon" href="TTMNewLogo.png" type="image/png">
   <link rel="stylesheet" href="forge.css?v=4">
 </head>
@@ -328,5 +330,6 @@
   <div class="os-toast" id="toast"></div>
 
   <script type="module" src="forge-app.js?v=3"></script>
+  <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}</script>
 </body>
 </html>

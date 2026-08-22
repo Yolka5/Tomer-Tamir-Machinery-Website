@@ -15,6 +15,7 @@ const mime = {
   '.gif': 'image/gif',
   '.svg': 'image/svg+xml',
   '.webmanifest': 'application/manifest+json',
+  '.json': 'application/json',
   '.ico': 'image/x-icon'
 };
 
