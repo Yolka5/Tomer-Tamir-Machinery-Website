@@ -64,13 +64,13 @@ try {
 }
 
 // ── Customise your pass here ──────────────────────────────────────────────────
-const SITE_URL     = 'https://yolka5.github.io/Tomer-Tamir-Machinery-Website/';
+const SITE_URL     = 'https://tomertamirmachinery.netlify.app/';
 const LOGO_URL     = 'https://raw.githubusercontent.com/Yolka5/Tomer-Tamir-Machinery-Website/main/TTMNewLogo.png';
 const CARD_IMG_URL = 'https://raw.githubusercontent.com/Yolka5/Tomer-Tamir-Machinery-Website/main/wallet/wallet-card.png';
 
 // Unique IDs — bump CLASS_ID version or OBJECT_ID suffix to force a new pass.
-const CLASS_ID  = `${issuerId}.ttm_card_v3`;
-const OBJECT_ID = `${issuerId}.ttm_yoni_card_v3`;
+const CLASS_ID  = `${issuerId}.ttm_card_v4`;
+const OBJECT_ID = `${issuerId}.ttm_yoni_card_v4`;
 
 // ── Pass class — no extra rows, clean card layout ─────────────────────────────
 const passClass = {
