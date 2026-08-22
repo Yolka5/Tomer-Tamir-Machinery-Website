@@ -68,75 +68,38 @@ const SITE_URL     = 'https://yolka5.github.io/Tomer-Tamir-Machinery-Website/';
 const LOGO_URL     = 'https://raw.githubusercontent.com/Yolka5/Tomer-Tamir-Machinery-Website/main/TTMNewLogo.png';
 const CAD_IMG_URL  = 'https://raw.githubusercontent.com/Yolka5/Tomer-Tamir-Machinery-Website/main/TTM%20Beaver/TTM%20Beaver%20Upper%201.png';
 
-// Unique IDs for class and object. Change OBJECT_ID to create a fresh pass.
-const CLASS_ID  = `${issuerId}.ttm_engineer_card_v1`;
-const OBJECT_ID = `${issuerId}.ttm_yoni_bvr001`;
+// Unique IDs — bump CLASS_ID version or OBJECT_ID suffix to force a new pass.
+const CLASS_ID  = `${issuerId}.ttm_card_v2`;
+const OBJECT_ID = `${issuerId}.ttm_yoni_card_v2`;
 
-// ── Pass class (template) ─────────────────────────────────────────────────────
+// ── Pass class — no extra rows, clean card layout ─────────────────────────────
 const passClass = {
-  id: CLASS_ID,
-  classTemplateInfo: {
-    cardTemplateOverride: {
-      cardRowTemplateInfos: [
-        {
-          twoItems: {
-            startItem: {
-              firstValue: { fields: [{ fieldPath: "object.textModulesData['program']" }] }
-            },
-            endItem: {
-              firstValue: { fields: [{ fieldPath: "object.textModulesData['phase']" }] }
-            }
-          }
-        }
-      ]
-    }
-  }
+  id: CLASS_ID
 };
 
-// ── Pass object (the actual card) ─────────────────────────────────────────────
+// ── Pass object — card-style, minimal ─────────────────────────────────────────
 const passObject = {
   id: OBJECT_ID,
   classId: CLASS_ID,
   state: 'ACTIVE',
 
-  // Header
+  // Card identity
   cardTitle: {
-    defaultValue: { language: 'en-US', value: 'Tomer Tamir Machinery' }
+    defaultValue: { language: 'en-US', value: 'TTM' }
   },
   header: {
-    defaultValue: { language: 'en-US', value: 'Engineering Portfolio' }
+    defaultValue: { language: 'en-US', value: 'Yoni Shapiro' }
   },
   subheader: {
-    defaultValue: { language: 'en-US', value: 'Original Design · Systems Engineering' }
+    defaultValue: { language: 'en-US', value: 'Tomer Tamir Machinery' }
   },
 
-  // Branding
+  // Branding — logo only, no hero image (cleaner card look)
   logo: {
     sourceUri: { uri: LOGO_URL },
     contentDescription: { defaultValue: { language: 'en-US', value: 'TTM Logo' } }
   },
-  heroImage: {
-    sourceUri: { uri: CAD_IMG_URL },
-    contentDescription: { defaultValue: { language: 'en-US', value: 'TTM Beaver CAD render' } }
-  },
   hexBackgroundColor: '#0c0c0f',
-
-  // Info rows (shown in the card body)
-  textModulesData: [
-    { id: 'program', header: 'ACTIVE PROGRAM', body: 'TTM Beaver — BVR-001'       },
-    { id: 'phase',   header: 'PHASE',           body: 'Parametric CAD'             }
-  ],
-
-  // Links button at the bottom of the pass
-  linksModuleData: {
-    uris: [
-      {
-        uri: SITE_URL,
-        description: 'TTM Website',
-        id: 'ttm_site'
-      }
-    ]
-  },
 
   // QR code — scans to the website
   barcode: {
@@ -145,7 +108,6 @@ const passObject = {
     alternateText: 'TTM Website'
   },
 
-  // Notifications
   hasUsers: true
 };
 
