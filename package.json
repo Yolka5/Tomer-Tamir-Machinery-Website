@@ -1,0 +1,12 @@
+{
+  "name": "ttm-website",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node _dev-server.js",
+    "wallet": "node wallet/generate-pass.js"
+  },
+  "devDependencies": {
+    "jsonwebtoken": "^9.0.2"
+  }
+}

@@ -734,7 +734,13 @@
           </div>
         </div>
       </div>
-      <div class="footer__bottom"><p>© <span id="year"></span> Tomer Tamir Machinery</p><p class="footer__disclaimer">TTM is a personal engineering and design portfolio. This website presents fictional and conceptual work for creative showcase purposes; it is not a commercial offering and is not affiliated with any manufacturer or government.</p></div>
+      <div class="footer__bottom">
+        <p>© <span id="year"></span> Tomer Tamir Machinery</p>
+        <a href="#" id="wallet-btn" class="wallet-btn" target="_blank" rel="noopener" hidden aria-label="Save TTM card to Google Wallet">
+          <img src="https://wallet.google.com/intl/en_us/images/save-to-google-wallet-badge.svg" alt="Save to Google Wallet" height="40">
+        </a>
+        <p class="footer__disclaimer">TTM is a personal engineering and design portfolio. This website presents fictional and conceptual work for creative showcase purposes; it is not a commercial offering and is not affiliated with any manufacturer or government.</p>
+      </div>
     </div>
   </footer>
 
@@ -751,5 +757,15 @@
   <script src="script.js?v=34"></script>
   <script src="hero3d.js?v=10"></script>
   <script src="hero-award.js?v=3"></script>
+  <script src="wallet/wallet-url.js"></script>
+  <script>
+    (function() {
+      var btn = document.getElementById('wallet-btn');
+      if (btn && window.TTM_WALLET_URL) {
+        btn.href = window.TTM_WALLET_URL;
+        btn.hidden = false;
+      }
+    })();
+  </script>
 </body>
 </html>

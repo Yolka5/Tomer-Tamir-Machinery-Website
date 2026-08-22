@@ -1,0 +1,192 @@
+#!/usr/bin/env node
+/**
+ * TTM Google Wallet Pass Generator
+ * ─────────────────────────────────────────────────────────────────────────────
+ * Generates a signed "Add to Google Wallet" URL for a personal TTM engineer
+ * badge and saves it to wallet/wallet-url.js for use by the website.
+ *
+ * USAGE
+ *   node wallet/generate-pass.js <service-account.json> <issuer-id>
+ *
+ *   Example:
+ *   node wallet/generate-pass.js ./my-sa-key.json 3388000000012345678
+ *
+ * ONE-TIME SETUP (do this once, ~10 minutes)
+ * ─────────────────────────────────────────────────────────────────────────────
+ * 1. Google Pay & Wallet Console
+ *    → https://pay.google.com/business/console/
+ *    → Click "Google Wallet API" in the left sidebar
+ *    → Click "Create an issuer account" and fill in your info
+ *    → Copy your Issuer ID (a number like 3388000000012345678)
+ *
+ * 2. Google Cloud Console  (https://console.cloud.google.com/)
+ *    → Create a new project (or use an existing one)
+ *    → APIs & Services → Enable "Google Wallet API"
+ *    → IAM & Admin → Service Accounts → Create service account
+ *    → Give it any name, no special IAM roles needed
+ *    → After creation: Actions → Manage keys → Add key → JSON
+ *    → Download the JSON key file — keep it out of the repo!
+ *
+ * 3. Back in Google Pay & Wallet Console
+ *    → Google Wallet API → API Access
+ *    → Add the service account email from your JSON key
+ *
+ * 4. Run this script:
+ *    node wallet/generate-pass.js ./my-sa-key.json YOUR_ISSUER_ID
+ *
+ * 5. Open the printed URL on your phone to save the pass, or commit
+ *    wallet/wallet-url.js and click the button on the live site.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+const fs   = require('fs');
+const path = require('path');
+const jwt  = require('jsonwebtoken');
+
+// ── CLI args ──────────────────────────────────────────────────────────────────
+const saPath   = process.argv[2];
+const issuerId = process.argv[3];
+
+if (!saPath || !issuerId) {
+  console.error('\nUsage: node wallet/generate-pass.js <service-account.json> <issuer-id>');
+  console.error('See the comments at the top of this file for setup instructions.\n');
+  process.exit(1);
+}
+
+// ── Load service account ──────────────────────────────────────────────────────
+let sa;
+try {
+  sa = JSON.parse(fs.readFileSync(path.resolve(saPath), 'utf8'));
+} catch (e) {
+  console.error('\nCould not read service account file:', saPath);
+  console.error(e.message, '\n');
+  process.exit(1);
+}
+
+// ── Customise your pass here ──────────────────────────────────────────────────
+const SITE_URL     = 'https://yolka5.github.io/Tomer-Tamir-Machinery-Website/';
+const LOGO_URL     = 'https://raw.githubusercontent.com/Yolka5/Tomer-Tamir-Machinery-Website/main/TTMNewLogo.png';
+const CAD_IMG_URL  = 'https://raw.githubusercontent.com/Yolka5/Tomer-Tamir-Machinery-Website/main/TTM%20Beaver/TTM%20Beaver%20Upper%201.png';
+
+// Unique IDs for class and object. Change OBJECT_ID to create a fresh pass.
+const CLASS_ID  = `${issuerId}.ttm_engineer_card_v1`;
+const OBJECT_ID = `${issuerId}.ttm_yoni_bvr001`;
+
+// ── Pass class (template) ─────────────────────────────────────────────────────
+const passClass = {
+  id: CLASS_ID,
+  classTemplateInfo: {
+    cardTemplateOverride: {
+      cardRowTemplateInfos: [
+        {
+          twoItems: {
+            startItem: {
+              firstValue: { fields: [{ fieldPath: "object.textModulesData['program']" }] }
+            },
+            endItem: {
+              firstValue: { fields: [{ fieldPath: "object.textModulesData['phase']" }] }
+            }
+          }
+        }
+      ]
+    }
+  }
+};
+
+// ── Pass object (the actual card) ─────────────────────────────────────────────
+const passObject = {
+  id: OBJECT_ID,
+  classId: CLASS_ID,
+  state: 'ACTIVE',
+
+  // Header
+  cardTitle: {
+    defaultValue: { language: 'en-US', value: 'Tomer Tamir Machinery' }
+  },
+  header: {
+    defaultValue: { language: 'en-US', value: 'Engineering Portfolio' }
+  },
+  subheader: {
+    defaultValue: { language: 'en-US', value: 'Original Design · Systems Engineering' }
+  },
+
+  // Branding
+  logo: {
+    sourceUri: { uri: LOGO_URL },
+    contentDescription: { defaultValue: { language: 'en-US', value: 'TTM Logo' } }
+  },
+  heroImage: {
+    sourceUri: { uri: CAD_IMG_URL },
+    contentDescription: { defaultValue: { language: 'en-US', value: 'TTM Beaver CAD render' } }
+  },
+  hexBackgroundColor: '#0c0c0f',
+
+  // Info rows (shown in the card body)
+  textModulesData: [
+    { id: 'program', header: 'ACTIVE PROGRAM', body: 'TTM Beaver — BVR-001'       },
+    { id: 'phase',   header: 'PHASE',           body: 'Parametric CAD'             }
+  ],
+
+  // Links button at the bottom of the pass
+  linksModuleData: {
+    uris: [
+      {
+        uri: SITE_URL,
+        description: 'TTM Website',
+        id: 'ttm_site'
+      }
+    ]
+  },
+
+  // QR code — scans to the website
+  barcode: {
+    type: 'QR_CODE',
+    value: SITE_URL,
+    alternateText: 'TTM Website'
+  },
+
+  // Notifications
+  hasUsers: true
+};
+
+// ── Sign the JWT ──────────────────────────────────────────────────────────────
+const claims = {
+  iss: sa.client_email,
+  aud: 'google',
+  typ: 'savetowallet',
+  iat: Math.floor(Date.now() / 1000),
+  origins: ['*'],
+  payload: {
+    genericClasses: [passClass],
+    genericObjects: [passObject]
+  }
+};
+
+let token;
+try {
+  token = jwt.sign(claims, sa.private_key, { algorithm: 'RS256' });
+} catch (e) {
+  console.error('\nJWT signing failed. Is the private_key in your service account JSON valid?');
+  console.error(e.message, '\n');
+  process.exit(1);
+}
+
+const walletUrl = `https://pay.google.com/gp/v/save/${token}`;
+
+// ── Write wallet-url.js ───────────────────────────────────────────────────────
+const outPath = path.join(__dirname, 'wallet-url.js');
+const outContent =
+`// Auto-generated by wallet/generate-pass.js
+// Re-run the script any time you update the pass content.
+// This file is safe to commit — it contains no private keys.
+window.TTM_WALLET_URL = '${walletUrl}';
+`;
+
+fs.writeFileSync(outPath, outContent, 'utf8');
+
+console.log('\n  ✅  Google Wallet pass URL generated!');
+console.log('  📁  Saved to: wallet/wallet-url.js');
+console.log('\n  🔗  Test it now:');
+console.log('     ', walletUrl.slice(0, 80) + '...');
+console.log('\n  Open that URL on an Android phone with Google Wallet installed.');
+console.log('  Or click the "Add to Google Wallet" badge on the TTM site after committing.\n');

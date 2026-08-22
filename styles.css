@@ -2235,8 +2235,28 @@ html.award-product-first.award-chrome-in .hero__dots { opacity: 1; }
 .footer__col h4 { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem; }
 .footer__col a { display: block; font-size: 0.875rem; margin-bottom: 0.4rem; transition: opacity 0.2s, transform 0.2s; }
 .footer__col a:hover { opacity: 0.65; transform: translateX(2px); }
-.footer__bottom { padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.footer__bottom {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+}
 .footer__bottom p { font-size: 0.75rem; color: var(--text-muted); }
+.footer__bottom .footer__disclaimer { flex-basis: 100%; }
+
+.wallet-btn {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 8px;
+  overflow: hidden;
+  opacity: 0.82;
+  transition: opacity 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+.wallet-btn:hover { opacity: 1; transform: translateY(-1px); }
+.wallet-btn img { display: block; }
 .footer__disclaimer {
   margin-top: 0.55rem;
   font-size: 0.58rem;

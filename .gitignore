@@ -19,3 +19,12 @@ Thumbs.db
 
 # Local API keys (copy from marcus-config.example.js)
 BeaverOS/app/marcus-config.js
+
+# Google service account key — NEVER commit this
+*-sa-key.json
+*service-account*.json
+sa-key.json
+
+# Generated wallet URL (contains a signed JWT — commit only if you want the
+# badge live on the site; regenerate any time with generate-pass.js)
+# wallet/wallet-url.js
