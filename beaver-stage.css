@@ -1,0 +1,765 @@
+/* ===== TTM Beaver product stage =====
+   Layered on top of styles.css and only ever loaded by beaver.html.
+
+   Two states, switched by `data-bvr-mode` on the stage element:
+     static  — the default, and what ships without JS, WebGL or with
+               prefers-reduced-motion. Everything reads as one long editorial
+               section, top to bottom.
+     live    — beaver-stage.js has a renderer up. The stage pins for the
+               length of its track and the layers stack around the canvas.
+
+   Inside the pin the paint order is deliberate: page tint, then the type,
+   then the contact shadow, then the WebGL canvas, then the copy. That is what
+   puts the giant word behind the product and the beats in front of it. */
+
+.bvr-page main {
+  /* styles.css clips product-page main; the pin needs a live sticky context. */
+  overflow: visible;
+}
+
+.bvr-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ─────────────────────────────────────────────── static / fallback layout */
+
+.bvr-stage {
+  position: relative;
+}
+
+.bvr-stage__pin {
+  padding: clamp(4rem, 12vh, 8rem) 0 clamp(3rem, 8vh, 5rem);
+}
+
+.bvr-act + .bvr-act {
+  margin-top: clamp(3.5rem, 9vh, 6rem);
+}
+
+.bvr-stage__void,
+.bvr-stage__shadow,
+.bvr-stage__gl,
+.bvr-stage__chrome {
+  display: none;
+}
+
+.bvr-stage__inner {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.bvr-type {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.bvr-type__label,
+.bvr-type__sub {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.bvr-type__label { margin-bottom: 1rem; }
+.bvr-type__sub { margin-top: 1rem; }
+
+.bvr-word {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 11vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--text);
+  margin: 0;
+}
+
+.bvr-type--script .bvr-word {
+  font-family: 'Shadows Into Light', cursive;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.bvr-beats {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.bvr-beat__index {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.9rem;
+}
+
+.bvr-beat__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.4vw, 1.85rem);
+  line-height: 1.1;
+  letter-spacing: 0.015em;
+  margin: 0 0 0.85rem;
+  color: var(--text);
+}
+
+.bvr-beat__body {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.bvr-stat {
+  display: grid;
+  gap: 1.15rem;
+  margin: 0;
+}
+
+.bvr-stat__k {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+}
+
+.bvr-stat__v {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1.8vw, 1.4rem);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: var(--text);
+  margin: 0;
+}
+
+.bvr-stage__still {
+  margin-top: 3rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  overflow: hidden;
+}
+
+.bvr-stage__still img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ──────────────────────────────────────────────────────── live stage */
+
+.bvr-stage[data-bvr-mode='live'] {
+  /* The module sets the real track from its own phase table as soon as it runs.
+     The fallback only covers the gap between the inline switch in beaver.html
+     and that module, so it is kept equal to the table's current total — a stale
+     value here would move section 3 once on load. */
+  height: var(--bvr-track, 540vh);
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-stage__pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  padding: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-stage__inner,
+.bvr-stage[data-bvr-mode='live'] .bvr-act {
+  position: absolute;
+  inset: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-stage__void,
+.bvr-stage[data-bvr-mode='live'] .bvr-stage__shadow,
+.bvr-stage[data-bvr-mode='live'] .bvr-stage__gl,
+.bvr-stage[data-bvr-mode='live'] .bvr-stage__chrome {
+  display: block;
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-stage__still {
+  display: none;
+}
+
+/* Layer 1 — the page tint. Act 2 runs white on black; this panel only covers
+   the pin, so the sections above and below keep the site's own background.
+
+   It arrives as a curtain travelling down the pin rather than a crossfade.
+   Fading black over white spends the whole transition passing through
+   mid-grey, which drags the type and the product through a washed-out
+   no-man's-land; a hard edge keeps full contrast on both sides of it at every
+   moment. `--slide` runs 0→1 as the curtain's lower edge crosses the pin, then
+   1→2 as its upper edge follows it out the bottom, so the dark act enters and
+   leaves in the same direction the reader is scrolling. */
+.bvr-stage__void {
+  position: absolute;
+  inset: -1px;
+  z-index: 1;
+  background:
+    radial-gradient(120% 90% at 50% 42%, #16161a 0%, #0b0b0d 55%, #07070a 100%);
+  clip-path: inset(
+    calc(clamp(0, var(--slide, 0) - 1, 1) * 100%) 0
+    calc(clamp(0, 1 - var(--slide, 0), 1) * 100%) 0
+  );
+  will-change: clip-path;
+}
+
+/* Layer 2 — the type, sitting behind the product. */
+.bvr-stage[data-bvr-mode='live'] .bvr-type {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  align-content: center;
+  gap: 0;
+  margin: 0;
+  padding: 0 1.5rem;
+  text-align: center;
+  pointer-events: none;
+  opacity: var(--reveal, 0);
+}
+
+/* Hidden until the module says otherwise, rather than shown until it says to
+   hide. The pinned layout is switched on while the document is still parsing,
+   so between then and the module's first frame no act has been chosen yet —
+   defaulting to visible would stack both headlines on top of each other. */
+.bvr-stage[data-bvr-mode='live'] .bvr-type:not([data-bvr-on='1']) {
+  visibility: hidden;
+}
+
+/* The two mono lines are pulled out of the flow and parked near the edges of
+   the pin. Left in the flow they would sit tight against the headline, which
+   puts them exactly where the product is — the model would cut straight
+   through them at every window size. */
+.bvr-stage[data-bvr-mode='live'] .bvr-type__label,
+.bvr-stage[data-bvr-mode='live'] .bvr-type__sub {
+  --lp: clamp(0, calc((var(--reveal, 0) - 0.42) / 0.4), 1);
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0;
+  opacity: calc(var(--lp) * 0.9);
+  transform: translate3d(0, calc((1 - var(--lp)) * 1.1rem), 0);
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-type__label {
+  top: clamp(6.5rem, 15vh, 11rem);
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-type__sub {
+  bottom: clamp(4.5rem, 13vh, 8.5rem);
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-word {
+  font-size: clamp(3rem, 19vw, 17.5rem);
+  line-height: 0.82;
+  white-space: nowrap;
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-type--script .bvr-word {
+  font-size: clamp(3.25rem, 20vw, 18rem);
+  line-height: 1;
+  color: #fff;
+}
+
+.bvr-word__ch,
+.bvr-word__line {
+  display: inline-block;
+}
+
+/* Everything below only applies once a renderer is up. If the stage falls back
+   to static the split letters must stay plain text, not a stack of invisible
+   transformed glyphs. */
+.bvr-stage[data-bvr-mode='live'] .bvr-word__line {
+  perspective: 1100px;
+  /* Scroll drifts the whole word slightly, so the type and the product read
+     as living on two different planes. */
+  transform:
+    translate3d(0, calc(var(--drift, 0) * -1.6vh), 0)
+    scale(calc(1 + var(--drift, 0) * 0.055));
+  will-change: transform;
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-word__ch {
+  --lead: calc(var(--i, 0) * 0.055);
+  --lp: clamp(0, calc((var(--reveal, 0) - var(--lead)) / 0.4), 1);
+  transform-origin: 50% 88%;
+  transform:
+    translate3d(0, calc((1 - var(--lp)) * 0.42em), 0)
+    rotateX(calc((1 - var(--lp)) * -82deg))
+    scale(calc(0.92 + var(--lp) * 0.08));
+  opacity: var(--lp);
+  will-change: transform, opacity;
+}
+
+/* Act 2's headline climbs out of the dark instead of flipping up — the
+   handwriting face has no weight to flip. */
+.bvr-stage[data-bvr-mode='live'] .bvr-type--script .bvr-word__ch {
+  transform-origin: 50% 60%;
+  transform:
+    translate3d(0, calc((1 - var(--lp)) * 0.3em), 0)
+    scale(calc(0.88 + var(--lp) * 0.12));
+  color: color-mix(in oklab, #101014, #ffffff calc(var(--lp) * 100%));
+  text-shadow:
+    0 0 calc((1 - var(--lp)) * 42px) rgba(255, 255, 255, calc(var(--lp) * 0.5)),
+    0 0 calc(var(--lp) * 90px) rgba(190, 210, 255, calc(var(--lp) * 0.16));
+}
+
+/* Layer 3 — the contact shadow. Above the type so the product casts onto it,
+   below the canvas so the model still occludes it. */
+.bvr-stage__shadow {
+  position: absolute;
+  left: 50%;
+  top: 66%;
+  z-index: 3;
+  width: min(70vw, 58rem);
+  height: min(22vh, 13rem);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    rgba(10, 10, 14, 0.3) 0%,
+    rgba(10, 10, 14, 0.16) 38%,
+    rgba(10, 10, 14, 0) 72%
+  );
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+/* Layer 4 — the product. */
+.bvr-stage__gl {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Layer 5 — the copy that changes as the product turns. */
+.bvr-stage[data-bvr-mode='live'] .bvr-beats {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: block;
+  gap: 0;
+  pointer-events: none;
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-beat {
+  position: absolute;
+  width: min(30ch, 34vw);
+  opacity: var(--t, 0);
+  transform: translate3d(calc((1 - var(--t, 0)) * var(--dx, 0px)), calc((1 - var(--t, 0)) * var(--dy, 0px)), 0);
+  will-change: opacity, transform;
+}
+
+/* As with the headlines: off until told otherwise, or all twelve beats pile up
+   in the same two corners for as long as the module takes to arrive. */
+.bvr-stage[data-bvr-mode='live'] .bvr-beat:not([data-bvr-on='1']) {
+  visibility: hidden;
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-beat[data-bvr-anchor='tl'] {
+  top: clamp(6.5rem, 15vh, 11rem);
+  left: max(2rem, 5vw);
+  --dx: -2.4rem;
+  --dy: -1rem;
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-beat[data-bvr-anchor='tr'] {
+  top: clamp(6.5rem, 15vh, 11rem);
+  right: max(2rem, 5vw);
+  text-align: right;
+  --dx: 2.4rem;
+  --dy: -1rem;
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-beat[data-bvr-anchor='bl'] {
+  bottom: clamp(4.5rem, 13vh, 8.5rem);
+  left: max(2rem, 5vw);
+  --dx: -2.4rem;
+  --dy: 1rem;
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-beat[data-bvr-anchor='br'] {
+  bottom: clamp(4.5rem, 13vh, 8.5rem);
+  right: max(2rem, 5vw);
+  text-align: right;
+  --dx: 2.4rem;
+  --dy: 1rem;
+}
+
+/* Inside a beat the lines stagger off the same scroll value. */
+.bvr-stage[data-bvr-mode='live'] .bvr-beat__index,
+.bvr-stage[data-bvr-mode='live'] .bvr-beat__title,
+.bvr-stage[data-bvr-mode='live'] .bvr-beat__body,
+.bvr-stage[data-bvr-mode='live'] .bvr-stat > div {
+  opacity: var(--st, 1);
+  transform: translate3d(0, calc((1 - var(--st, 1)) * 0.9rem), 0);
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-beat__index { --st: clamp(0, calc(var(--t, 0) * 2), 1); }
+.bvr-stage[data-bvr-mode='live'] .bvr-beat__title { --st: clamp(0, calc(var(--t, 0) * 2 - 0.24), 1); }
+.bvr-stage[data-bvr-mode='live'] .bvr-beat__body { --st: clamp(0, calc(var(--t, 0) * 2 - 0.48), 1); }
+.bvr-stage[data-bvr-mode='live'] .bvr-stat > div:nth-child(1) { --st: clamp(0, calc(var(--t, 0) * 2 - 0.16), 1); }
+.bvr-stage[data-bvr-mode='live'] .bvr-stat > div:nth-child(2) { --st: clamp(0, calc(var(--t, 0) * 2 - 0.4), 1); }
+
+.bvr-stage[data-bvr-mode='live'] .bvr-beat--stat {
+  width: min(22ch, 26vw);
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-beat__title {
+  font-size: clamp(1.35rem, 2.6vw, 2.15rem);
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-beat__body {
+  font-size: clamp(0.86rem, 1.02vw, 0.98rem);
+  line-height: 1.6;
+}
+
+/* Layer 6 — persistent chrome: act rail and the first-scroll nudge. */
+.bvr-stage__chrome {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.bvr-rail {
+  position: absolute;
+  top: 50%;
+  right: max(1.25rem, 2.2vw);
+  transform: translateY(-50%);
+  display: grid;
+  gap: 1.35rem;
+  justify-items: end;
+}
+
+.bvr-rail__step {
+  display: grid;
+  grid-template-columns: auto 2px;
+  align-items: center;
+  gap: 0.7rem;
+  opacity: 0.28;
+  transition: opacity 0.5s var(--ease-out);
+}
+
+.bvr-rail__step[data-bvr-on='1'] { opacity: 1; }
+
+.bvr-rail__label {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text);
+  writing-mode: vertical-rl;
+}
+
+.bvr-rail__track {
+  position: relative;
+  width: 2px;
+  height: 4.5rem;
+  background: rgba(10, 10, 12, 0.16);
+  overflow: hidden;
+}
+
+.bvr-rail__fill {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 100%;
+  background: var(--text);
+  transform: scaleY(var(--fill, 0));
+  transform-origin: 50% 0;
+}
+
+.bvr-rail__step[data-bvr-on='0'] .bvr-rail__fill { transform: scaleY(0); }
+
+/* The site's chapter rail indexes the long-form sections below the stage and
+   sits at exactly the edge the act rail uses, so it stands down until the pin
+   releases rather than stacking two indicators on top of each other. */
+body:has(.bvr-stage[data-bvr-pinned='1']) .product-story-rail {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.product-story-rail {
+  transition: opacity 0.45s var(--ease-out);
+}
+
+.bvr-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 1.75rem;
+  transform: translateX(-50%);
+  display: grid;
+  justify-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 1;
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+}
+
+.bvr-stage[data-bvr-hint='gone'] .bvr-hint {
+  opacity: 0;
+  transform: translateX(-50%) translateY(0.75rem);
+}
+
+.bvr-hint__line {
+  width: 1px;
+  height: 2.25rem;
+  background: linear-gradient(180deg, var(--text-muted), transparent);
+  animation: bvrHint 2.4s var(--ease-out) infinite;
+}
+
+@keyframes bvrHint {
+  0%, 100% { transform: scaleY(0.35); opacity: 0.35; transform-origin: 50% 0; }
+  45% { transform: scaleY(1); opacity: 1; transform-origin: 50% 0; }
+}
+
+/* Loading state — the pin must never be a blank screen. */
+.bvr-stage__boot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 7;
+  transform: translate(-50%, -50%);
+  display: none;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.bvr-stage[data-bvr-mode='live'] .bvr-stage__boot { display: flex; }
+.bvr-stage[data-bvr-loaded='1'] .bvr-stage__boot { display: none; }
+
+.bvr-stage__boot-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text);
+  animation: bvrPulse 1.1s ease-in-out infinite;
+}
+
+@keyframes bvrPulse {
+  0%, 100% { opacity: 0.25; transform: scale(0.7); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+/* ────────────────────────────────────────── act 2: white on black */
+
+/* Only the pin itself goes dark, but the fixed header floats over it, so the
+   inversion has to reach outside the stage. */
+body.bvr-dark {
+  --text: #f4f4f6;
+  --text-muted: rgba(244, 244, 246, 0.62);
+  --border: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.2);
+}
+
+.bvr-page .header,
+.bvr-page .nav__wordmark,
+.bvr-page .nav__tagline,
+.bvr-page .nav__link,
+.bvr-page .nav__logo-img,
+.bvr-page .nav__toggle span,
+.bvr-page .scroll-progress,
+.bvr-page .scroll-progress__bar {
+  transition:
+    background-color 0.55s var(--ease-out),
+    color 0.55s var(--ease-out),
+    filter 0.55s var(--ease-out),
+    border-color 0.55s var(--ease-out),
+    background 0.55s var(--ease-out);
+}
+
+body.bvr-dark .header {
+  background: rgba(10, 10, 13, 0.72);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+body.bvr-dark .nav__wordmark { color: #f4f4f6; }
+body.bvr-dark .nav__tagline { color: rgba(244, 244, 246, 0.55); }
+body.bvr-dark .nav__link { color: #f4f4f6; }
+body.bvr-dark .nav__link:not(.nav__dropdown-toggle)::after { background: #f4f4f6; }
+body.bvr-dark .nav__toggle span { background: #f4f4f6; }
+
+/* The mark is black line art with no light variant. */
+body.bvr-dark .nav__logo-img { filter: invert(1); }
+
+body.bvr-dark .nav__link--cta {
+  background: rgba(255, 255, 255, 0.94);
+  color: #0a0a0c;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+body.bvr-dark .nav__link--cta:hover {
+  background: #fff;
+  color: #0a0a0c;
+}
+
+body.bvr-dark .nav__dropdown-menu {
+  background: rgba(14, 14, 17, 0.9);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+body.bvr-dark .nav__dropdown-link { color: #f4f4f6; }
+body.bvr-dark .nav__dropdown-link:hover { background: rgba(255, 255, 255, 0.08); }
+body.bvr-dark .nav__dropdown-divider { background: rgba(255, 255, 255, 0.12); }
+
+body.bvr-dark .scroll-progress { background: rgba(255, 255, 255, 0.08); }
+body.bvr-dark .scroll-progress__bar {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.9));
+}
+
+body.bvr-dark .bvr-rail__track { background: rgba(255, 255, 255, 0.2); }
+body.bvr-dark .bvr-stage__shadow { opacity: 0 !important; }
+
+/* ────────────────────────────────────────────────── act 3 handoff */
+
+/* The section after the stage needs its own opaque ground: the pin is still
+   painting behind it while the last of the track scrolls past. */
+.bvr-after {
+  position: relative;
+  z-index: 8;
+  background: var(--bg);
+}
+
+.bvr-after__lead {
+  padding-top: clamp(4rem, 9vh, 7rem);
+}
+
+.bvr-handoff {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2.25rem;
+}
+
+/* ─────────────────────────────────────────────────────── narrow screens */
+
+@media (max-width: 1080px) {
+  .bvr-stage[data-bvr-mode='live'] .bvr-beat {
+    width: min(34ch, 44vw);
+  }
+  .bvr-stage[data-bvr-mode='live'] .bvr-beat--stat {
+    width: min(20ch, 32vw);
+  }
+}
+
+@media (max-width: 760px) {
+  /* Corners collapse: at this width the product owns the middle band and the
+     copy stacks above and below it instead of beside it. */
+  .bvr-stage[data-bvr-mode='live'] .bvr-beat {
+    width: auto;
+    left: 1.5rem;
+    right: 1.5rem;
+    text-align: left;
+  }
+
+  .bvr-stage[data-bvr-mode='live'] .bvr-beat[data-bvr-anchor='tl'],
+  .bvr-stage[data-bvr-mode='live'] .bvr-beat[data-bvr-anchor='tr'] {
+    top: clamp(5.5rem, 12vh, 8rem);
+    bottom: auto;
+    text-align: left;
+    --dx: 0px;
+    --dy: -1.25rem;
+  }
+
+  .bvr-stage[data-bvr-mode='live'] .bvr-beat[data-bvr-anchor='bl'],
+  .bvr-stage[data-bvr-mode='live'] .bvr-beat[data-bvr-anchor='br'] {
+    bottom: clamp(4.5rem, 11vh, 7rem);
+    top: auto;
+    text-align: left;
+    --dx: 0px;
+    --dy: 1.25rem;
+  }
+
+  .bvr-stage[data-bvr-mode='live'] .bvr-beat--stat .bvr-stat {
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .bvr-rail { display: none; }
+
+  .bvr-stage[data-bvr-mode='live'] .bvr-word { font-size: clamp(2.6rem, 21vw, 8rem); }
+  .bvr-stage[data-bvr-mode='live'] .bvr-type--script .bvr-word { font-size: clamp(2.8rem, 22vw, 8rem); }
+  .bvr-stage[data-bvr-mode='live'] .bvr-type__label { margin-bottom: 0.75rem; }
+  .bvr-stage[data-bvr-mode='live'] .bvr-type__sub { margin-top: 0.75rem; }
+}
+
+/* Portrait — a phone held upright, or anything else taller than it is wide.
+   The part stands on end here (see the framing pass), so the copy cannot sit
+   beside it: it stacks into a band above and a band below instead. Figures go
+   up, prose goes down, whichever corner the desktop layout assigned them —
+   short blocks read fine under the header, and a paragraph does not.
+
+   Keyed off the attribute the framing pass sets rather than an orientation
+   query, because that pass measures these bands to decide how much of the
+   screen the part may take. Two sources of truth for "is this portrait" would
+   eventually disagree, and the symptom would be copy printed over the
+   product. */
+.bvr-stage[data-bvr-mode='live'][data-bvr-portrait='1'] .bvr-type__label {
+  top: clamp(4.5rem, 9vh, 7rem);
+}
+
+.bvr-stage[data-bvr-mode='live'][data-bvr-portrait='1'] .bvr-type__sub {
+  bottom: clamp(2rem, 4vh, 3.5rem);
+}
+
+.bvr-stage[data-bvr-mode='live'][data-bvr-portrait='1'] .bvr-beat--stat {
+  top: clamp(6.75rem, 13vh, 10rem);
+  bottom: auto;
+  --dy: -1.25rem;
+}
+
+.bvr-stage[data-bvr-mode='live'][data-bvr-portrait='1'] .bvr-beat:not(.bvr-beat--stat) {
+  top: auto;
+  bottom: clamp(4.5rem, 9vh, 7.5rem);
+  --dy: 1.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bvr-word__ch,
+  .bvr-word__line,
+  .bvr-stage[data-bvr-mode='live'] .bvr-beat {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+  .bvr-hint__line { animation: none; }
+  .bvr-stage__boot-dot { animation: none; }
+}

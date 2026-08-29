@@ -1,0 +1,2 @@
+three.js r185 (0.185.1)
+Vendored from npm 	hree by scripts/vendor-three.mjs — MIT, see LICENSE.

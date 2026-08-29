@@ -8,12 +8,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Shadows+Into+Light&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0c0c0f">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#f8f8f9">
   <link rel="icon" href="TTMNewLogo.png" type="image/png">
   <link rel="stylesheet" href="styles.css?v=40">
+  <link rel="stylesheet" href="beaver-stage.css?v=1">
+  <link rel="preload" href="models/beaver-upper.glb" as="fetch" type="model/gltf-binary" crossorigin>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three/three.module.min.js",
+      "three/addons/": "./vendor/three/addons/"
+    }
+  }
+  </script>
 </head>
-<body class="subpage subpage--beaver product-page">
+<body class="subpage subpage--beaver product-page bvr-page">
   <div class="scroll-progress" id="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar"></div></div>
   <div class="page-transition" id="page-transition" aria-hidden="true"></div>
 
@@ -60,55 +70,213 @@
 
   <main>
 
-    <!-- ═══ HERO ═══ -->
-    <section class="beaver-hero">
-      <div class="beaver-hero__bg" aria-hidden="true"></div>
-      <div class="beaver-hero__dots" aria-hidden="true"></div>
-      <span class="beaver-hero__watermark" aria-hidden="true">BVR-001</span>
-      <div class="container">
-        <div class="beaver-hero__grid animate-in">
-          <div class="beaver-hero__visual">
-            <div class="beaver-hero__img-wrap">
-              <img src="TTM%20Beaver/TTM%20Beaver%20Upper%201.png"
-                   alt="TTM Beaver upper receiver — early development CAD render"
-                   class="beaver-hero__cad">
+    <!-- ═══════════════════════════════════════════════════════════════════
+         SECTIONS 1 + 2 — the scroll-driven product stage.
+         Section 1: the Beaver upper, black on white.
+         Section 2: the 6.8 TVCM cartridge, white on black.
+         Without JS or WebGL this whole block reads as a normal section.
+         ═══════════════════════════════════════════════════════════════════ -->
+    <div class="bvr-stage" data-bvr-stage>
+      <div class="bvr-stage__pin">
+
+        <div class="bvr-stage__void" data-bvr-void aria-hidden="true"></div>
+        <div class="bvr-stage__shadow" data-bvr-shadow aria-hidden="true"></div>
+        <canvas class="bvr-stage__gl" data-bvr-gl aria-hidden="true"></canvas>
+
+        <div class="bvr-stage__boot" aria-hidden="true">
+          <span class="bvr-stage__boot-dot"></span>Loading assembly
+        </div>
+
+        <div class="bvr-stage__chrome" data-bvr-chrome aria-hidden="true">
+          <div class="bvr-rail">
+            <div class="bvr-rail__step" data-bvr-rail-step="0" data-bvr-on="1">
+              <span class="bvr-rail__label">Beaver</span>
+              <span class="bvr-rail__track"><span class="bvr-rail__fill" data-bvr-rail-fill></span></span>
             </div>
-            <div class="beaver-hero__visual-badges">
-              <span class="product-badge product-badge--flagship">Original design</span>
-              <span class="beaver-hero__live"><span class="beaver-hero__live-dot"></span>Active CAD development</span>
+            <div class="bvr-rail__step" data-bvr-rail-step="1" data-bvr-on="0">
+              <span class="bvr-rail__label">6.8 TVCM</span>
+              <span class="bvr-rail__track"><span class="bvr-rail__fill" data-bvr-rail-fill></span></span>
             </div>
           </div>
-          <div class="beaver-hero__copy">
-            <span class="section__eyebrow">Small Arms · Program BVR-001 · Original Design</span>
-            <h1 class="beaver-hero__title">TTM Beaver</h1>
-            <p class="beaver-hero__tagline">6.8 TVCM · Ultra-compact SOF battle rifle · <span class="hl">Built from scratch</span></p>
-            <p class="beaver-hero__desc">Not a clone. Not a derivative. An engineering exercise in extreme systems integration — packing <span class="hl">Level-4</span> armor-piercing power into the footprint of a standard 5.56 PDW. The result of rigorous formal trade studies across every subsystem, from the cartridge to the BCG.</p>
-            <div class="beaver-hero__phase">
-              <span class="beaver-hero__phase-label">Current phase</span>
-              <span class="beaver-hero__phase-value">Parametric CAD — upper receiver & BCG assembly</span>
-            </div>
-            <ul class="beaver-hero__stats">
-              <li><span class="beaver-hero__stat-k">Cartridge</span><span class="beaver-hero__stat-v"><span class="hl">6.8 TVCM polymer</span></span></li>
-              <li><span class="beaver-hero__stat-k">Armor defeat</span><span class="beaver-hero__stat-v"><span class="hl">Level 4 @ 500 m</span></span></li>
-              <li><span class="beaver-hero__stat-k">Chamber pressure</span><span class="beaver-hero__stat-v"><span class="hl">65,000 PSI</span></span></li>
-              <li><span class="beaver-hero__stat-k">Design origin</span><span class="beaver-hero__stat-v"><span class="hl">Original — from scratch</span></span></li>
-            </ul>
-            <div class="beaver-hero__actions">
-              <a href="#trade-studies" class="btn btn--primary">Engineering process</a>
-              <a href="#cad" class="btn btn--outline">CAD renders</a>
-            </div>
+          <div class="bvr-hint">
+            Scroll
+            <span class="bvr-hint__line"></span>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- ═══ FOUR ENGINEERING PILLARS ═══ -->
-    <section class="section" id="pillars">
+        <div class="bvr-stage__inner">
+
+          <!-- ─── SECTION 1 — TTM Beaver ─── -->
+          <div class="bvr-act">
+            <div class="bvr-type" data-bvr-type="0">
+              <p class="bvr-type__label">TTM · Program BVR-001</p>
+              <h1 class="bvr-word" data-bvr-word>Beaver</h1>
+              <p class="bvr-type__sub">6.8 TVCM · Ultra-compact SOF battle rifle</p>
+            </div>
+
+            <div class="bvr-beats">
+              <article class="bvr-beat" data-bvr-beat data-bvr-act="0" data-bvr-step="0" data-bvr-anchor="tl">
+                <p class="bvr-beat__index">01 / Program origin</p>
+                <h2 class="bvr-beat__title">Built from scratch.</h2>
+                <p class="bvr-beat__body">Every earlier TTM program re-engineered an established platform. The Beaver is the first designed from first principles — concept definition, formal trade studies, then parametric CAD.</p>
+              </article>
+              <aside class="bvr-beat bvr-beat--stat" data-bvr-beat data-bvr-act="0" data-bvr-step="0" data-bvr-anchor="br">
+                <dl class="bvr-stat">
+                  <div>
+                    <dt class="bvr-stat__k">Design origin</dt>
+                    <dd class="bvr-stat__v">Original</dd>
+                  </div>
+                  <div>
+                    <dt class="bvr-stat__k">Current phase</dt>
+                    <dd class="bvr-stat__v">Parametric CAD</dd>
+                  </div>
+                </dl>
+              </aside>
+
+              <article class="bvr-beat" data-bvr-beat data-bvr-act="0" data-bvr-step="1" data-bvr-anchor="br">
+                <p class="bvr-beat__index">02 / BCG kinematics</p>
+                <h2 class="bvr-beat__title">Zero carrier tilt.</h2>
+                <p class="bvr-beat__body">A two-piece cylindrical carrier in Maraging Stainless Steel and Carpenter 158. Its rear half is the buffer, so the recoil spring travels perfectly linearly inside an exceptionally slim receiver.</p>
+              </article>
+              <aside class="bvr-beat bvr-beat--stat" data-bvr-beat data-bvr-act="0" data-bvr-step="1" data-bvr-anchor="tl">
+                <dl class="bvr-stat">
+                  <div>
+                    <dt class="bvr-stat__k">Carrier tilt</dt>
+                    <dd class="bvr-stat__v">0°</dd>
+                  </div>
+                  <div>
+                    <dt class="bvr-stat__k">Receiver bore</dt>
+                    <dd class="bvr-stat__v">1.000 in</dd>
+                  </div>
+                </dl>
+              </aside>
+
+              <article class="bvr-beat" data-bvr-beat data-bvr-act="0" data-bvr-step="2" data-bvr-anchor="tl">
+                <p class="bvr-beat__index">03 / Mission envelope</p>
+                <h2 class="bvr-beat__title">Battle-rifle power in a PDW footprint.</h2>
+                <p class="bvr-beat__body">Level-4 armour defeat at 500 m, an SR-25 magwell and a fully tucked suppressor — inside the size and weight profile of a standard 5.56 rifle.</p>
+              </article>
+              <aside class="bvr-beat bvr-beat--stat" data-bvr-beat data-bvr-act="0" data-bvr-step="2" data-bvr-anchor="br">
+                <dl class="bvr-stat">
+                  <div>
+                    <dt class="bvr-stat__k">Armour defeat</dt>
+                    <dd class="bvr-stat__v">Level 4 @ 500 m</dd>
+                  </div>
+                  <div>
+                    <dt class="bvr-stat__k">Receiver</dt>
+                    <dd class="bvr-stat__v">7075-T6 aluminium</dd>
+                  </div>
+                </dl>
+              </aside>
+            </div>
+          </div>
+
+          <div class="bvr-stage__still">
+            <img src="TTM%20Beaver/TTM%20Beaver%20Upper%201.png" alt="TTM Beaver upper receiver — CAD render" loading="lazy">
+          </div>
+
+          <!-- ─── SECTION 2 — 6.8 TVCM cartridge ─── -->
+          <div class="bvr-act">
+            <div class="bvr-type bvr-type--script" data-bvr-type="1">
+              <p class="bvr-type__label">Cartridge architecture</p>
+              <h2 class="bvr-word" data-bvr-word>6.8 TVCM</h2>
+              <p class="bvr-type__sub">Polymer-cased · 65,000 PSI · Level 4 @ 500 m</p>
+            </div>
+
+            <div class="bvr-beats">
+              <article class="bvr-beat" data-bvr-beat data-bvr-act="1" data-bvr-step="0" data-bvr-anchor="tl">
+                <p class="bvr-beat__index">01 / Selection</p>
+                <h3 class="bvr-beat__title">Chosen over .277 Fury.</h3>
+                <p class="bvr-beat__body">The program rejected the 800-metre armour-defeat standard as an Afghan-theatre relic and locked the realistic 500-metre infantry limit instead — which is exactly what unlocks a lower-pressure polymer case.</p>
+              </article>
+              <aside class="bvr-beat bvr-beat--stat" data-bvr-beat data-bvr-act="1" data-bvr-step="0" data-bvr-anchor="br">
+                <dl class="bvr-stat">
+                  <div>
+                    <dt class="bvr-stat__k">Casing</dt>
+                    <dd class="bvr-stat__v">Polymer composite</dd>
+                  </div>
+                  <div>
+                    <dt class="bvr-stat__k">Magazine</dt>
+                    <dd class="bvr-stat__v">DPMS / SR-25</dd>
+                  </div>
+                </dl>
+              </aside>
+
+              <article class="bvr-beat" data-bvr-beat data-bvr-act="1" data-bvr-step="1" data-bvr-anchor="br">
+                <p class="bvr-beat__index">02 / Pressure</p>
+                <h3 class="bvr-beat__title">65,000 PSI, not 80,000.</h3>
+                <p class="bvr-beat__body">Fifteen thousand PSI below .277 Fury. Far less thermomechanical stress on the bolt and chamber, slower barrel wear, and an acoustic signature that survives a drone-monitored battlespace.</p>
+              </article>
+              <aside class="bvr-beat bvr-beat--stat" data-bvr-beat data-bvr-act="1" data-bvr-step="1" data-bvr-anchor="tl">
+                <dl class="bvr-stat">
+                  <div>
+                    <dt class="bvr-stat__k">Chamber pressure</dt>
+                    <dd class="bvr-stat__v">65,000 PSI</dd>
+                  </div>
+                  <div>
+                    <dt class="bvr-stat__k">Gas dwell</dt>
+                    <dd class="bvr-stat__v">Mid-length · 9 in</dd>
+                  </div>
+                </dl>
+              </aside>
+
+              <article class="bvr-beat" data-bvr-beat data-bvr-act="1" data-bvr-step="2" data-bvr-anchor="tl">
+                <p class="bvr-beat__index">03 / Mass &amp; heat</p>
+                <h3 class="bvr-beat__title">30% lighter than brass.</h3>
+                <p class="bvr-beat__body">The polymer casing also insulates. It carries heat out of the chamber on ejection instead of soaking it into the receiver, which is what makes sustained suppressive fire practical.</p>
+              </article>
+              <aside class="bvr-beat bvr-beat--stat" data-bvr-beat data-bvr-act="1" data-bvr-step="2" data-bvr-anchor="br">
+                <dl class="bvr-stat">
+                  <div>
+                    <dt class="bvr-stat__k">Ammunition mass</dt>
+                    <dd class="bvr-stat__v">−30% vs brass</dd>
+                  </div>
+                  <div>
+                    <dt class="bvr-stat__k">Case function</dt>
+                    <dd class="bvr-stat__v">Thermal insulator</dd>
+                  </div>
+                </dl>
+              </aside>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <script>
+      /* Switch the stage to its pinned layout here, while the parser is still
+         inside the body, rather than waiting for beaver-stage.js. That module
+         is deferred, so it cannot run until the whole document is parsed — and
+         this page is long enough that the browser paints the static, flowing
+         layout first and then jumps to the pinned one.
+
+         Mirrors the module's own reduced-motion guard. Anything else it bails
+         on, WebGL above all, resets the attribute from there. */
+      (function () {
+        try {
+          if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          document.querySelector('[data-bvr-stage]').dataset.bvrMode = 'live';
+        } catch (err) {
+          /* Static layout is the fallback and it is already what is on screen. */
+        }
+      })();
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         SECTION 3 — everything else: the engineering record.
+         ═══════════════════════════════════════════════════════════════════ -->
+    <div class="bvr-after">
+
+    <section class="section bvr-after__lead" id="pillars">
       <div class="container">
         <div class="section__header animate-in">
           <span class="section__eyebrow">Systems architecture</span>
           <h2 class="section__title">Four subsystems. Zero compromises.</h2>
           <p class="section__lead">The Beaver is not a hybrid of existing platforms. Each subsystem was independently evaluated through a formal trade study, then integrated into a single coherent chassis.</p>
+          <div class="bvr-handoff">
+            <a href="#trade-studies" class="btn btn--primary">Engineering process</a>
+            <a href="#cad" class="btn btn--outline">CAD renders</a>
+          </div>
         </div>
         <div class="beaver-pillars">
           <article class="beaver-pillar animate-in" data-num="01">
@@ -128,7 +296,7 @@
           </article>
           <article class="beaver-pillar animate-in" data-num="04">
             <span class="beaver-pillar__num">04</span>
-            <h3 class="beaver-pillar__title">Chassis & receiver</h3>
+            <h3 class="beaver-pillar__title">Chassis &amp; receiver</h3>
             <p class="beaver-pillar__desc">7075-T6 aluminum with a 1.000-inch bore. SR-25 magwell for maximum internal volume. Knurled press-fit steel top-hat inserts on all critical fasteners — <span class="hl">steel-on-steel lockdown</span> at 65,000 PSI.</p>
           </article>
         </div>
@@ -165,7 +333,7 @@
               <li><span class="beaver-openeng__item-arrow" aria-hidden="true">→</span>BCG kinematics: monolithic vs. top op-rod vs. <span class="hl">TTM two-piece cylindrical</span></li>
               <li><span class="beaver-openeng__item-arrow" aria-hidden="true">→</span>Gas architecture: DI vs. long-stroke vs. <span class="hl">short-stroke piston</span></li>
               <li><span class="beaver-openeng__item-arrow" aria-hidden="true">→</span>Platform analysis: SIG MCX, HK416, FN ARKA, Q Boombox</li>
-              <li><span class="beaver-openeng__item-arrow" aria-hidden="true">→</span>Mission envelope definition & <span class="hl">500-meter requirement</span> rationale</li>
+              <li><span class="beaver-openeng__item-arrow" aria-hidden="true">→</span>Mission envelope definition &amp; <span class="hl">500-meter requirement</span> rationale</li>
             </ul>
           </div>
           <div class="beaver-openeng__cta">
@@ -236,7 +404,7 @@
             <div class="beaver-trade__header">
               <span class="beaver-trade__num">01</span>
               <div>
-                <h3 class="beaver-trade__title">Ammunition & the 500-meter requirement</h3>
+                <h3 class="beaver-trade__title">Ammunition &amp; the 500-meter requirement</h3>
                 <p class="beaver-trade__sub">Candidates evaluated: .277 Fury vs. 6.8 TVCM polymer</p>
               </div>
             </div>
@@ -267,7 +435,7 @@
             <div class="beaver-trade__header">
               <span class="beaver-trade__num">02</span>
               <div>
-                <h3 class="beaver-trade__title">BCG kinematics & recoil dynamics</h3>
+                <h3 class="beaver-trade__title">BCG kinematics &amp; recoil dynamics</h3>
                 <p class="beaver-trade__sub">Candidates evaluated: monolithic carrier · top op-rod · TTM two-piece cylindrical</p>
               </div>
             </div>
@@ -400,7 +568,7 @@
             <span class="beaver-roadmap__marker" aria-hidden="true"></span>
             <div class="beaver-roadmap__body">
               <span class="beaver-roadmap__status">Complete</span>
-              <h3>Systems architecture & trade studies</h3>
+              <h3>Systems architecture &amp; trade studies</h3>
               <p>Mission requirements defined. Formal trade studies conducted across ammunition, BCG kinematics, gas architecture, and chassis design. All platform-level decisions locked using the Milanote master design board.</p>
             </div>
           </li>
@@ -408,7 +576,7 @@
             <span class="beaver-roadmap__marker" aria-hidden="true"></span>
             <div class="beaver-roadmap__body">
               <span class="beaver-roadmap__status">Complete</span>
-              <h3>Cartridge & ammunition selection</h3>
+              <h3>Cartridge &amp; ammunition selection</h3>
               <p>6.8 TVCM polymer cartridge selected over .277 Fury. 65,000 PSI pressure cycle validated against bolt thrust, chamber geometry, and polymer case extraction dwell requirements.</p>
             </div>
           </li>
@@ -416,7 +584,7 @@
             <span class="beaver-roadmap__marker" aria-hidden="true"></span>
             <div class="beaver-roadmap__body">
               <span class="beaver-roadmap__status">Complete</span>
-              <h3>BCG & gas system architecture locked</h3>
+              <h3>BCG &amp; gas system architecture locked</h3>
               <p>Two-piece cylindrical carrier geometry established. Mid-length (9-inch) gas port dwell confirmed. Material specifications — Maraging Stainless Steel + Carpenter 158 — and spring isolation geometry finalized.</p>
             </div>
           </li>
@@ -424,7 +592,7 @@
             <span class="beaver-roadmap__marker" aria-hidden="true"></span>
             <div class="beaver-roadmap__body">
               <span class="beaver-roadmap__status">In progress</span>
-              <h3>Parametric CAD — upper receiver & BCG assembly</h3>
+              <h3>Parametric CAD — upper receiver &amp; BCG assembly</h3>
               <p>Upper receiver bore geometry, BCG interface, gas block mounting, op-rod housing, and rail system being modeled parametrically. Early development renders now available above.</p>
             </div>
           </li>
@@ -432,7 +600,7 @@
             <span class="beaver-roadmap__marker" aria-hidden="true"></span>
             <div class="beaver-roadmap__body">
               <span class="beaver-roadmap__status">Up next</span>
-              <h3>Lower receiver, magwell & controls CAD</h3>
+              <h3>Lower receiver, magwell &amp; controls CAD</h3>
               <p>SR-25 magwell dimensioning, ambidextrous control layout, integrated collapsible stock interface, and press-fit insert locations to be parametrically modeled.</p>
             </div>
           </li>
@@ -440,7 +608,7 @@
             <span class="beaver-roadmap__marker" aria-hidden="true"></span>
             <div class="beaver-roadmap__body">
               <span class="beaver-roadmap__status">Planned</span>
-              <h3>Full assembly integration & validation</h3>
+              <h3>Full assembly integration &amp; validation</h3>
               <p>Complete parametric assembly, interference checks, tolerance stack analysis, and publication of final specifications and full CAD renders.</p>
             </div>
           </li>
@@ -503,6 +671,8 @@
       </div>
     </section>
 
+    </div><!-- /.bvr-after -->
+
   </main>
 
   <footer class="footer">
@@ -512,6 +682,7 @@
   </footer>
 
   <script src="script.js?v=34"></script>
+  <script type="module" src="beaver-stage.js?v=1"></script>
   <script>if('serviceWorker' in navigator){navigator.serviceWorker.register('/sw.js')}</script>
 </body>
 </html>

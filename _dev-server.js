@@ -16,7 +16,14 @@ const mime = {
   '.svg': 'image/svg+xml',
   '.webmanifest': 'application/manifest+json',
   '.json': 'application/json',
-  '.ico': 'image/x-icon'
+  '.ico': 'image/x-icon',
+  '.mjs': 'text/javascript; charset=utf-8',
+  '.glb': 'model/gltf-binary',
+  '.gltf': 'model/gltf+json',
+  '.bin': 'application/octet-stream',
+  '.webp': 'image/webp',
+  '.woff2': 'font/woff2',
+  '.txt': 'text/plain; charset=utf-8'
 };
 
 http.createServer(function (req, res) {

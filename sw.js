@@ -1,4 +1,4 @@
-const CACHE = 'ttm-v1';
+const CACHE = 'ttm-v2';
 
 const PRECACHE = [
   '/',
@@ -33,8 +33,11 @@ self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
   if (url.origin !== location.origin) return;
 
-  // HTML: network-first so fresh content loads when online
-  if (e.request.headers.get('accept')?.includes('text/html')) {
+  // HTML, CSS and JS: network-first so a deploy takes effect on the next load
+  // instead of serving whatever was cached the first time a visitor arrived.
+  // The cache copy is still written, so offline keeps working.
+  const isCode = /\.(css|js|mjs)$/.test(url.pathname);
+  if (isCode || e.request.headers.get('accept')?.includes('text/html')) {
     e.respondWith(
       fetch(e.request)
         .then(res => { caches.open(CACHE).then(c => c.put(e.request, res.clone())); return res; })
@@ -43,7 +46,7 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Everything else: cache-first
+  // Images, fonts and models are immutable in practice: cache-first
   e.respondWith(
     caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
       caches.open(CACHE).then(c => c.put(e.request, res.clone()));
