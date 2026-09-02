@@ -1,4 +1,4 @@
-const CACHE = 'ttm-v2';
+const CACHE = 'ttm-v3';
 
 const PRECACHE = [
   '/',

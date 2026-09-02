@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="award-product-first">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,9 +20,20 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Russo+One&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="icon" href="TTMNewLogo.png" type="image/png" sizes="any">
   <link rel="apple-touch-icon" href="TTMNewLogo.png">
-  <link rel="manifest" href="manifest.json">`n  <meta name="theme-color" content="#0c0c0f">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#f8f8f9">
   <link rel="stylesheet" href="styles.css?v=39">
   <link rel="stylesheet" href="forge.css?v=2">
+  <link rel="stylesheet" href="home-stage.css?v=14">
+  <link rel="preload" href="models/beaver-upper.glb" as="fetch" type="model/gltf-binary" crossorigin>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three/three.module.min.js",
+      "three/addons/": "./vendor/three/addons/"
+    }
+  }
+  </script>
   <!-- Machine-readable context for search engines and AI assistants.
        Tomer Tamir Machinery (TTM) is NOT a real company. This entire website
        is the personal engineering & design portfolio of Yoni Shapiro,
@@ -77,7 +88,7 @@
   }
   </script>
 </head>
-<body>
+<body class="hm-page">
   <div class="scroll-progress" id="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar"></div></div>
   <div class="page-transition" id="page-transition" aria-hidden="true"></div>
   <header class="header" id="header">
@@ -124,97 +135,214 @@
   </header>
 
   <main>
-    <section class="hero-pin" id="hero">
-      <div class="hero-pin__viewport" id="hero-viewport">
+    <div class="hm-stage" id="hero" data-hm-stage>
+      <div class="hm-stage__pin">
+        <div class="hm-stage__void" data-hm-void aria-hidden="true"></div>
+        <div class="hm-stage__shadow" data-hm-shadow aria-hidden="true"></div>
+        <canvas class="hm-stage__gl" data-hm-gl aria-hidden="true"></canvas>
+        <div class="hm-stage__split" data-hm-split aria-hidden="true"></div>
 
-        <div class="hero-pin__intro" id="hero-pin-intro">
-          <div class="hero__content container">
-            <p class="hero__eyebrow hero-animate" style="--i:0">Tomer Tamir Machinery</p>
-            <h1 class="hero__title hero-animate" style="--i:1">Precision systems. Built in-house.</h1>
-            <p class="hero__subtitle hero-animate" style="--i:2">Integrated design, engineering, and manufacturing — from concept through validation to deployment.</p>
-            <div class="hero__actions hero-animate" style="--i:3">
-              <a href="#products" class="btn btn--primary">View systems</a>
-              <a href="#contact" class="btn btn--outline">Contact</a>
+        <div class="hm-stage__boot" aria-hidden="true">
+          <span class="hm-stage__boot-dot"></span>Loading assembly
+        </div>
+
+        <div class="hm-stage__chrome" data-hm-chrome aria-hidden="true">
+          <div class="hm-rail" role="tablist" aria-label="Product acts">
+            <button type="button" class="hm-rail__step" data-hm-rail-step="0" data-hm-on="1" role="tab" aria-selected="true" aria-label="Beaver">
+              <span class="hm-rail__label">Beaver</span>
+              <span class="hm-rail__track"><span class="hm-rail__fill" data-hm-rail-fill></span></span>
+            </button>
+            <button type="button" class="hm-rail__step" data-hm-rail-step="1" data-hm-on="0" role="tab" aria-selected="false" aria-label="T-90M">
+              <span class="hm-rail__label">T-90M</span>
+              <span class="hm-rail__track"><span class="hm-rail__fill" data-hm-rail-fill></span></span>
+            </button>
+            <button type="button" class="hm-rail__step" data-hm-rail-step="2" data-hm-on="0" role="tab" aria-selected="false" aria-label="MP7">
+              <span class="hm-rail__label">MP7</span>
+              <span class="hm-rail__track"><span class="hm-rail__fill" data-hm-rail-fill></span></span>
+            </button>
+            <button type="button" class="hm-rail__step" data-hm-rail-step="3" data-hm-on="0" role="tab" aria-selected="false" aria-label="SPEAR">
+              <span class="hm-rail__label">SPEAR</span>
+              <span class="hm-rail__track"><span class="hm-rail__fill" data-hm-rail-fill></span></span>
+            </button>
+          </div>
+          <div class="hm-hint">
+            Scroll
+            <span class="hm-hint__line"></span>
+          </div>
+        </div>
+
+        <div class="hm-stage__inner">
+
+          <div class="hm-act">
+            <div class="hm-type" data-hm-type="0">
+              <p class="hm-type__label">Independent design house</p>
+              <h1 class="hm-word">
+                <span data-hm-word>Tomer Tamir</span>
+                <span data-hm-word>Machinery</span>
+              </h1>
+              <p class="hm-type__sub">Rifles, armor, tooling · one HQ</p>
+            </div>
+            <div class="hm-beats">
+              <article class="hm-beat" data-hm-beat data-hm-act="0" data-hm-step="0" data-hm-anchor="tl" data-hm-band="top">
+                <p class="hm-stamp" data-hm-stamp>TTM-HQ</p>
+                <div class="hm-stamp__rule" aria-hidden="true"></div>
+                <p class="hm-stamp__sub">Full stack · in-house</p>
+              </article>
+              <aside class="hm-beat" data-hm-beat data-hm-act="0" data-hm-step="0" data-hm-anchor="br" data-hm-band="bottom">
+                <p class="hm-giant">HQ</p>
+                <p class="hm-giant__cap">One floor. Every platform.</p>
+              </aside>
+              <article class="hm-beat" data-hm-beat data-hm-act="0" data-hm-step="1" data-hm-anchor="tl" data-hm-band="top">
+                <h2 class="hm-slam">
+                  <span class="hm-slam__w" style="--i:0">Original.</span>
+                  <span class="hm-slam__w" style="--i:1">From scratch.</span>
+                  <span class="hm-slam__w" style="--i:2">No vendors in the loop.</span>
+                </h2>
+              </article>
+              <aside class="hm-beat" data-hm-beat data-hm-act="0" data-hm-step="1" data-hm-anchor="br" data-hm-band="bottom">
+                <a class="hm-open" href="beaver.html">The original program</a>
+              </aside>
+            </div>
+            <div class="hm-stage__still">
+              <img src="TTM%20Beaver/TTM%20Beaver%20Upper%201.png" alt="TTM Beaver upper receiver" loading="lazy">
             </div>
           </div>
-          <div class="hero__scroll"><span>Scroll</span><div class="hero__scroll-line"></div></div>
-          <div class="hero__dots" id="hero-dots" aria-label="Hero slideshow">
-            <button type="button" class="hero__dot hero__dot--active" data-slide="0" aria-label="Slide 1"></button>
-            <button type="button" class="hero__dot" data-slide="1" aria-label="Slide 2"></button>
-            <button type="button" class="hero__dot" data-slide="2" aria-label="Slide 3"></button>
-            <button type="button" class="hero__dot" data-slide="3" aria-label="Slide 4"></button>
-          </div>
-        </div>
 
-        <!-- AWARD-6:#3 scroll-story callout — HUD plate, not a material card -->
-        <aside class="hero-award-callout" id="hero-award-callout" aria-hidden="true">
-          <span class="hero-award-callout__bracket hero-award-callout__bracket--tl" aria-hidden="true"></span>
-          <span class="hero-award-callout__bracket hero-award-callout__bracket--tr" aria-hidden="true"></span>
-          <span class="hero-award-callout__bracket hero-award-callout__bracket--bl" aria-hidden="true"></span>
-          <span class="hero-award-callout__bracket hero-award-callout__bracket--br" aria-hidden="true"></span>
-          <span class="hero-award-callout__scan" aria-hidden="true"></span>
-          <div class="hero-award-callout__head">
-            <span class="hero-award-callout__id" id="hero-award-callout-id">SYS-01</span>
-            <span class="hero-award-callout__live"><i></i>TRACKING</span>
-          </div>
-          <span class="hero-award-callout__label">DESIGNATION</span>
-          <span class="hero-award-callout__name" id="hero-award-callout-name"></span>
-          <span class="hero-award-callout__rule" aria-hidden="true"></span>
-          <div class="hero-award-callout__foot">
-            <span class="hero-award-callout__phase">PHASE</span>
-            <span class="hero-award-callout__meta" id="hero-award-callout-meta">MACHINED IN-HOUSE</span>
-          </div>
-        </aside>
-
-        <div class="hero-card" id="hero-card">
-          <div class="hero-card__layer hero-card__layer-2" id="hero-card-layer-2" aria-hidden="true"></div>
-          <div class="hero-card__layer hero-card__layer-1" id="hero-card-layer-1" aria-hidden="true"></div>
-          <div class="hero-card__frame" id="hero-card-frame">
-            <div class="hero__media">
-              <div class="hero__slides">
-                <img src="T90M%20Render.png" alt="" class="hero__slide hero__slide--active">
-                <img src="Sigspear5.png" alt="" class="hero__slide">
-                <img src="TTM%20CMMG%20MK47/Main%20CMMG.png" alt="" class="hero__slide">
-                <img src="TTM%20MP7/MP7%20Side1%20.png" alt="" class="hero__slide">
-              </div>
-              <div class="hero__overlay"></div>
-              <div class="hero__spotlight" id="hero-spotlight" aria-hidden="true"></div>
+          <div class="hm-act">
+            <div class="hm-type hm-type--short" data-hm-type="1">
+              <p class="hm-type__label">Built at TTM</p>
+              <h2 class="hm-word"><span data-hm-word>T-90M</span></h2>
+              <p class="hm-type__sub">Armor on the same floor as the rifles</p>
+            </div>
+            <div class="hm-beats">
+              <article class="hm-beat" data-hm-beat data-hm-act="1" data-hm-step="0" data-hm-anchor="tl" data-hm-band="top">
+                <div class="hm-hud">
+                  <span class="hm-hud__br hm-hud__br--tl" aria-hidden="true"></span>
+                  <span class="hm-hud__br hm-hud__br--tr" aria-hidden="true"></span>
+                  <span class="hm-hud__br hm-hud__br--bl" aria-hidden="true"></span>
+                  <span class="hm-hud__br hm-hud__br--br" aria-hidden="true"></span>
+                  <p class="hm-hud__k">Floor</p>
+                  <p class="hm-hud__v"><span data-hm-count="1" data-hm-pad="2">00</span></p>
+                </div>
+              </article>
+              <aside class="hm-beat" data-hm-beat data-hm-act="1" data-hm-step="0" data-hm-anchor="br" data-hm-band="bottom">
+                <p class="hm-count"><span data-hm-count="8">0</span></p>
+                <p class="hm-count__unit">Platforms · one house</p>
+                <span class="hm-count__bar" aria-hidden="true"><i></i></span>
+              </aside>
+              <article class="hm-beat hm-beat--fill" data-hm-beat data-hm-act="1" data-hm-step="1" data-hm-anchor="fill">
+                <div class="hm-promo hm-promo--ua" data-hm-promo="ua">
+                  <div class="hm-promo__map" data-hm-ua-map></div>
+                  <div class="hm-promo__copy">
+                    <p class="hm-promo__k">Track lock · theater</p>
+                    <h2 class="hm-promo__slam">
+                      <span class="hm-promo__slam-k">Fielded in</span>
+                      <span data-hm-word>Ukraine</span>
+                    </h2>
+                    <p class="hm-promo__fix">50.45° N · 30.52° E · Kyiv</p>
+                    <a class="btn btn--primary hm-promo__btn" href="t90m.html" data-map-jump="t90m.html">View T-90M</a>
+                  </div>
+                  <div class="hm-promo__reticle" aria-hidden="true"></div>
+                </div>
+              </article>
+            </div>
+            <div class="hm-stage__still">
+              <img src="T90M%20Render.png" alt="T-90M turret" loading="lazy">
             </div>
           </div>
-          <div class="hero-card__border" id="hero-card-border" aria-hidden="true">
-            <span class="hero-card__corner hero-card__corner--tl"></span>
-            <span class="hero-card__corner hero-card__corner--tr"></span>
-            <span class="hero-card__corner hero-card__corner--bl"></span>
-            <span class="hero-card__corner hero-card__corner--br"></span>
-          </div>
-          <div class="hero-card__glass" id="hero-card-glass" aria-hidden="true"></div>
-        </div>
 
-        <div class="hero-pin__reveal container" id="hero-pin-reveal">
-          <div class="hero-pin__reveal-inner">
-            <div class="reveal-mask reveal-mask--block"><span class="section__eyebrow reveal-mask__el" data-reveal-start="0">In the details</span></div>
-            <h2 class="section__title"><span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.08">Every</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.13">system,</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.18">machined</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.23">by</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.27">our</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.31">own</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.35">hands.</span></span></h2>
-            <div class="reveal-mask reveal-mask--block"><p class="hero-pin__reveal-desc reveal-mask__el" data-reveal-start="0.46">No outsourced castings, no white-labeled parts. From receiver blanks to final assembly, every platform on this page passes through our own workshop floor before it ships.</p></div>
-            <div class="reveal-mask reveal-mask--block"><div class="hero__actions reveal-mask__el" data-reveal-start="0.56">
-              <a href="#products" class="btn btn--outline">See what we build</a>
-            </div></div>
+          <div class="hm-act">
+            <div class="hm-type hm-type--short" data-hm-type="2">
+              <p class="hm-type__label">TTM small-arms cell</p>
+              <h2 class="hm-word"><span data-hm-word>MP7</span></h2>
+              <p class="hm-type__sub">One bench. Every platform.</p>
+            </div>
+            <div class="hm-beats">
+              <article class="hm-beat" data-hm-beat data-hm-act="2" data-hm-step="0" data-hm-anchor="tl" data-hm-band="top">
+                <div class="hm-len">
+                  <span class="hm-len__n">CAD</span>
+                  <span class="hm-len__bar" aria-hidden="true"><i></i></span>
+                  <span class="hm-len__n">CHIP</span>
+                </div>
+              </article>
+              <aside class="hm-beat" data-hm-beat data-hm-act="2" data-hm-step="0" data-hm-anchor="br" data-hm-band="bottom">
+                <p class="hm-pulse"><span class="hm-pulse__n">LIVE</span><i class="hm-pulse__tick" aria-hidden="true"></i></p>
+                <p class="hm-pulse__cap">Workshop floor · machines running</p>
+              </aside>
+              <article class="hm-beat hm-beat--fill" data-hm-beat data-hm-act="2" data-hm-step="1" data-hm-anchor="fill">
+                <div class="hm-promo hm-promo--cad" data-hm-promo="cad">
+                  <div class="hm-promo__sheet" aria-hidden="true">
+                    <span class="hm-promo__ortho"></span>
+                    <span class="hm-promo__ortho hm-promo__ortho--b"></span>
+                    <span class="hm-promo__ortho hm-promo__ortho--c"></span>
+                  </div>
+                  <div class="hm-promo__gallery" aria-hidden="true">
+                    <figure class="hm-promo__shot hm-promo__shot--a"><img src="library/mp7a2.png" alt=""></figure>
+                    <figure class="hm-promo__shot hm-promo__shot--b"><img src="library/hk416.png" alt=""></figure>
+                    <figure class="hm-promo__shot hm-promo__shot--c"><img src="library/p90.png" alt=""></figure>
+                    <figure class="hm-promo__shot hm-promo__shot--d"><img src="library/glock18c.png" alt=""></figure>
+                  </div>
+                  <div class="hm-promo__copy">
+                    <p class="hm-promo__k">Archive · 30+ platforms</p>
+                    <h2 class="hm-promo__slam">
+                      <span class="hm-promo__slam-k">Reference library</span>
+                      <span data-hm-word>CAD</span>
+                    </h2>
+                    <p class="hm-promo__fix">Exterior + cutaway · controlled issue</p>
+                    <div class="hm-promo__actions">
+                      <a class="btn btn--primary hm-promo__btn" href="library.html" data-cad-jump="library.html">Open the library</a>
+                      <a class="btn btn--outline hm-promo__btn" href="library.html#preview">View previews</a>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="hm-stage__still">
+              <img src="TTM%20MP7/MP7%20Side1%20.png" alt="TTM MP7" loading="lazy">
+            </div>
           </div>
-        </div>
 
-        <div class="hero-pin__reveal hero-pin__reveal--alt container" id="hero-pin-reveal-2">
-          <div class="hero-pin__reveal-inner">
-            <div class="reveal-mask reveal-mask--block"><span class="section__eyebrow reveal-mask__el" data-reveal-start="0">Zero compromise</span></div>
-            <h2 class="section__title"><span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.08">Engineered</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.15">first.</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.22">Manufactured</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.29">to</span></span> <span class="reveal-mask"><span class="reveal-mask__el" data-reveal-start="0.34">match.</span></span></h2>
-            <div class="reveal-mask reveal-mask--block"><p class="hero-pin__reveal-desc reveal-mask__el" data-reveal-start="0.46">Every dimension is modeled, toleranced, and validated in-house before a single chip comes off the mill — so what ships is exactly what was designed.</p></div>
-            <div class="reveal-mask reveal-mask--block"><div class="hero__actions reveal-mask__el" data-reveal-start="0.56">
-              <a href="#process" class="btn btn--outline">See our process</a>
-            </div></div>
+          <div class="hm-act">
+            <div class="hm-type hm-type--short" data-hm-type="3">
+              <p class="hm-type__label">The house, not a vendor</p>
+              <h2 class="hm-word"><span data-hm-word>SPEAR</span></h2>
+              <p class="hm-type__sub">TTM machines what other shops buy</p>
+            </div>
+            <div class="hm-beats">
+              <article class="hm-beat" data-hm-beat data-hm-act="3" data-hm-step="0" data-hm-anchor="tl" data-hm-band="top">
+                <div class="hm-gauge">
+                  <div class="hm-gauge__col" aria-hidden="true"><i></i></div>
+                  <p class="hm-gauge__n"><span data-hm-count="80000" data-hm-comma="1">0</span><br>PSI</p>
+                </div>
+              </article>
+              <aside class="hm-beat" data-hm-beat data-hm-act="3" data-hm-step="0" data-hm-anchor="br" data-hm-band="bottom">
+                <p class="hm-fury"><span class="hm-fury__n">TTM</span> <span class="hm-fury__w">HOUSE</span></p>
+              </aside>
+              <article class="hm-beat" data-hm-beat data-hm-act="3" data-hm-step="1" data-hm-anchor="tl" data-hm-band="top">
+                <p class="hm-spec">A shop that writes its own next rifle — and everyone else’s.</p>
+              </article>
+              <aside class="hm-beat" data-hm-beat data-hm-act="3" data-hm-step="1" data-hm-anchor="br" data-hm-band="bottom">
+                <a class="hm-open" href="sigspear.html">View SPEAR</a>
+              </aside>
+            </div>
+            <div class="hm-stage__still">
+              <img src="New%20TTM%20SIG%20SPEAR%20Image.png" alt="TTM SIG SPEAR" loading="lazy">
+            </div>
           </div>
-        </div>
 
+        </div>
       </div>
-    </section>
+    </div>
+    <script>
+      (function () {
+        try {
+          if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          document.querySelector('[data-hm-stage]').dataset.hmMode = 'live';
+        } catch (err) { /* static layout is already on screen */ }
+      })();
+    </script>
 
+    <div class="hm-rest" data-hm-rest>
     <section class="arsenal" id="products">
       <div class="container arsenal__intro animate-in">
         <div class="arsenal__intro-copy">
@@ -375,38 +503,44 @@
       </div>
     </section>
 
-    <section class="section workshop" id="workshop">
-      <div class="container">
-        <div class="section__header animate-in">
-          <span class="section__eyebrow">In production</span>
-          <h2 class="section__title">From the workshop</h2>
-        </div>
-        <div class="workshop__grid">
-          <div class="workshop__item animate-in"><img src="T90M Tracks.png" alt="T-90M tracks"></div>
-          <div class="workshop__item animate-in"><img src="T90M Engine Pistons.png" alt="Engine pistons"></div>
-          <div class="workshop__item animate-in"><img src="TTM%20CMMG%20MK47/CMMG%20With%20Internals.png" alt="CMMG internals"></div>
-          <div class="workshop__item animate-in"><img src="M4A1%20Internals.png" alt="M4A1 internals"></div>
+    <div class="hm-turn" data-hm-turn>
+      <div class="hm-turn__track">
+        <div class="hm-turn__pin">
+          <section class="section workshop hm-turn__base" id="workshop">
+            <div class="container">
+              <div class="section__header animate-in">
+                <span class="section__eyebrow">In production</span>
+                <h2 class="section__title">From the workshop</h2>
+              </div>
+              <div class="workshop__grid">
+                <div class="workshop__item animate-in"><img src="T90M Tracks.png" alt="T-90M tracks"></div>
+                <div class="workshop__item animate-in"><img src="T90M Engine Pistons.png" alt="Engine pistons"></div>
+                <div class="workshop__item animate-in"><img src="TTM%20CMMG%20MK47/CMMG%20With%20Internals.png" alt="CMMG internals"></div>
+                <div class="workshop__item animate-in"><img src="M4A1%20Internals.png" alt="M4A1 internals"></div>
+              </div>
+            </div>
+          </section>
+          <section class="field-band hm-turn__sheet" id="field">
+            <div class="field-band__bg">
+              <img src="UkraineTTMFlag.png" alt="">
+              <div class="field-band__overlay"></div>
+            </div>
+            <div class="container field-band__content">
+              <div class="field-band__panel animate-in">
+                <span class="section__eyebrow">In the field</span>
+                <h2 class="section__title">Fielded in Ukraine</h2>
+                <p class="field-band__desc">The TTM T-90M is engineered and manufactured at our HQ for operational deployment. Currently fielded in Ukraine.</p>
+                <a href="t90m.html" class="btn btn--primary" data-map-jump="t90m.html">View T-90M</a>
+                <span class="field-band__caption" aria-hidden="true">T-90M Proryv · Fielded — Ukraine</span>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
-    </section>
+    </div>
 
-    <section class="field-band" id="field">
-      <div class="field-band__bg">
-        <img src="UkraineTTMFlag.png" alt="">
-        <div class="field-band__overlay"></div>
-      </div>
-      <div class="container field-band__content">
-        <div class="field-band__panel animate-in">
-          <span class="section__eyebrow">In the field</span>
-          <h2 class="section__title">Deployed where it matters</h2>
-          <p class="field-band__desc">The TTM T-90M is engineered and manufactured at our HQ for operational deployment. Currently fielded in Ukraine.</p>
-          <a href="t90m.html" class="btn btn--primary">View T-90M</a>
-          <span class="field-band__caption" aria-hidden="true">T-90M Proryv · Fielded — Ukraine</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="forge-strip" id="forge">
+    <div class="hm-chapters" data-hm-chapters>
+    <section class="forge-strip hm-chapter hm-chapter--dark" id="forge" data-hm-chapter>
       <div class="container">
         <div class="forge-strip__grid">
           <div class="animate-in">
@@ -425,7 +559,7 @@
       </div>
     </section>
 
-    <section class="lib-strip" id="library">
+    <section class="lib-strip hm-chapter hm-chapter--blueprint" id="library" data-hm-chapter>
       <div class="container">
         <div class="lib-strip__grid">
           <div class="animate-in">
@@ -460,7 +594,7 @@
       </div>
     </section>
 
-    <section class="custom-strip" id="custom">
+    <section class="custom-strip hm-chapter hm-chapter--dark" id="custom" data-hm-chapter>
       <div class="container">
         <div class="custom-strip__grid">
           <div class="animate-in">
@@ -489,7 +623,7 @@
       </div>
     </section>
 
-    <section class="section process" id="process">
+    <section class="section process hm-chapter" id="process" data-hm-chapter>
       <div class="container">
         <div class="section__header animate-in">
           <span class="section__eyebrow">How we work</span>
@@ -504,7 +638,7 @@
       </div>
     </section>
 
-    <section class="section team" id="team">
+    <section class="section team hm-chapter" id="team" data-hm-chapter>
       <div class="container">
         <div class="section__header animate-in">
           <span class="section__eyebrow">Leadership</span>
@@ -539,7 +673,7 @@
       </div>
     </section>
 
-    <section class="section careers" id="careers">
+    <section class="section careers hm-chapter hm-chapter--band" id="careers" data-hm-chapter>
       <div class="container">
         <div class="careers__banner animate-in">
           <div>
@@ -632,7 +766,7 @@
       </div>
     </section>
 
-    <section class="section faq" id="faq">
+    <section class="section faq hm-chapter" id="faq" data-hm-chapter>
       <div class="container">
         <div class="section__header animate-in">
           <span class="section__eyebrow">FAQ</span>
@@ -667,7 +801,7 @@
       </div>
     </section>
 
-    <section class="section contact" id="contact">
+    <section class="section contact hm-chapter hm-chapter--contact" id="contact" data-hm-chapter>
       <div class="container">
         <div id="contact-success" class="contact__success" hidden role="status">
           Message sent — we'll get back to you shortly.
@@ -694,6 +828,8 @@
         </div>
       </div>
     </section>
+    </div>
+    </div>
   </main>
 
   <footer class="footer">
@@ -745,18 +881,14 @@
   </footer>
 
   <button type="button" class="back-to-top" id="back-to-top" aria-label="Back to top" hidden>↑</button>
-  <!-- AWARD-6:#5 workshop ambience toggle (muted by default) -->
-  <button type="button" class="hero-sound-toggle" id="hero-sound-toggle" aria-pressed="false" title="Enable workshop ambience" aria-label="Toggle workshop ambience">
-    <svg class="hero-sound-toggle__off" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-    <svg class="hero-sound-toggle__on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-  </button>
   <a href="https://discord.gg/pYwJuHhg52" target="_blank" rel="noopener noreferrer" class="chat-widget" aria-label="Join Discord">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/></svg>
   </a>
 
-  <script src="script.js?v=34"></script>
-  <script src="hero3d.js?v=10"></script>
-  <script src="hero-award.js?v=3"></script>
+  <script src="script.js?v=37"></script>
+  <script type="module" src="home-stage.js?v=21"></script>
+  <script src="field-map.js?v=4"></script>
+  <script src="cad-jump.js?v=1"></script>
   <script src="wallet/wallet-url.js"></script>
   <script>
     (function() {

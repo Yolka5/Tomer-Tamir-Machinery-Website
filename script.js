@@ -125,6 +125,7 @@
       target = clamped;
       startLoop();
     };
+    window.__ttmSmoothScroll = smoothScrollTo;
   })();
 
   function toggleMenu() {
@@ -2145,6 +2146,8 @@
     function isInternalPageLink(anchor) {
       var href = anchor.getAttribute('href');
       if (!href || href === '#' || href.indexOf('#') === 0) return false;
+      if (anchor.hasAttribute('data-map-jump')) return false;
+      if (anchor.hasAttribute('data-cad-jump')) return false;
       if (anchor.target === '_blank' || anchor.hasAttribute('download')) return false;
       if (href.indexOf('mailto:') === 0 || href.indexOf('tel:') === 0) return false;
       if (href.indexOf('http') === 0 && href.indexOf(window.location.origin) !== 0) return false;
