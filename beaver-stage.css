@@ -99,7 +99,7 @@
 
 .bvr-beat__index {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -131,7 +131,7 @@
 
 .bvr-stat__k {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -276,6 +276,10 @@
   font-size: clamp(3rem, 19vw, 17.5rem);
   line-height: 0.82;
   white-space: nowrap;
+  /* Lifted off the model's centreline so the receiver crosses the base of the
+     letterforms instead of slicing them in half. */
+  transform: translate3d(0, -9vh, 0);
+  opacity: 0.94;
 }
 
 .bvr-stage[data-bvr-mode='live'] .bvr-type--script .bvr-word {
@@ -303,8 +307,11 @@
 }
 
 .bvr-stage[data-bvr-mode='live'] .bvr-word__ch {
-  --lead: calc(var(--i, 0) * 0.055);
-  --lp: clamp(0, calc((var(--reveal, 0) - var(--lead)) / 0.4), 1);
+  /* Normalised by word length for the same reason as the home stage: a flat
+     per-character lead runs out of reveal range on anything long and leaves
+     the tail glyphs permanently dimmed and tilted. */
+  --lead: calc(var(--i, 0) / var(--n, 1) * 0.42);
+  --lp: clamp(0, calc((var(--reveal, 0) - var(--lead)) / 0.58), 1);
   transform-origin: 50% 88%;
   transform:
     translate3d(0, calc((1 - var(--lp)) * 0.42em), 0)
@@ -471,7 +478,7 @@
 
 .bvr-rail__label {
   font-family: var(--font-mono);
-  font-size: 0.58rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -519,7 +526,7 @@ body:has(.bvr-stage[data-bvr-pinned='1']) .product-story-rail {
   justify-items: center;
   gap: 0.55rem;
   font-family: var(--font-mono);
-  font-size: 0.58rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.26em;
   text-transform: uppercase;
@@ -556,7 +563,7 @@ body:has(.bvr-stage[data-bvr-pinned='1']) .product-story-rail {
   align-items: center;
   gap: 0.7rem;
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.24em;
   text-transform: uppercase;

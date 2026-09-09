@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ttm-dev",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["_dev-server.js"],
+      "port": 8877
+    }
+  ]
+}

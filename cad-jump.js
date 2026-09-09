@@ -1,4 +1,11 @@
-/* MP7 act → CAD library: a drawing-sheet wipe, then the archive. */
+/* MP7 act → CAD library: a drawing-sheet wipe, then the archive.
+
+   Wrapped: this file and field-map.js both ran as classic scripts and both
+   declared DURATION plus go/mount/play/bind at top level. The const collision
+   threw at parse time and killed this whole file; the function names would
+   have silently cross-wired the two transitions once that was fixed. */
+(function () {
+  'use strict';
 
 const DURATION = 1600;
 
@@ -74,3 +81,4 @@ function bind() {
 }
 
 bind();
+})();

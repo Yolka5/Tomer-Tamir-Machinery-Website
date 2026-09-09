@@ -1,4 +1,7 @@
-/* Field-band → T-90M: a black world map zooms Ukraine, then the product page. */
+/* Field-band → T-90M: a black world map zooms Ukraine, then the product page.
+   Scoped for the same reason as cad-jump.js — see the note there. */
+(function () {
+  'use strict';
 
 const WORLD = '-180 -90 360 180';
 const UKRAINE = '21.6 -53.4 19.4 9.6';
@@ -114,3 +117,4 @@ function bind() {
 }
 
 bind();
+})();

@@ -56,6 +56,19 @@
       return Math.max(0, Math.min(maxScroll(), y));
     }
 
+    /* Custom wheel easing is for the pinned hero only. Past merch, native
+       scroll must take over — the low EASE factor reads as lag on long pages. */
+    function pastMerch() {
+      var merch = document.getElementById('merch');
+      if (!merch) return false;
+      return merch.getBoundingClientRect().bottom < window.innerHeight * 0.55;
+    }
+
+    function syncNativeScroll() {
+      current = target = window.scrollY;
+      looping = false;
+    }
+
     function isInsideScrollable(node) {
       while (node && node !== document.documentElement) {
         if (node.nodeType === 1) {
@@ -98,6 +111,10 @@
     window.addEventListener('wheel', function (e) {
       if (e.ctrlKey || e.defaultPrevented) return;
       if (isInsideScrollable(e.target)) return;
+      if (pastMerch()) {
+        syncNativeScroll();
+        return;
+      }
 
       if (!looping) current = target = window.scrollY;
 
@@ -116,6 +133,15 @@
 
     smoothScrollTo = function (y, opts) {
       var clamped = clampScroll(y);
+      if (pastMerch()) {
+        window.scrollTo({
+          top: clamped,
+          left: 0,
+          behavior: opts && opts.instant ? 'instant' : 'smooth'
+        });
+        syncNativeScroll();
+        return;
+      }
       if (opts && opts.instant) {
         current = target = clamped;
         setScroll(current);
@@ -837,7 +863,14 @@
     }
 
     layout();
-    startMotion();
+    if (typeof IntersectionObserver !== 'undefined') {
+      new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) startMotion();
+        else stopMotion();
+      }, { rootMargin: '12% 0px' }).observe(orbit);
+    } else {
+      startMotion();
+    }
   })();
 
   /* ===== About section parallax alignment =====
@@ -878,9 +911,29 @@
       }
     }
 
-    window.addEventListener('scroll', requestTick, { passive: true });
-    window.addEventListener('resize', requestTick, { passive: true });
-    requestTick();
+    var parallaxOn = false;
+    if (typeof IntersectionObserver !== 'undefined') {
+      new IntersectionObserver(function (entries) {
+        parallaxOn = entries[0].isIntersecting;
+        if (parallaxOn) requestTick();
+        else {
+          ticking = false;
+          current = target = 0;
+          visual.style.transform = '';
+        }
+      }, { rootMargin: '20% 0px' }).observe(grid);
+    } else {
+      parallaxOn = true;
+    }
+
+    function onParallaxScroll() {
+      if (!parallaxOn) return;
+      requestTick();
+    }
+
+    window.addEventListener('scroll', onParallaxScroll, { passive: true });
+    window.addEventListener('resize', onParallaxScroll, { passive: true });
+    if (parallaxOn) requestTick();
   })();
 
   var heroSlides = document.querySelectorAll('.hero__slide');
@@ -1043,7 +1096,7 @@
         name: 'TTM Beaver',
         short: 'Beaver',
         href: 'beaver.html',
-        image: 'TTM%20Beaver/TTM%20Beaver%20Upper%201.png',
+        image: 'TTM%20Beaver/TTM%20Beaver%20Upper%201.webp',
         logo: false,
         class: 'SOF battle rifle / PDW',
         cartridge: '6.8 TVCM (polymer casing)',
@@ -1075,7 +1128,7 @@
         name: 'SIG SPEAR',
         short: 'SPEAR',
         href: 'sigspear.html',
-        image: 'Sigspear5.png',
+        image: 'Sigspear5.webp',
         logo: false,
         class: 'Battle rifle / carbine',
         cartridge: '.277 Fury (6.8×51mm)',
@@ -1107,7 +1160,7 @@
         name: 'CMMG MK47',
         short: 'MK47',
         href: 'cmmg-mk47.html',
-        image: 'TTM%20CMMG%20MK47/Main%20CMMG.png',
+        image: 'TTM%20CMMG%20MK47/Main%20CMMG.webp',
         logo: false,
         class: 'Carbine (AR / AK hybrid)',
         cartridge: '7.62×39mm',
@@ -1139,7 +1192,7 @@
         name: 'MP7',
         short: 'MP7',
         href: 'mp7.html',
-        image: 'TTM%20MP7/MP7%20Side1%20.png',
+        image: 'TTM%20MP7/MP7%20Side1%20.webp',
         logo: false,
         class: 'PDW',
         cartridge: '4.6×30mm',
@@ -1171,7 +1224,7 @@
         name: 'M4A1',
         short: 'M4A1',
         href: 'm4a1.html',
-        image: 'M4A1.png',
+        image: 'M4A1.webp',
         logo: false,
         class: 'Carbine',
         cartridge: '5.56×45mm NATO',
@@ -1203,7 +1256,7 @@
         name: 'AN-94',
         short: 'AN-94',
         href: 'an94.html',
-        image: 'AN94.png',
+        image: 'AN94.webp',
         logo: false,
         class: 'Assault rifle',
         cartridge: '5.45×39mm',
@@ -1235,7 +1288,7 @@
         name: 'Ruger Precision',
         short: 'Ruger PR',
         href: 'ruger-precision.html',
-        image: 'Ruger%20Precison%20.png',
+        image: 'Ruger%20Precison%20.webp',
         logo: false,
         class: 'Precision rifle',
         cartridge: '6.5 Creedmoor / .308 Win (config)',
@@ -1553,7 +1606,7 @@
         id: 'beaver',
         name: 'TTM Beaver',
         href: 'beaver.html',
-        image: 'TTM%20Beaver/TTM%20Beaver%20Upper%201.png',
+        image: 'TTM%20Beaver/TTM%20Beaver%20Upper%201.webp',
         logo: false,
         meta: '6.8 TVCM · SOF battle rifle · Original design'
       },
@@ -1561,7 +1614,7 @@
         id: 'sigspear',
         name: 'SIG SPEAR',
         href: 'sigspear.html',
-        image: 'Sigspear5.png',
+        image: 'Sigspear5.webp',
         logo: false,
         meta: '.277 Fury · 6.8×51'
       },
@@ -1569,7 +1622,7 @@
         id: 'mk47',
         name: 'CMMG MK47',
         href: 'cmmg-mk47.html',
-        image: 'TTM%20CMMG%20MK47/Main%20CMMG.png',
+        image: 'TTM%20CMMG%20MK47/Main%20CMMG.webp',
         logo: false,
         meta: '7.62×39 · AR / AK hybrid'
       },
@@ -1577,7 +1630,7 @@
         id: 'mp7',
         name: 'MP7',
         href: 'mp7.html',
-        image: 'TTM%20MP7/MP7%20Side1%20.png',
+        image: 'TTM%20MP7/MP7%20Side1%20.webp',
         logo: false,
         meta: '4.6×30 · PDW'
       },
@@ -1585,7 +1638,7 @@
         id: 'm4a1',
         name: 'M4A1',
         href: 'm4a1.html',
-        image: 'M4A1.png',
+        image: 'M4A1.webp',
         logo: false,
         meta: '5.56×45 · Carbine'
       },
@@ -1593,7 +1646,7 @@
         id: 'an94',
         name: 'AN-94',
         href: 'an94.html',
-        image: 'AN94.png',
+        image: 'AN94.webp',
         logo: false,
         meta: '5.45×39 · Hyperburst'
       },
@@ -1601,7 +1654,7 @@
         id: 'ruger',
         name: 'Ruger Precision',
         href: 'ruger-precision.html',
-        image: 'Ruger%20Precison%20.png',
+        image: 'Ruger%20Precison%20.webp',
         logo: false,
         meta: '6.5 CM / .308 · Bolt-action'
       }

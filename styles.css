@@ -51,6 +51,27 @@ img { max-width: 100%; height: auto; display: block; }
 
 .container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
 
+/* Keyboard focus. The site had 9 :focus-visible rules against 3 outline:none
+   declarations, so tabbing through it was largely invisible. One ring, defined
+   once, that inverts with the dark acts. */
+:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
+@supports selector(:focus-visible) {
+  a:focus:not(:focus-visible),
+  button:focus:not(:focus-visible) { outline: none; }
+}
+
 .mono,
 .data-readout {
   font-family: var(--font-mono);
@@ -1300,12 +1321,20 @@ html.award-product-first.award-chrome-in .hero__dots { opacity: 1; }
   filter: saturate(1.05) contrast(1.08);
 }
 
-/* Beaver tile — CAD render on light background */
+/* Beaver tile — a CAD grab that ships with its own white background. Left on
+   a gradient it read as a screenshot pasted into the tile, with a visible seam
+   where the image ended. Multiply drops the white out so the receiver sits on
+   the tile's own ground like the studio renders beside it. */
 .arsenal-tile__img--cad {
   object-fit: contain;
-  padding: 1.5rem;
+  padding: 2.25rem 1.75rem;
   filter: none;
-  background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.98), rgba(228,228,234,0.92));
+  mix-blend-mode: multiply;
+  background: transparent;
+}
+
+.arsenal-tile--beaver {
+  background: linear-gradient(168deg, #fdfdfe 0%, #ececed 58%, #dedee2 100%);
 }
 
 .arsenal-tile:hover .arsenal-tile__img--cad {
@@ -2289,8 +2318,10 @@ html.award-product-first.award-chrome-in .hero__dots { opacity: 1; }
   box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
+/* Moved off the left gutter: the stage's data plate and closing statement both
+   live there now, and a saturated blurple puck sat straight on top of them. */
 .chat-widget {
-  position: fixed; bottom: 2rem; left: 2rem; width: 52px; height: 52px;
+  position: fixed; bottom: 1.75rem; right: 1.75rem; width: 46px; height: 46px;
   border-radius: 50%;
   background: #5865f2;
   color: #fff;
@@ -5410,19 +5441,53 @@ body.lightbox-open {
   .product-story-rail { display: none; }
 }
 
-@media (max-width: 768px) {
+/* Nav drawer takes over at 900px, where the horizontal menu stops fitting. */
+@media (max-width: 900px) {
   .nav__tagline { display: none; }
+  /* The drawer trigger. Without this the menu parks off-canvas at right:-100%
+     and nothing on the page can bring it back — the whole site becomes a
+     single page on a phone. */
+  .nav__toggle { display: flex; margin-left: auto; }
   .nav__menu, .nav__actions {
-    position: fixed; top: 0; right: -100%; width: 80%; max-width: 300px;
-    height: 100vh;
+    position: fixed; right: -100%; width: 80%; max-width: 320px;
     background: var(--glass-white-strong);
     backdrop-filter: blur(24px);
     flex-direction: column;
-    justify-content: center; gap: 2rem; padding: 2rem;
-    box-shadow: var(--shadow-lg); transition: right 0.35s; z-index: 999;
+    gap: 1.35rem; padding: 2rem;
+    box-shadow: var(--shadow-lg);
+    transition: right 0.4s var(--ease-out); z-index: 999;
     align-items: stretch;
   }
+  /* Two sibling panels, one drawer: the link list fills the sheet and the CTA
+     sits on its bottom edge. Both are pinned with top/height rather than
+     bottom, because .header carries a backdrop-filter and that makes it the
+     containing block for its fixed descendants — a `bottom: 0` here resolved
+     against the 72px header, not the viewport, and threw the CTA off the top
+     of the screen. */
+  .nav__menu,
+  .nav__actions {
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+  }
+  .nav__menu {
+    justify-content: flex-start;
+    padding-top: calc(var(--nav-h) + 1.5rem);
+    padding-bottom: 7rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .nav__actions {
+    justify-content: flex-end;
+    background: transparent;
+    backdrop-filter: none;
+    box-shadow: none;
+    pointer-events: none;
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+  }
+  .nav__actions.open > * { pointer-events: auto; }
   .nav__menu.open, .nav__actions.open { right: 0; }
+  .nav__toggle { position: relative; z-index: 1001; }
   .nav__dropdown { width: 100%; }
   .nav__dropdown-menu {
     position: static;
@@ -5435,6 +5500,9 @@ body.lightbox-open {
     display: none;
   }
   .nav__dropdown.is-open .nav__dropdown-menu { display: block; }
+}
+
+@media (max-width: 768px) {
   .hero__dots { bottom: 5.5rem; right: 50%; transform: translateX(50%); }
   .hero__scroll { bottom: 1.5rem; }
   .team__grid, .careers__grid, .process__grid, .project-gallery__grid, .product-gallery { grid-template-columns: 1fr; }

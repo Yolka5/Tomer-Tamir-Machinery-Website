@@ -18,15 +18,26 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 
+/* The running order the page actually tells:
+     Beaver → exploded Beaver → isolated upper receiver → T-90M → Ukraine
+     → MP7 → CAD library → SPEAR.
+
+   Each full-frame panel (Ukraine, CAD library) now HOLDS to the end of its act
+   and is carried into the following handoff by `f.tail`, instead of fading out
+   and handing the frame back to the model for a few hundred milliseconds
+   before the swap started. That flash-back was the model briefly reappearing
+   between the panel and the transition. */
 const PHASES = [
-  { kind: 'act', act: 0, vh: 62 },
-  { kind: 'swap', swap: 0, vh: 32 },
-  { kind: 'act', act: 1, vh: 70 },
-  { kind: 'swap', swap: 1, vh: 26 },
-  { kind: 'act', act: 2, vh: 66 },
-  { kind: 'swap', swap: 2, vh: 32 },
-  { kind: 'act', act: 3, vh: 56 },
-  { kind: 'outro', vh: 80 }
+  { kind: 'act', act: 0, vh: 52 },
+  { kind: 'blow', vh: 40 },
+  { kind: 'act', act: 4, vh: 52 },
+  { kind: 'swap', swap: 0, vh: 36 },
+  { kind: 'act', act: 1, vh: 62 },
+  { kind: 'swap', swap: 1, vh: 38 },
+  { kind: 'act', act: 2, vh: 58 },
+  { kind: 'swap', swap: 2, vh: 40 },
+  { kind: 'act', act: 3, vh: 50 },
+  { kind: 'outro', vh: 70 }
 ];
 
 const TRACK_VH = PHASES.reduce((sum, ph) => sum + ph.vh, 0);
@@ -89,7 +100,16 @@ function mdl(partial) {
     punch: 1,
     x: 0,
     clip: 'axis',
-    split: 0
+    split: 0,
+    /* 0 = assembled, 1 = every part pushed out along its own assembly vector.
+       On a rig that cannot be taken apart this drives a recede-and-shrink
+       instead, so both kinds of exit run on one curve. */
+    explode: 0,
+    /* 0 = the whole assembly, 1 = everything except the parts named in the
+       spec's `isolateKeep` has been thrown clear of the frame. */
+    isolate: 0,
+    /* Which end of the part spread leads the move (1 = muzzle first). */
+    lead: 1
   }, partial);
 }
 
@@ -101,127 +121,204 @@ function frameAt(p, introT, typeIntroT) {
     slide: 0,
     beatAct: -1,
     beatQ: 0,
+    railAct: -1,
+    railQ: 0,
     splitLine: -1,
     rest: 0,
     uaScan: 0,
     cadScan: 0,
     introGate: 0,
+    teardown: 0,
+    /* Headline reveal per act. Kept separate from the models now that two
+       acts (0 and 4) share one rig. */
+    types: [0, 0, 0, 0, 0],
+    /* Keeps one act's beat alive through the following handoff. */
+    tail: null,
     models: [mdl(), mdl(), mdl(), mdl()]
   };
 
   if (ph.kind === 'act' && ph.act === 0) {
-    const scrollGate = outQuart(smooth(span(p, 0.05, 0.32)));
+    /* This read `smooth(span(p, 0.05, 0.32))` — one argument, so span's
+       `b === a` branch fired on two undefineds and returned 1 every time,
+       quietly pinning the gate open. Written correctly it also has to be
+       measured against the act's own local progress. */
+    const scrollGate = outQuart(smooth(q, 0.04, 0.3));
     const typePop = typeIntroT > 0 ? outCubic(typeIntroT) : 0;
-    const popped = scrollGate * typePop;
     f.introGate = scrollGate;
-    f.models[0] = mdl({ wipe: outCubic(introT), clock: q, arrive: introT, type: popped });
+    f.types[0] = scrollGate * typePop;
+    f.models[0] = mdl({
+      wipe: outCubic(introT),
+      clock: q,
+      arrive: introT,
+      type: f.types[0]
+    });
     f.beatAct = 0;
     f.beatQ = q;
-  } else if (ph.kind === 'swap' && ph.swap === 0) {
-    /* Class change: curtain + bore wipe, turret grows from a silhouette. */
-    f.dark = smooth(q, 0.2, 0.62);
-    f.slide = f.dark;
+    f.railAct = 0;
+    f.railQ = q * 0.34;
+  } else if (ph.kind === 'blow') {
+    /* The rifle comes apart and stays apart — its own beat, not a handoff. */
+    f.types[0] = 1 - inCubic(span(q, 0.0, 0.26));
+    f.teardown = smooth(q, 0.08, 0.55);
+    f.railAct = 0;
+    f.railQ = 0.34 + q * 0.33;
     f.models[0] = mdl({
-      wipe: 1 - outCubic(span(q, 0, 0.58)),
-      clock: 1 + q * 0.55,
+      wipe: 1,
+      clock: 1 + q * 0.3,
       arrive: 1,
-      type: 1 - inCubic(span(q, 0.03, 0.3))
+      type: 1,
+      explode: outCubic(span(q, 0.05, 0.88)),
+      grow: mix(1, 0.84, smooth(q, 0.12, 0.9))
+    });
+  } else if (ph.kind === 'act' && ph.act === 4) {
+    /* Everything that is not the upper receiver is thrown clear of the frame;
+       the receiver settles back into its own seat and carries the specs. */
+    f.types[4] = smooth(q, 0.26, 0.5);
+    f.beatAct = 4;
+    f.beatQ = q;
+    f.railAct = 0;
+    f.railQ = 0.67 + q * 0.33;
+    f.models[0] = mdl({
+      wipe: 1,
+      clock: 1.3 + q * 0.45,
+      arrive: 1,
+      type: 1,
+      explode: 1,
+      isolate: smooth(q, 0.04, 0.46),
+      grow: mix(0.84, 1, smooth(q, 0.08, 0.55))
+    });
+  } else if (ph.kind === 'swap' && ph.swap === 0) {
+    /* Upper receiver hands over to the turret. */
+    f.dark = smooth(q, 0.22, 0.66);
+    f.slide = f.dark;
+    f.railAct = q < 0.5 ? 0 : 1;
+    f.railQ = q < 0.5 ? 1 : 0;
+    f.models[0] = mdl({
+      wipe: 1 - outCubic(span(q, 0.04, 0.62)),
+      clock: 1.75 + q * 0.4,
+      arrive: 1 - inCubic(span(q, 0.08, 0.68)),
+      type: 1 - inCubic(span(q, 0.02, 0.24)),
+      explode: 1,
+      isolate: 1,
+      grow: mix(1, 0.78, smooth(q, 0.04, 0.7))
     });
     f.models[1] = mdl({
-      wipe: outCubic(span(q, 0.22, 0.78)),
-      clock: -0.15 + q * 0.4,
-      arrive: 1,
-      type: span(q, 0.36, 1),
-      grow: mix(0.16, 1, outExpo(span(q, 0.22, 0.88)))
+      wipe: 1,
+      /* Lands on 0 so it meets act 1's `clock: q` without a rotation snap. */
+      clock: -0.3 + q * 0.3,
+      arrive: outCubic(span(q, 0.26, 0.92)),
+      type: span(q, 0.5, 1),
+      explode: 1 - outQuart(span(q, 0.26, 1)),
+      grow: mix(0.8, 1, outExpo(span(q, 0.26, 0.95)))
     });
   } else if (ph.kind === 'act' && ph.act === 1) {
     f.dark = 1;
     f.slide = 1;
-    const promo = beatPhaseWide(q, 1, 2);
+    const promo = beatHold(q, 1, 2);
     f.beatAct = 1;
     f.beatQ = q;
+    f.railAct = 1;
+    f.railQ = q;
     f.uaScan = smooth(q, 0.22, 0.94);
+    f.types[1] = mix(1, 0.02, promo);
     f.models[1] = mdl({
-      wipe: mix(1, 0.12, outCubic(promo)),
+      wipe: mix(1, 0.1, outCubic(promo)),
       clock: q,
       arrive: 1,
       type: mix(1, 0.06, promo),
-      grow: mix(1, 0.38, outCubic(promo)),
-      x: mix(0, 0.42, outCubic(promo))
+      grow: mix(1, 0.34, outCubic(promo)),
+      x: mix(0, 0.45, outCubic(promo))
     });
   } else if (ph.kind === 'swap' && ph.swap === 1) {
-    /* Collapse: turret shrinks away, MP7 punches in oversized. Theme stays dark. */
+    /* The Ukraine panel is still up when this starts and fades out over the
+       first third, so the turret never comes back to be seen. */
     f.dark = 1;
     f.slide = 1;
+    f.tail = { act: 1, step: 1, t: 1 - smooth(q, 0.0, 0.34) };
+    f.railAct = q < 0.5 ? 1 : 2;
+    f.railQ = q < 0.5 ? 1 : 0;
     f.models[1] = mdl({
-      wipe: 1 - outCubic(span(q, 0, 0.62)),
-      clock: 1 + q * 0.5,
+      wipe: mix(0.1, 0, smooth(q, 0.04, 0.4)),
+      clock: 1 + q * 0.3,
       arrive: 1,
-      type: 1 - inCubic(span(q, 0.02, 0.28)),
-      grow: mix(1, 0.18, outCubic(span(q, 0, 0.58)))
+      grow: 0.34,
+      x: mix(0.45, 0.56, q)
     });
     f.models[2] = mdl({
-      wipe: outCubic(span(q, 0.22, 0.72)),
-      clock: -0.2 + q * 0.45,
-      arrive: span(q, 0.22, 1),
-      type: span(q, 0.34, 1),
-      punch: mix(1.38, 1, outCubic(span(q, 0.48, 1)))
+      wipe: 1,
+      clock: -0.4 + q * 0.4,
+      arrive: outCubic(span(q, 0.3, 0.9)),
+      type: span(q, 0.55, 1),
+      explode: 1 - outQuart(span(q, 0.3, 0.96)),
+      grow: mix(0.86, 1, outExpo(span(q, 0.3, 0.95))),
+      punch: mix(1.12, 1, outBack(clamp01(span(q, 0.6, 1))))
     });
   } else if (ph.kind === 'act' && ph.act === 2) {
     f.dark = 1;
     f.slide = 1;
-    const promo = beatPhaseWide(q, 1, 2);
-    const mp7Return = outBack(clamp01(1 - promo * 1.15));
+    const promo = beatHold(q, 1, 2);
     f.beatAct = 2;
     f.beatQ = q;
+    f.railAct = 2;
+    f.railQ = q;
     f.cadScan = smooth(q, 0.34, 0.9);
+    f.types[2] = mix(1, 0.02, promo);
     f.models[2] = mdl({
-      wipe: mix(1, 0.16, outCubic(promo)),
+      wipe: mix(1, 0.14, outCubic(promo)),
       clock: q,
       arrive: 1,
       type: mix(1, 0.08, promo),
-      grow: mix(1 + mp7Return * 0.05, 0.44, outCubic(promo)),
-      x: mix(0, -0.3, outCubic(promo)),
-      punch: mix(1, 1 + mp7Return * 0.04, outCubic(promo))
+      grow: mix(1, 0.4, outCubic(promo)),
+      x: mix(0, -0.32, outCubic(promo))
     });
   } else if (ph.kind === 'swap' && ph.swap === 2) {
-    /* Bench swap: both on screen, a world-X plane travels left to right.
-       Curtain leaves with the plane so SPEAR is born on white. */
-    f.dark = 1 - smooth(q, 0.28, 0.82);
+    /* Bench swap. The library panel is held and cut away by the same seam
+       that carries the curtain, and the SPEAR builds on the light side. */
+    f.dark = 1 - smooth(q, 0.3, 0.84);
     f.slide = 2 - f.dark;
-    const split = span(q, 0.08, 0.92);
+    const split = smooth(q, 0.12, 0.9);
     f.splitLine = split;
+    f.tail = { act: 2, step: 1, t: 1 };
+    f.railAct = q < 0.5 ? 2 : 3;
+    f.railQ = q < 0.5 ? 1 : 0;
     f.models[2] = mdl({
-      wipe: 1,
-      clock: 1 + q * 0.4,
+      wipe: mix(0.14, 0, smooth(q, 0.02, 0.32)),
+      clock: 1 + q * 0.3,
       arrive: 1,
-      type: 1 - inCubic(span(q, 0.02, 0.28)),
-      x: mix(0, -0.28, outCubic(q)),
-      clip: 'splitL',
-      split
+      grow: 0.4,
+      x: -0.32
     });
     f.models[3] = mdl({
       wipe: 1,
-      clock: -0.15 + q * 0.4,
-      arrive: span(q, 0.12, 0.7),
-      type: span(q, 0.38, 1),
-      x: mix(0.32, 0, outCubic(span(q, 0.2, 1))),
+      clock: -0.36 + q * 0.36,
+      arrive: outCubic(span(q, 0.2, 0.9)),
+      type: span(q, 0.55, 1),
+      explode: (1 - outQuart(span(q, 0.2, 0.96))) * 0.7,
+      lead: -1,
+      x: mix(0.24, 0, outCubic(span(q, 0.2, 1))),
       clip: 'splitR',
       split
     });
   } else if (ph.kind === 'act' && ph.act === 3) {
+    f.types[3] = 1;
     f.models[3] = mdl({ wipe: 1, clock: q, arrive: 1, type: 1 });
     f.beatAct = 3;
     f.beatQ = q;
+    f.railAct = 3;
+    f.railQ = q;
     f.slide = 2;
   } else if (ph.kind === 'outro') {
     f.slide = 2;
+    f.railAct = 3;
+    f.railQ = 1;
     f.rest = outCubic(span(q, 0.06, 0.92));
+    f.types[3] = 1 - inCubic(span(q, 0.0, 0.22));
     f.models[3] = mdl({
       wipe: 1,
       clock: 1 + q * 0.35,
       arrive: 1,
       type: 1 - inCubic(span(q, 0.0, 0.22)),
+      explode: outCubic(span(q, 0.1, 0.7)) * 0.55,
       x: mix(0, -0.42, outCubic(span(q, 0.08, 0.85)))
     });
   }
@@ -246,13 +343,23 @@ function beatPhaseWide(q, i, count) {
   return smooth(q, at, at + ramp) * (1 - smooth(q, at + size - fade, at + size + fade));
 }
 
+/* Ramps up and then stays up. The full-frame panels use this so they own the
+   frame until the next phase takes it from them. */
+function beatHold(q, i, count) {
+  const pad = 0.02;
+  const size = (1 - pad * 2) / count;
+  const at = pad + i * size;
+  const ramp = Math.min(0.24, size * 0.58);
+  return smooth(q, at, at + ramp);
+}
+
 function beatT(act, step, q, counts, gate = 1) {
-  const wide = (act === 1 || act === 2) && step === 1;
+  const held = (act === 1 || act === 2) && step === 1;
   let localQ = q;
   if (act === 0) {
-    localQ = Math.max(0, (q - 0.14) / 0.86) * gate;
+    localQ = Math.max(0, (q - 0.1) / 0.9) * gate;
   }
-  return wide ? beatPhaseWide(localQ, step, counts[act]) : beatPhase(localQ, step, counts[act]);
+  return held ? beatHold(localQ, step, counts[act]) : beatPhase(localQ, step, counts[act]);
 }
 
 const MODEL_SPECS = [
@@ -260,6 +367,17 @@ const MODEL_SPECS = [
     url: 'models/beaver-upper.glb',
     turns: 1.35,
     idle: 0.9,
+    /* The Beaver exports with its parts named, so the isolation beat can keep
+       the receiver by name instead of guessing at geometry. */
+    isolateKeep: /upper[\s_-]*rec(ei|ie)ver/i,
+    /* ...except the receiver mesh has the top rail welded into it as a second
+       shell. Split that mesh and rename the slender island so it is flung with
+       everything else. Slenderness of the two: rail 24:1, body 3.5:1. */
+    splitShells: {
+      match: /upper[\s_-]*rec(ei|ie)ver/i,
+      slender: 8,
+      slenderName: 'Top_Rail'
+    },
     view: {
       orient: [0, 0, -Math.PI / 2],
       axis: 'x',
@@ -285,17 +403,22 @@ const MODEL_SPECS = [
     view: {
       orient: [0, 0, 0],
       axis: 'y',
-      pose: [0.1, 0.45, 0.04],
-      fit: { wide: 0.84, narrow: 0.74 },
-      cap: 0.94,
-      bias: -0.02
+      /* Pitched further over so the camera looks down onto the roof instead of
+         up into the open underside of the shell, and framed smaller so a tall
+         subject stops swallowing the headline the way the long ones don't. */
+      pose: [0.22, 0.45, 0.04],
+      fit: { wide: 0.7, narrow: 0.64 },
+      cap: 0.8,
+      bias: -0.12
     },
-    portrait: { fit: 0.62, fill: 0.92 }
+    portrait: { fit: 0.54, fill: 0.92 }
   },
   {
     url: 'models/mp7.glb',
     turns: 1.4,
     idle: 1.05,
+    /* No teardown on this one — it arrives and leaves on depth alone. */
+    noExplode: true,
     view: {
       orient: [0, 0, -Math.PI / 2],
       axis: 'x',
@@ -345,12 +468,15 @@ function viewFor(spec, portrait, narrow, band) {
 }
 
 function retuneMaterial(material) {
-  material.side = THREE.FrontSide;
   material.flatShading = false;
 
   /* Palette atlases already carry the CAD colors. Treating them as bare
      metal with a darkened multiplier makes a turret vanish on black. */
   if (material.map) {
+    /* These two ship as open shells out of CAD, so single-sided faces let the
+       camera look straight through the hull. Rendering both sides closes the
+       turret up without touching its colour. */
+    material.side = THREE.DoubleSide;
     material.metalness = 0.38;
     material.roughness = 0.5;
     material.envMapIntensity = 1.08;
@@ -358,6 +484,8 @@ function retuneMaterial(material) {
     material.needsUpdate = true;
     return;
   }
+
+  material.side = THREE.FrontSide;
 
   const c = material.color;
   const maxc = Math.max(c.r, c.g, c.b);
@@ -389,6 +517,85 @@ function retuneMaterial(material) {
 
   material.color.multiplyScalar(0.84);
   material.needsUpdate = true;
+}
+
+/* ===== Shell splitting =====
+   The Beaver's receiver exports as a single mesh with the full-length top rail
+   welded into it as a second, disconnected shell — so "keep only the upper
+   receiver" kept the rail too, and there was no second node to exclude.
+
+   Connected components over the triangle graph separates them exactly: the
+   receiver body comes out as one island (7.1k tris, 0.15 x 0.86 x 0.24) and
+   the rail as another (5.6k tris, 0.08 x 2.0 x 0.03). Vertices are welded by
+   quantised position first, because a CAD tessellation duplicates vertices
+   along shared edges and would otherwise shatter one solid into many islands.
+
+   The split geometries share the original's attribute buffers — only the index
+   is rebuilt — so this costs an index array, not a copy of the mesh. */
+function splitShells(mesh) {
+  const geo = mesh.geometry;
+  const pos = geo && geo.attributes && geo.attributes.position;
+  const idx = geo && geo.index;
+  if (!pos || !idx) return null;
+
+  const n = pos.count;
+  const parent = new Int32Array(n);
+  for (let i = 0; i < n; i++) parent[i] = i;
+  const find = (a) => {
+    while (parent[a] !== a) { parent[a] = parent[parent[a]]; a = parent[a]; }
+    return a;
+  };
+  const uni = (a, b) => { a = find(a); b = find(b); if (a !== b) parent[b] = a; };
+
+  const seen = new Map();
+  const K = 1e5;
+  for (let i = 0; i < n; i++) {
+    const key = Math.round(pos.getX(i) * K) + '_' +
+                Math.round(pos.getY(i) * K) + '_' +
+                Math.round(pos.getZ(i) * K);
+    const prev = seen.get(key);
+    if (prev === undefined) seen.set(key, i); else uni(prev, i);
+  }
+
+  const ia = idx.array;
+  const tris = ia.length / 3;
+  for (let t = 0; t < tris; t++) {
+    uni(ia[t * 3], ia[t * 3 + 1]);
+    uni(ia[t * 3 + 1], ia[t * 3 + 2]);
+  }
+
+  const buckets = new Map();
+  for (let t = 0; t < tris; t++) {
+    const r = find(ia[t * 3]);
+    let b = buckets.get(r);
+    if (!b) { b = []; buckets.set(r, b); }
+    b.push(t);
+  }
+  if (buckets.size < 2 || buckets.size > 64) return null;
+
+  const v = new THREE.Vector3();
+  const out = [];
+  for (const list of buckets.values()) {
+    const arr = new ia.constructor(list.length * 3);
+    const box = new THREE.Box3();
+    let w = 0;
+    for (const t of list) {
+      for (let k = 0; k < 3; k++) {
+        const vi = ia[t * 3 + k];
+        arr[w++] = vi;
+        box.expandByPoint(v.fromBufferAttribute(pos, vi));
+      }
+    }
+    const g = new THREE.BufferGeometry();
+    for (const key in geo.attributes) g.setAttribute(key, geo.attributes[key]);
+    g.setIndex(new THREE.BufferAttribute(arr, 1));
+    /* Set explicitly — computeBoundingBox would measure the shared position
+       buffer and hand every island the whole mesh's bounds. */
+    g.boundingBox = box;
+    g.boundingSphere = box.getBoundingSphere(new THREE.Sphere());
+    out.push({ geometry: g, box, tris: list.length });
+  }
+  return out;
 }
 
 function buildEnvironment(renderer) {
@@ -560,9 +767,128 @@ function boot(root) {
     rig.pose.rotation.fromArray(view.pose);
   }
 
+  /* A real exploded view separates every part along its own assembly vector —
+     the line from the centre of the assembly out through the part. Offsetting
+     along one shared axis instead only spreads a rifle lengthwise and leaves
+     anything stacked above or beside the bore sitting inside its neighbours.
+
+     So each part stores the full 3-D delta from the assembly centroid to its
+     own centroid, measured in its parent's space. Scaling that delta pushes
+     every component straight out of where it was fitted and pulls it back to
+     exactly the same seat, and because the vector is parent-local the whole
+     scattered assembly still turns as one rigid object. */
+  const partBox = new THREE.Box3();
+  const partCentre = new THREE.Vector3();
+  const partAnchor = new THREE.Vector3();
+  const partInv = new THREE.Matrix4();
+
+  function prepExplode(rig, model) {
+    rig.root.updateMatrixWorld(true);
+    partBox.setFromObject(model);
+    if (partBox.isEmpty()) { rig.parts = []; rig.canExplode = false; return; }
+    partBox.getSize(tmpVec);
+    const size = tmpVec.clone();
+    partBox.getCenter(tmpVec);
+    const centre = tmpVec.clone();
+
+    let axis = 'x';
+    if (size.y > size.x && size.y > size.z) axis = 'y';
+    else if (size.z > size.x && size.z > size.y) axis = 'z';
+    const half = Math.max(1e-5, size[axis] / 2);
+
+    const parts = [];
+    model.traverse((node) => {
+      if (!node.isMesh || !node.geometry) return;
+      if (!node.geometry.boundingBox) node.geometry.computeBoundingBox();
+      const bb = node.geometry.boundingBox;
+      if (!bb) return;
+
+      bb.getCenter(partCentre);
+      node.localToWorld(partCentre);
+
+      /* Where the part sits along the long axis, used only to stagger the
+         order things come apart so the assembly peels from one end. */
+      const t = Math.max(-1, Math.min(1, (partCentre[axis] - centre[axis]) / half));
+
+      /* Both points into the parent's space, then subtract — transformDirection
+         would normalise and throw away the distance we need. */
+      partAnchor.copy(centre);
+      if (node.parent) {
+        partInv.copy(node.parent.matrixWorld).invert();
+        partCentre.applyMatrix4(partInv);
+        partAnchor.applyMatrix4(partInv);
+      }
+      const delta = partCentre.clone().sub(partAnchor);
+
+      /* Walk up for a name — GLTFLoader splits a multi-primitive mesh into
+         child meshes that inherit nothing but their parent's name. */
+      let named = node;
+      let label = '';
+      while (named && !label) {
+        label = named.name || '';
+        named = named.parent;
+      }
+      /* GLTFLoader runs names through PropertyBinding.sanitizeNodeName, which
+         turns every space into an underscore — "Upper Reciever" arrives as
+         "Upper_Reciever". Normalise separators before matching. */
+      const clean = label.replace(/[\s_.\-]+/g, ' ').trim();
+      const keep = !!(rig.spec.isolateKeep && rig.spec.isolateKeep.test(clean));
+
+      /* Parts sitting on the centroid have no delta to normalise, so they get
+         a stable pseudo-random bearing to be thrown along instead. */
+      const fling = delta.clone();
+      if (fling.lengthSq() < 1e-9) {
+        const a = parts.length * 2.399963;
+        fling.set(Math.cos(a), Math.sin(a * 0.7), Math.sin(a));
+      }
+      fling.normalize();
+
+      parts.push({ node, base: node.position.clone(), delta, fling, t, keep });
+    });
+
+    rig.parts = parts;
+    rig.spread = size[axis];
+    rig.keeps = parts.filter((x) => x.keep).length;
+    rig.canExplode = parts.length >= 8 && !rig.spec.noExplode;
+  }
+
+  /* Replace any mesh the spec marks as welded with one mesh per shell, so the
+     isolation can address the parts independently. */
+  function applyShellSplit(rig, model) {
+    const rule = rig.spec.splitShells;
+    if (!rule) return;
+    const targets = [];
+    model.traverse((node) => {
+      if (!node.isMesh) return;
+      const clean = (node.name || '').replace(/[\s_.\-]+/g, ' ').trim();
+      if (rule.match.test(clean)) targets.push(node);
+    });
+
+    for (const node of targets) {
+      const shells = splitShells(node);
+      if (!shells || shells.length < 2) continue;
+      const parent = node.parent;
+      if (!parent) continue;
+
+      for (const shell of shells) {
+        const size = shell.box.getSize(new THREE.Vector3()).toArray().sort((a, b) => b - a);
+        const slender = size[1] > 1e-6 && size[0] / size[1] >= rule.slender;
+        const piece = new THREE.Mesh(shell.geometry, node.material);
+        piece.name = slender ? rule.slenderName : node.name;
+        piece.position.copy(node.position);
+        piece.quaternion.copy(node.quaternion);
+        piece.scale.copy(node.scale);
+        parent.add(piece);
+      }
+      parent.remove(node);
+    }
+  }
+
   function adopt(rig, gltf) {
     const model = gltf.scene;
     rig.shift.add(model);
+
+    applyShellSplit(rig, model);
 
     rest(rig);
     rig.orient.rotation.set(0, 0, 0);
@@ -582,21 +908,82 @@ function boot(root) {
       }
     });
 
+    prepExplode(rig, model);
+
     rig.loaded = true;
     layout();
   }
 
-  const LOAD_ORDER = [0, 2, 3, 1];
-  function loadOne(pos) {
-    const index = LOAD_ORDER[pos];
+  /* A single-mesh export (the T-90M and SPEAR ship as one or two primitives)
+     has nothing to take apart, so those rigs lean on scale and depth instead
+     and this is a no-op for them. */
+  function paintExplode(rig, m) {
+    const parts = rig.parts;
+    if (!rig.canExplode || !parts || !parts.length) return;
+    const e = clamp01(m.explode);
+    const iso = rig.keeps ? clamp01(m.isolate) : 0;
+    if (e < 0.0005 && iso < 0.0005 && !rig.exploded) return;
+    rig.exploded = e >= 0.0005 || iso >= 0.0005;
+
+    /* Each part travels this multiple of its own distance from the assembly
+       centroid, so the whole thing opens up in proportion rather than smearing
+       along one axis. */
+    const GAIN = 1.9;
+    /* Far enough that nothing thrown clear is still on screen. */
+    const FLING = rig.spread * 5.5;
+    for (let i = 0; i < parts.length; i++) {
+      const p = parts[i];
+      if (e < 0.0005 && iso < 0.0005) {
+        p.node.position.copy(p.base);
+        continue;
+      }
+      /* Stagger by position so the assembly peels from one end rather than
+         everything blooming at once. */
+      const s = m.lead >= 0 ? (p.t + 1) * 0.5 : 1 - (p.t + 1) * 0.5;
+      const local = clamp01((e * 1.42) - s * 0.42);
+      const spread = outCubic(local) * GAIN;
+
+      if (p.keep) {
+        /* The part being isolated retreats back into its own seat as the
+           others leave, so it ends the beat exactly where it was fitted. */
+        p.node.position.copy(p.base).addScaledVector(p.delta, spread * (1 - iso));
+      } else {
+        const gone = inCubic(iso) * FLING * (0.75 + (i % 7) * 0.07);
+        p.node.position.copy(p.base)
+          .addScaledVector(p.delta, spread)
+          .addScaledVector(p.fling, gone);
+      }
+    }
+  }
+
+  /* The four assemblies are 11 MB together and only the first one is on screen
+     when the page opens, so each is gated on the scroll position that needs
+     it. A visitor who never scrolls pays for one. The gates sit well ahead of
+     the act that consumes them, and each act's still image covers the rig
+     until its geometry lands. */
+  const NEED_AT = [0, 0.02, 0.14, 0.3];
+  const bootPct = root.querySelector('[data-hm-boot-pct]');
+  const bootBar = root.querySelector('[data-hm-boot-bar]');
+  let loadingIndex = -1;
+
+  function showBoot(frac) {
+    const pct = Math.round(clamp01(frac) * 100);
+    if (bootPct) bootPct.textContent = pct + '%';
+    if (bootBar) bootBar.style.transform = 'scaleX(' + clamp01(frac).toFixed(3) + ')';
+  }
+
+  function startLoad(index) {
     const rig = rigs[index];
+    loadingIndex = index;
     loader.load(
       rig.spec.url,
       (gltf) => {
+        loadingIndex = -1;
         try {
           adopt(rig, gltf);
         } catch (err) {
           console.error('[home-stage] adopt failed', rig.spec.url, err);
+          rig.failed = true;
           if (index === 0) {
             root.dataset.hmMode = 'static';
             stop();
@@ -604,22 +991,39 @@ function boot(root) {
           }
         }
         if (index === 0) {
+          showBoot(1);
           root.dataset.hmLoaded = '1';
           startModelIntro();
         }
-        if (pos + 1 < LOAD_ORDER.length) loadOne(pos + 1);
+        pumpLoads(progress());
       },
-      undefined,
+      index === 0
+        ? (e) => { if (e.lengthComputable && e.total) showBoot(e.loaded / e.total); }
+        : undefined,
       (err) => {
         console.error('[home-stage] load failed', rig.spec.url, err);
+        loadingIndex = -1;
+        rig.failed = true;
         if (index === 0) {
           root.dataset.hmMode = 'static';
           stop();
           return;
         }
-        if (pos + 1 < LOAD_ORDER.length) loadOne(pos + 1);
+        pumpLoads(progress());
       }
     );
+  }
+
+  let idleKick = false;
+  function pumpLoads(p) {
+    if (loadingIndex >= 0) return;
+    for (let i = 0; i < rigs.length; i++) {
+      if (rigs[i].loaded || rigs[i].failed) continue;
+      /* Strictly in order — a later act is never fetched ahead of an earlier
+         one, so bandwidth always goes to whatever the viewer meets next. */
+      if (p >= NEED_AT[i] || (i <= 1 && idleKick)) startLoad(i);
+      return;
+    }
   }
 
   let narrow = false;
@@ -723,6 +1127,8 @@ function boot(root) {
 
     renderer.setPixelRatio(pixelRatio());
     renderer.setSize(w, h, false);
+    measureLeads();
+    placePull();
   }
 
   let dprScale = 1;
@@ -737,7 +1143,9 @@ function boot(root) {
   const splitEl = root.querySelector('[data-hm-split]');
   const restEl = document.querySelector('[data-hm-rest]');
   if (restEl) restEl.classList.add('hm-rest--live');
-  const types = [...root.querySelectorAll('[data-hm-type]')];
+  const typeByAct = new Map(
+    [...root.querySelectorAll('[data-hm-type]')].map((el) => [el.dataset.hmType, el])
+  );
   const beats = [...root.querySelectorAll('[data-hm-beat]')];
   const chromeEl = root.querySelector('[data-hm-chrome]');
   const bandTop = [...root.querySelectorAll('[data-hm-band="top"], .hm-type__label')];
@@ -747,6 +1155,8 @@ function boot(root) {
   const themeMeta = document.querySelector('meta[name="theme-color"]');
   const counts = [...root.querySelectorAll('[data-hm-count]')];
   const giants = [...root.querySelectorAll('.hm-giant')];
+  const plates = [...root.querySelectorAll('[data-hm-plate]')];
+  const leadsSvg = root.querySelector('[data-hm-leads]');
   const uaPromo = root.querySelector('[data-hm-promo="ua"]');
   const cadPromo = root.querySelector('[data-hm-promo="cad"]');
   const uaMapHost = root.querySelector('[data-hm-ua-map]');
@@ -771,7 +1181,113 @@ function boot(root) {
       .catch(() => { /* slam type still carries the beat */ });
   }
 
-  const beatGroups = [0, 1, 2, 3].map((act) =>
+  /* ===== Leader lines =====
+     Each plate row names a point on the model. The point is stored in
+     normalised bounding-box coordinates, projected through the live camera
+     every frame and joined to its row with a drawing-office elbow, so the copy
+     stays wired to the geometry while the part turns. */
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const leads = [];
+  const leadPt = new THREE.Vector3();
+  const leadView = new THREE.Vector3();
+  const leadCentre = new THREE.Vector3();
+  let leadW = 0;
+  let leadH = 0;
+
+  if (leadsSvg) {
+    for (const row of root.querySelectorAll('[data-hm-pt]')) {
+      const nums = row.dataset.hmPt.split(',').map(Number);
+      if (nums.length !== 3 || nums.some((n) => !isFinite(n))) continue;
+      const path = document.createElementNS(SVG_NS, 'path');
+      path.setAttribute('class', 'hm-lead__path');
+      path.setAttribute('pathLength', '1');
+      const dot = document.createElementNS(SVG_NS, 'circle');
+      dot.setAttribute('class', 'hm-lead__dot');
+      dot.setAttribute('r', '3.5');
+      leadsSvg.append(path, dot);
+      leads.push({
+        row,
+        act: Number(row.dataset.hmAct),
+        p: nums,
+        path,
+        dot,
+        tx: 0,
+        ty: 0,
+        shown: false
+      });
+    }
+  }
+
+  function measureLeads() {
+    if (!leadsSvg) return;
+    const box = leadsSvg.getBoundingClientRect();
+    leadW = box.width;
+    leadH = box.height;
+    if (leadW && leadH) leadsSvg.setAttribute('viewBox', '0 0 ' + leadW + ' ' + leadH);
+    for (const lead of leads) {
+      const plate = lead.row.closest('[data-hm-plate]');
+      if (!plate) continue;
+      lead.tx = plate.offsetLeft + plate.offsetWidth;
+      lead.ty = plate.offsetTop + lead.row.offsetTop + lead.row.offsetHeight / 2;
+    }
+  }
+
+  function hideLead(lead) {
+    if (!lead.shown) return;
+    lead.shown = false;
+    lead.path.style.opacity = '0';
+    lead.dot.style.opacity = '0';
+  }
+
+  function paintLeads(f) {
+    if (!leads.length || !leadW) return;
+    for (const lead of leads) {
+      const rig = rigs[lead.act];
+      const t = lead.act === f.beatAct ? Number(lead.row.style.getPropertyValue('--t')) || 0 : 0;
+      if (t < 0.04 || !rig || !rig.loaded || !rig.root.visible || !rig.view) {
+        hideLead(lead);
+        continue;
+      }
+
+      const b = rig.localBox;
+      leadPt.set(
+        mix(b.min.x, b.max.x, lead.p[0]),
+        mix(b.min.y, b.max.y, lead.p[1]),
+        mix(b.min.z, b.max.z, lead.p[2])
+      );
+      leadPt.applyMatrix4(rig.scaler.matrixWorld);
+
+      /* Anchors on the far side of the object are dimmed rather than hidden,
+         so a leader fades as its point rotates away instead of blinking. */
+      leadView.copy(leadPt).applyMatrix4(camera.matrixWorldInverse);
+      leadCentre.copy(rig.root.position).applyMatrix4(camera.matrixWorldInverse);
+      const depth = clamp01((leadView.z - leadCentre.z) / Math.max(0.12, rig.halfLen * 0.9) + 0.5);
+
+      leadPt.project(camera);
+      if (!isFinite(leadPt.x) || !isFinite(leadPt.y)) { hideLead(lead); continue; }
+      const ax = (leadPt.x * 0.5 + 0.5) * leadW;
+      const ay = (-leadPt.y * 0.5 + 0.5) * leadH;
+      if (ax < lead.tx + 40 || ax > leadW - 8 || ay < 8 || ay > leadH - 8) {
+        hideLead(lead);
+        continue;
+      }
+
+      const draw = outCubic(clamp01((t - 0.12) / 0.55));
+      const alpha = (0.12 + depth * 0.3) * t;
+      lead.path.setAttribute('d',
+        'M' + lead.tx.toFixed(1) + ',' + lead.ty.toFixed(1) +
+        'L' + (lead.tx + 26).toFixed(1) + ',' + lead.ty.toFixed(1) +
+        'L' + ax.toFixed(1) + ',' + ay.toFixed(1));
+      lead.path.style.strokeDashoffset = (1 - draw).toFixed(4);
+      lead.path.style.opacity = alpha.toFixed(3);
+      lead.dot.setAttribute('cx', ax.toFixed(1));
+      lead.dot.setAttribute('cy', ay.toFixed(1));
+      lead.dot.style.opacity = (alpha * draw).toFixed(3);
+      lead.shown = true;
+    }
+  }
+
+  const beatGroups = [0, 1, 2, 3, 4].map((act) =>
     beats.filter((el) => Number(el.dataset.hmAct) === act)
   );
   const beatCount = beatGroups.map((group) => {
@@ -902,10 +1418,17 @@ function boot(root) {
 
   function paintDom(f) {
     if (voidEl) voidEl.style.setProperty('--slide', f.slide.toFixed(4));
+    const splitOn = f.splitLine >= 0;
     if (splitEl) {
-      const on = f.splitLine >= 0 ? 1 : 0;
-      splitEl.style.opacity = String(on);
-      if (on) splitEl.style.setProperty('--split', f.splitLine.toFixed(4));
+      splitEl.style.opacity = splitOn ? '1' : '0';
+      if (splitOn) splitEl.style.setProperty('--split', f.splitLine.toFixed(4));
+    }
+    /* Hand the curtain the same edge the seam is riding. */
+    if (splitOn) {
+      root.dataset.hmCurtain = 'x';
+      if (voidEl) voidEl.style.setProperty('--split', f.splitLine.toFixed(4));
+    } else if (root.dataset.hmCurtain) {
+      delete root.dataset.hmCurtain;
     }
 
     const isDark = f.slide > 0.05 && f.slide < 1.03;
@@ -915,26 +1438,43 @@ function boot(root) {
       if (themeMeta) themeMeta.setAttribute('content', isDark ? '#08080a' : '#f8f8f9');
     }
 
-    for (let a = 0; a < 4; a++) {
-      const m = f.models[a];
-      const type = types[a];
-      if (!type) continue;
-      let reveal = a === 0 ? outCubic(m.type) : outExpo(m.type);
-      if (a === 1) reveal *= 1 - beatPhaseWide(f.beatQ, 1, beatCount[1]) * 0.98;
-      if (a === 2) reveal *= 1 - beatPhaseWide(f.beatQ, 1, beatCount[2]) * 0.98;
+    /* Headlines are keyed by act now, not by model — acts 0 and 4 share the
+       Beaver rig but need their own titles. */
+    for (const [key, type] of typeByAct) {
+      const a = Number(key);
+      const reveal = clamp01(a === 0 ? outCubic(f.types[a]) : outExpo(f.types[a]));
       type.style.setProperty('--reveal', reveal.toFixed(4));
-      type.style.setProperty('--drift', (a === f.beatAct ? f.beatQ : m.clock).toFixed(4));
+      type.style.setProperty('--drift', (a === f.beatAct ? f.beatQ : 0).toFixed(4));
       type.dataset.hmOn = reveal > 0.02 ? '1' : '0';
     }
 
     const beatGate = f.beatAct === 0 ? (f.introGate || 0) : 1;
+    const tail = f.tail;
     for (const el of beats) {
       const act = Number(el.dataset.hmAct);
       const step = Number(el.dataset.hmStep);
-      const t = act === f.beatAct ? beatT(act, step, f.beatQ, beatCount, beatGate) : 0;
+      let t = act === f.beatAct ? beatT(act, step, f.beatQ, beatCount, beatGate) : 0;
+      /* A panel carried into the following handoff keeps its own value so the
+         model underneath is never uncovered between the two. */
+      if (tail && tail.act === act && tail.step === step) t = tail.t;
       el.style.setProperty('--t', t.toFixed(4));
       el.dataset.hmOn = t > 0.015 ? '1' : '0';
     }
+
+    /* The plate frame outlives its rows: it fades up once at the head of the
+       act and holds until the act hands over, so there is always one fixed
+       thing on screen to read against. */
+    for (const plate of plates) {
+      const on = Number(plate.dataset.hmAct) === f.beatAct;
+      const gate = f.beatAct === 0 ? (f.introGate || 0) : 1;
+      const v = on
+        ? clamp01(Math.min(f.beatQ / 0.1, (1 - f.beatQ) / 0.08, 1)) * gate
+        : 0;
+      plate.style.setProperty('--plate', v.toFixed(4));
+      plate.dataset.hmOn = v > 0.015 ? '1' : '0';
+    }
+
+    paintLeads(f);
 
     for (const el of counts) {
       const beat = el.closest('[data-hm-beat]');
@@ -952,9 +1492,9 @@ function boot(root) {
       for (const m of f.models) mx = Math.max(mx, m.type);
       chromeEl.style.opacity = (mx * (1 - f.rest * 0.9)).toFixed(3);
     }
-    for (const fill of railFills) fill.style.setProperty('--fill', (f.beatAct < 0 ? 0 : f.beatQ).toFixed(4));
+    for (const fill of railFills) fill.style.setProperty('--fill', (f.railAct < 0 ? 0 : f.railQ).toFixed(4));
     for (const s of railSteps) {
-      const on = Number(s.dataset.hmRailStep) === f.beatAct;
+      const on = Number(s.dataset.hmRailStep) === f.railAct;
       s.dataset.hmOn = on ? '1' : '0';
       if (s.tagName === 'BUTTON') s.setAttribute('aria-selected', on ? 'true' : 'false');
     }
@@ -970,6 +1510,7 @@ function boot(root) {
         lift = Math.min(0, scrolled - travel);
       }
       restEl.style.setProperty('--lift', lift.toFixed(1) + 'px');
+      if (f.rest >= 0.985) restEl.classList.add('hm-rest--settled');
     }
 
     const lightWipe = Math.max(f.models[0].wipe, f.models[3].wipe);
@@ -981,6 +1522,17 @@ function boot(root) {
     }
     if (cadPromo) {
       cadPromo.style.setProperty('--scan', f.cadScan.toFixed(4));
+      cadPromo.style.setProperty('--cut', splitOn ? f.splitLine.toFixed(4) : '0');
+    }
+
+    if (pullEl) {
+      /* Up from the moment the page opens — it is the shortcut past the
+         stage, so it cannot arrive after the visitor has started scrolling. */
+      const show = f.beatAct === 0 ? clamp01(Math.min((1 - f.beatQ) / 0.14, 1)) : 0;
+      pullEl.style.setProperty('--pull-in', show.toFixed(3));
+      pullEl.style.setProperty('--pull-hit', show > 0.5 ? 'auto' : 'none');
+      pullEl.setAttribute('aria-hidden', show > 0.5 ? 'false' : 'true');
+      pullEl.tabIndex = show > 0.5 ? 0 : -1;
     }
 
     if (!hinted && progress() > 0.055) {
@@ -990,7 +1542,22 @@ function boot(root) {
   }
 
   function paintModel(rig, m) {
-    const live = m.wipe > 0.001 && (m.grow > 0.02 || m.clip !== 'axis');
+    /* A rig that cannot be taken apart still has to leave. Driving its exit
+       off the clip plane meant a solid turret lost chunks of itself and was
+       94% gone a third of the way into the swap — it read as vanishing, not
+       departing. A single-mesh rig instead recedes and shrinks away along the
+       same `explode` value the others scatter on, so both kinds of handoff
+       run on one curve and neither ends on a jump. */
+    const solid = !rig.canExplode;
+    const dissolve = solid ? clamp01(m.explode) : 0;
+    /* Squared, not eased. `explode` is already an ease-out curve, so running
+       the size through a second one collapsed the turret to 4% of itself a
+       third of the way through the swap. Squaring holds the mass while the
+       incoming model builds, then lets it fall away quickly at the end. */
+    const away = dissolve * dissolve;
+    const shrink = solid ? mix(1, 0.02, away) : 1;
+
+    const live = m.wipe > 0.001 && (m.grow > 0.02 || m.clip !== 'axis') && shrink > 0.03;
     const splitLive = (m.clip === 'splitL' || m.clip === 'splitR') && m.split > 0 && m.split < 1;
     rig.root.visible = live || splitLive;
     if (!rig.root.visible || !rig.view) return;
@@ -1003,13 +1570,15 @@ function boot(root) {
     if (rig.view.axis === 'x') rig.spin.rotation.x = angle;
     else rig.spin.rotation.y = angle;
 
+    paintExplode(rig, m);
+
     const arrive = outExpo(m.arrive);
     rig.root.position.set(
       rig.center.x + parX * 0.055 + m.x,
       rig.center.y + parY * -0.035,
-      rig.center.z + mix(-1.15, 0, arrive)
+      rig.center.z + mix(-1.15, 0, arrive) - away * 1.9
     );
-    rig.root.scale.setScalar(mix(0.86, 1, arrive) * m.grow * m.punch);
+    rig.root.scale.setScalar(mix(0.86, 1, arrive) * m.grow * m.punch * shrink);
     rig.root.rotation.set(parY * -0.05, parX * 0.075, 0);
     rig.root.updateMatrixWorld(true);
 
@@ -1070,6 +1639,8 @@ function boot(root) {
       softBeatQ = ph.local;
     }
 
+    pumpLoads(p);
+
     const f = frameAt(p, introT, typeIntroT);
     if (f.beatAct === 0) f.beatQ = softBeatQ;
     if (!typeIntroQueued && p > TYPE_INTRO_SCROLL) startTypeIntro();
@@ -1084,6 +1655,13 @@ function boot(root) {
     key.intensity = mix(1.5, 2.15, dark);
     back.intensity = mix(0.75, 1.55, dark);
     renderer.toneMappingExposure = mix(1.05, 1.26, dark);
+
+    /* The key light rides the pointer, so machined faces flare as the cursor
+       crosses them. On a still object it is the difference between a render
+       and something that feels lit in the room. */
+    key.position.set(2.4 + parX * 2.1, 3.4 - parY * 1.6, 2.8);
+    edge.position.set(-3.2 + parX * 1.2, 0.6 - parY * 0.8, 1.4);
+
     renderer.render(scene, camera);
 
     if (dt > 0.028) {
@@ -1109,6 +1687,12 @@ function boot(root) {
 
   function evaluate() {
     if (root.dataset.hmMode !== 'live') { stop(); return; }
+    const rect = root.getBoundingClientRect();
+    if (rect.bottom < window.innerHeight * 0.06) {
+      onScreen = false;
+      stop();
+      return;
+    }
     if (onScreen) play();
     else stop();
   }
@@ -1119,7 +1703,9 @@ function boot(root) {
   new IntersectionObserver((entries) => {
     onScreen = entries[0].isIntersecting;
     evaluate();
-  }, { rootMargin: '15% 0px' }).observe(root);
+  }, { rootMargin: '5% 0px' }).observe(root);
+
+  window.addEventListener('scroll', evaluate, { passive: true });
 
   window.addEventListener('resize', layout, { passive: true });
   window.addEventListener('orientationchange', layout, { passive: true });
@@ -1182,8 +1768,120 @@ function boot(root) {
     stop();
   });
 
+  /* ===== Pull tab =====
+     Drag-only by design: a click does nothing, because pulling the systems
+     grid down should take an actual pull. Keyboard activation is kept so the
+     control is still reachable without a pointer. */
+  const pullEl = document.querySelector('[data-hm-pull]');
+
+  function placePull() {
+    if (!pullEl) return;
+    /* Below the nav breakpoint the menu is parked off-canvas, so its box says
+       nothing about where the gap is — the stylesheet pins the tab instead. */
+    if (window.innerWidth <= 900) { pullEl.style.removeProperty('--pull-x'); return; }
+    const brand = document.querySelector('.nav__logo');
+    const menu = document.querySelector('.nav__menu');
+    const host = pullEl.offsetParent;
+    if (!brand || !menu || !host) return;
+    const hb = host.getBoundingClientRect();
+    const bb = brand.getBoundingClientRect();
+    const mb = menu.getBoundingClientRect();
+    if (!(mb.left > bb.right)) return;
+    const mid = (bb.right + mb.left) / 2 - hb.left;
+    pullEl.style.setProperty('--pull-x', (mid - pullEl.offsetWidth / 2).toFixed(1) + 'px');
+  }
+
+  function scrollToRestTop() {
+    const target = root.offsetTop + Math.max(0, root.offsetHeight - window.innerHeight);
+    const prev = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = 'auto';
+    window.scrollTo({ top: target, left: 0, behavior: 'instant' });
+    document.documentElement.style.scrollBehavior = prev;
+  }
+
+  if (pullEl && restEl) {
+    const REACH = 260;
+    const COMMIT = 0.34;
+    let dragging = false;
+    let startY = 0;
+    let travelled = 0;
+    let busy = false;
+
+    const setP = (v) => restEl.style.setProperty('--pull-p', v.toFixed(4));
+
+    function open() {
+      restEl.classList.add('hm-rest--pull');
+      restEl.classList.remove('hm-rest--glide');
+      setP(0);
+    }
+
+    function finish(commit) {
+      restEl.classList.add('hm-rest--glide');
+      pullEl.style.setProperty('--pull', '0px');
+      pullEl.style.setProperty('--pull-stretch', '0px');
+      delete pullEl.dataset.drag;
+      travelled = 0;
+
+      if (commit) {
+        busy = true;
+        setP(1);
+        window.setTimeout(() => {
+          /* Back into flow BEFORE the scroll: while it is fixed the document
+             is a viewport shorter, and the target would be clamped. Both in
+             one task, so nothing is painted in between. */
+          restEl.classList.remove('hm-rest--pull', 'hm-rest--glide');
+          restEl.style.removeProperty('--pull-p');
+          scrollToRestTop();
+          busy = false;
+        }, 580);
+      } else {
+        setP(0);
+        window.setTimeout(() => {
+          restEl.classList.remove('hm-rest--pull', 'hm-rest--glide');
+          restEl.style.removeProperty('--pull-p');
+        }, 580);
+      }
+    }
+
+    pullEl.addEventListener('pointerdown', (e) => {
+      if (busy) return;
+      dragging = true;
+      startY = e.clientY;
+      travelled = 0;
+      pullEl.dataset.drag = '1';
+      open();
+      try { pullEl.setPointerCapture(e.pointerId); } catch (err) { /* capture is a nicety */ }
+      e.preventDefault();
+    });
+
+    pullEl.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      travelled = Math.max(0, e.clientY - startY);
+      pullEl.style.setProperty('--pull-stretch', Math.min(travelled * 0.34, 30).toFixed(1) + 'px');
+      setP(clamp01(travelled / REACH));
+    });
+
+    const stop = () => {
+      if (!dragging) return;
+      dragging = false;
+      finish(travelled / REACH >= COMMIT);
+    };
+    pullEl.addEventListener('pointerup', stop);
+    pullEl.addEventListener('pointercancel', stop);
+
+    /* detail === 0 is a keyboard activation; a real mouse click is ignored. */
+    pullEl.addEventListener('click', (e) => {
+      if (busy || dragging || e.detail !== 0) return;
+      open();
+      window.setTimeout(() => finish(true), 30);
+    });
+  }
+
   layout();
-  loadOne(0);
+  pumpLoads(progress());
+  /* If the viewer settles without scrolling, bring the second assembly in
+     anyway so the first handoff is never waiting on the network. */
+  window.setTimeout(() => { idleKick = true; pumpLoads(progress()); }, 2600);
 }
 
 const stage = document.querySelector('[data-hm-stage]');
@@ -1195,6 +1893,7 @@ function bootSheets() {
   if (!turn) return;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   const track = turn.querySelector('.hm-turn__track') || turn;
+  let sheetActive = false;
 
   function sheetProgress() {
     const rect = track.getBoundingClientRect();
@@ -1204,6 +1903,7 @@ function bootSheets() {
   }
 
   function paintSheet() {
+    if (!sheetActive) return;
     if (reduce.matches) {
       turn.style.setProperty('--sheet', '1');
       turn.dataset.hmOn = '1';
@@ -1212,6 +1912,7 @@ function bootSheets() {
     const t = outCubic(span(sheetProgress(), 0.08, 0.82));
     turn.style.setProperty('--sheet', t.toFixed(4));
     turn.dataset.hmOn = t > 0.55 ? '1' : '0';
+    if (t >= 0.995) turn.classList.add('hm-turn--settled');
   }
 
   function scrollToHash(hash) {
@@ -1245,7 +1946,16 @@ function bootSheets() {
 
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', paintSheet, { passive: true });
-  paintSheet();
+
+  if (typeof IntersectionObserver !== 'undefined') {
+    new IntersectionObserver((entries) => {
+      sheetActive = entries[0].isIntersecting;
+      if (sheetActive) paintSheet();
+    }, { rootMargin: '30% 0px' }).observe(track);
+  } else {
+    sheetActive = true;
+    paintSheet();
+  }
 
   document.addEventListener('click', (e) => {
     const node = e.target;
@@ -1345,6 +2055,13 @@ function bootChapters() {
       return;
     }
 
+    const forgeTop = chapters[0].getBoundingClientRect().top;
+    const nearChapters = forgeTop < window.innerHeight * 1.35;
+    if (!nearChapters) {
+      rail.dataset.hmOn = '0';
+      return;
+    }
+
     let best = -1;
     let bestScore = 0;
 
@@ -1376,7 +2093,6 @@ function bootChapters() {
       ? window.scrollY > stageEl.offsetTop + stageEl.offsetHeight * 0.82
       : true;
     const restReady = !restEl || restEl.dataset.hmOn === '1';
-    const forgeTop = chapters[0].getBoundingClientRect().top;
     rail.dataset.hmOn = (restReady || pastHero) && forgeTop < window.innerHeight * 0.92 ? '1' : '0';
   }
 
