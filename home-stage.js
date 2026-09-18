@@ -3,8 +3,8 @@
    the talking; each handoff is a different move so the page never repeats
    the same swap three times.
 
-   Act 0 - Beaver, black on white. Brand lockup.
-   Swap 0 - class change: rifle shears out, turret grows in, curtain down.
+   Act 0 - Beaver, black on white. Guided 3D tour of how the rifle works.
+   Swap 0 - class change: assembled upper shears out, turret grows in, curtain down.
    Act 1 - T-90M, white on black. Rangefinder HUD.
    Swap 1 - collapse: turret recedes, MP7 punches through.
    Act 2 - MP7, still dark. Length bar + rate.
@@ -17,10 +17,30 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import {
+  CAD_OFFSET,
+  CAD_TO_WORLD,
+  SEQ_HOLD,
+  SEQ_PANELS,
+  SEQ_T_MAX,
+  VFOV_DEG,
+  attachClipPlane,
+  createSeqRuntime,
+  ensureCad,
+  fillSeqCopy,
+  heroOpacity,
+  measureUpperBox,
+  panelOpacity,
+  prepare,
+  resetSeqCamera,
+  seqTimeFromQ,
+  spinGain,
+  stateAt,
+  tickSeq
+} from './beaver-seq.js?v=13';
 
 /* The running order the page actually tells:
-     Beaver → exploded Beaver → isolated upper receiver → T-90M → Ukraine
-     → MP7 → CAD library → SPEAR.
+     Beaver tour → T-90M → Ukraine → MP7 → CAD library → SPEAR.
 
    Each full-frame panel (Ukraine, CAD library) now HOLDS to the end of its act
    and is carried into the following handoff by `f.tail`, instead of fading out
@@ -28,10 +48,8 @@ import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
    before the swap started. That flash-back was the model briefly reappearing
    between the panel and the transition. */
 const PHASES = [
-  { kind: 'act', act: 0, vh: 52 },
-  { kind: 'blow', vh: 40 },
-  { kind: 'act', act: 4, vh: 52 },
-  { kind: 'swap', swap: 0, vh: 36 },
+  { kind: 'act', act: 0, vh: 1700 },
+  { kind: 'swap', swap: 0, vh: 44 },
   { kind: 'act', act: 1, vh: 62 },
   { kind: 'swap', swap: 1, vh: 38 },
   { kind: 'act', act: 2, vh: 58 },
@@ -129,87 +147,64 @@ function frameAt(p, introT, typeIntroT) {
     cadScan: 0,
     introGate: 0,
     teardown: 0,
-    /* Headline reveal per act. Kept separate from the models now that two
-       acts (0 and 4) share one rig. */
+    /* Headline reveal per act. */
     types: [0, 0, 0, 0, 0],
     /* Keeps one act's beat alive through the following handoff. */
     tail: null,
-    models: [mdl(), mdl(), mdl(), mdl()]
+    models: [mdl(), mdl(), mdl(), mdl()],
+    beaverQ: 0,
+    seqT: 0,
+    seqPanels: null,
+    seqLift: 0
   };
 
   if (ph.kind === 'act' && ph.act === 0) {
-    /* This read `smooth(span(p, 0.05, 0.32))` - one argument, so span's
-       `b === a` branch fired on two undefineds and returned 1 every time,
-       quietly pinning the gate open. Written correctly it also has to be
-       measured against the act's own local progress. */
-    const scrollGate = outQuart(smooth(q, 0.04, 0.3));
+    const q0 = q / SEQ_HOLD;
     const typePop = typeIntroT > 0 ? outCubic(typeIntroT) : 0;
-    f.introGate = scrollGate;
-    f.types[0] = scrollGate * typePop;
+    const tSeq = seqTimeFromQ(q);
+    f.introGate = 1;
+    f.beaverQ = q;
+    f.seqT = tSeq;
+    f.seqPanels = {};
+    for (const pan of SEQ_PANELS) f.seqPanels[pan.step] = panelOpacity(tSeq, pan.step);
+    f.types[0] = heroOpacity(tSeq) * typePop;
     f.models[0] = mdl({
       wipe: outCubic(introT),
-      clock: q,
+      clock: 0,
       arrive: introT,
-      type: f.types[0]
+      type: outCubic(introT)
     });
     f.beatAct = 0;
     f.beatQ = q;
     f.railAct = 0;
-    f.railQ = q * 0.34;
-  } else if (ph.kind === 'blow') {
-    /* The rifle comes apart and stays apart - its own beat, not a handoff. */
-    f.types[0] = 1 - inCubic(span(q, 0.0, 0.26));
-    f.teardown = smooth(q, 0.08, 0.55);
-    f.railAct = 0;
-    f.railQ = 0.34 + q * 0.33;
-    f.models[0] = mdl({
-      wipe: 1,
-      clock: 1 + q * 0.3,
-      arrive: 1,
-      type: 1,
-      explode: outCubic(span(q, 0.05, 0.88)),
-      grow: mix(1, 0.84, smooth(q, 0.12, 0.9))
-    });
-  } else if (ph.kind === 'act' && ph.act === 4) {
-    /* Everything that is not the upper receiver is thrown clear of the frame;
-       the receiver settles back into its own seat and carries the specs. */
-    f.types[4] = smooth(q, 0.26, 0.5);
-    f.beatAct = 4;
-    f.beatQ = q;
-    f.railAct = 0;
-    f.railQ = 0.67 + q * 0.33;
-    f.models[0] = mdl({
-      wipe: 1,
-      clock: 1.3 + q * 0.45,
-      arrive: 1,
-      type: 1,
-      explode: 1,
-      isolate: smooth(q, 0.04, 0.46),
-      grow: mix(0.84, 1, smooth(q, 0.08, 0.55))
-    });
+    f.railQ = q;
   } else if (ph.kind === 'swap' && ph.swap === 0) {
-    /* Upper receiver hands over to the turret. */
-    f.dark = smooth(q, 0.22, 0.66);
+    /* Settle into the site product camera on the light stage, close extras,
+       then shear the upper out as the turret grows in on the dark curtain. */
+    f.dark = smooth(q, 0.4, 0.7);
+    f.slide = f.dark;
     f.slide = f.dark;
     f.railAct = q < 0.5 ? 0 : 1;
     f.railQ = q < 0.5 ? 1 : 0;
+    f.seqT = SEQ_T_MAX;
+    f.beaverQ = 1;
     f.models[0] = mdl({
-      wipe: 1 - outCubic(span(q, 0.04, 0.62)),
-      clock: 1.75 + q * 0.4,
-      arrive: 1 - inCubic(span(q, 0.08, 0.68)),
-      type: 1 - inCubic(span(q, 0.02, 0.24)),
-      explode: 1,
-      isolate: 1,
-      grow: mix(1, 0.78, smooth(q, 0.04, 0.7))
+      wipe: 1 - smooth(q, 0.38, 0.64),
+      clock: 0,
+      arrive: 1 - inCubic(span(q, 0.4, 0.68)),
+      type: 1 - inCubic(span(q, 0.02, 0.22)),
+      explode: 0,
+      isolate: 0,
+      grow: 1
     });
     f.models[1] = mdl({
       wipe: 1,
       /* Lands on 0 so it meets act 1's `clock: q` without a rotation snap. */
       clock: -0.3 + q * 0.3,
-      arrive: outCubic(span(q, 0.26, 0.92)),
-      type: span(q, 0.5, 1),
-      explode: 1 - outQuart(span(q, 0.26, 1)),
-      grow: mix(0.8, 1, outExpo(span(q, 0.26, 0.95)))
+      arrive: outCubic(span(q, 0.6, 0.95)),
+      type: span(q, 0.68, 1),
+      explode: 1 - outQuart(span(q, 0.6, 1)),
+      grow: mix(0.8, 1, outExpo(span(q, 0.6, 0.96)))
     });
   } else if (ph.kind === 'act' && ph.act === 1) {
     f.dark = 1;
@@ -357,39 +352,28 @@ function beatT(act, step, q, counts, gate = 1) {
   const held = (act === 1 || act === 2) && step === 1;
   let localQ = q;
   if (act === 0) {
-    localQ = Math.max(0, (q - 0.1) / 0.9) * gate;
+    localQ = Math.max(0, (q - SEQ_HOLD) / (1 - SEQ_HOLD)) * gate;
   }
   return held ? beatHold(localQ, step, counts[act]) : beatPhase(localQ, step, counts[act]);
 }
 
 const MODEL_SPECS = [
   {
-    url: 'models/beaver-upper.glb',
+    url: 'models/beaver-meshopt.glb',
     turns: 1.35,
     idle: 0.9,
-    /* The Beaver exports with its parts named, so the isolation beat can keep
-       the receiver by name instead of guessing at geometry. */
-    isolateKeep: /upper[\s_-]*rec(ei|ie)ver/i,
-    /* ...except the receiver mesh has the top rail welded into it as a second
-       shell. Split that mesh and rename the slender island so it is flung with
-       everything else. Slenderness of the two: rail 24:1, body 3.5:1. */
-    splitShells: {
-      match: /upper[\s_-]*rec(ei|ie)ver/i,
-      slender: 8,
-      slenderName: 'Top_Rail'
-    },
+    sequence: true,
     view: {
-      orient: [0, 0, -Math.PI / 2],
+      orient: [0, 0, 0],
       axis: 'x',
-      pose: [0.11, -0.3, 0.05],
+      pose: [0, 0, 0],
       fit: { wide: 0.8, narrow: 0.92 },
       cap: 0.74,
       bias: -0.11
     },
     portrait: {
-      orient: [0, 0, Math.PI],
-      axis: 'y',
-      pose: [0.07, 0, -0.025],
+      axis: 'x',
+      pose: [0, 0, 0],
       fit: 0.52,
       cap: 0.66,
       bias: -0.01,
@@ -666,6 +650,18 @@ function boot(root) {
   if (!canvas) return;
   if (reduceMotion.matches) return;
 
+  bootLive(root, canvas, reduceMotion);
+}
+
+async function bootLive(root, canvas, reduceMotion) {
+  try {
+    await ensureCad();
+  } catch (err) {
+    console.error('[home-stage] beaver cad failed', err);
+    return;
+  }
+  fillSeqCopy(root);
+
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({
@@ -684,16 +680,18 @@ function boot(root) {
 
   renderer.setClearAlpha(0);
   renderer.toneMapping = THREE.NeutralToneMapping;
-  renderer.toneMappingExposure = 1.05;
+  renderer.toneMappingExposure = 1.08;
   renderer.localClippingEnabled = true;
 
   const scene = new THREE.Scene();
-  scene.environment = buildEnvironment(renderer);
+  const darkEnv = buildEnvironment(renderer);
+  scene.environment = darkEnv;
   scene.environmentIntensity = 1;
 
-  const camera = new THREE.PerspectiveCamera(CAM_FOV, 1, 0.1, 40);
+  const camera = new THREE.PerspectiveCamera(VFOV_DEG, 1, 0.005, 20);
   camera.position.set(0, 0, CAM_DIST);
   camera.lookAt(0, 0, 0);
+  const siteCamPos = new THREE.Vector3(0, 0, CAM_DIST);
 
   const key = new THREE.DirectionalLight(0xffffff, 1.5);
   key.position.set(2.4, 3.4, 2.8);
@@ -706,6 +704,23 @@ function boot(root) {
   const back = new THREE.DirectionalLight(0xffd9ac, 0.75);
   back.position.set(-1.4, 1.2, -3.4);
   scene.add(back);
+
+  let beaverLook = true;
+  function markMaterials() {
+    scene.traverse((o) => {
+      if (!o.isMesh) return;
+      const mats = Array.isArray(o.material) ? o.material : [o.material];
+      for (const mat of mats) {
+        if (mat) mat.needsUpdate = true;
+      }
+    });
+  }
+  function applyBeaverLook(on) {
+    if (on === beaverLook) return;
+    beaverLook = on;
+    renderer.toneMapping = THREE.NeutralToneMapping;
+    markMaterials();
+  }
 
   const loader = new GLTFLoader();
   loader.setMeshoptDecoder(MeshoptDecoder);
@@ -759,6 +774,18 @@ function boot(root) {
   function reorient(rig) {
     const view = rig.view;
     rest(rig);
+    if (rig.spec.sequence) {
+      rig.orient.quaternion.copy(CAD_TO_WORLD);
+      rig.shift.position.copy(CAD_OFFSET);
+      rig.root.updateMatrixWorld(true);
+      if (rig.upperBox && !rig.upperBox.isEmpty()) rig.localBox.copy(rig.upperBox);
+      else if (rig.seqParts) rig.localBox.copy(measureUpperBox(rig.seqParts));
+      rig.localBox.getSize(tmpVec);
+      rig.rawLen = view.axis === 'x' ? tmpVec.x : tmpVec.y;
+      rig.pose.rotation.fromArray(view.pose);
+      return;
+    }
+    rig.orient.quaternion.identity();
     rig.orient.rotation.fromArray(view.orient);
     rig.root.updateMatrixWorld(true);
     rig.localBox.setFromObject(rig.orient);
@@ -887,6 +914,23 @@ function boot(root) {
   function adopt(rig, gltf) {
     const model = gltf.scene;
     rig.shift.add(model);
+
+    if (rig.spec.sequence) {
+      rest(rig);
+      rig.orient.rotation.set(0, 0, 0);
+      rig.orient.quaternion.copy(CAD_TO_WORLD);
+      rig.shift.position.copy(CAD_OFFSET);
+      rig.seqParts = prepare(model, rig.plane);
+      attachClipPlane(rig.seqParts, rig.plane);
+      rig.seqRt = createSeqRuntime();
+      rig.root.updateMatrixWorld(true);
+      rig.upperBox = measureUpperBox(rig.seqParts);
+      rig.localBox.copy(rig.upperBox);
+      rig.canExplode = false;
+      rig.loaded = true;
+      layout();
+      return;
+    }
 
     applyShellSplit(rig, model);
 
@@ -1082,6 +1126,7 @@ function boot(root) {
 
     rig.center.copy(rig.root.position);
     rig.halfLen = (rig.rawLen * rig.scaler.scale.x) / 2;
+    rig.fitScale = rig.scaler.scale.x;
   }
 
   function portraitBand() {
@@ -1110,6 +1155,17 @@ function boot(root) {
     root.dataset.hmPortrait = portrait ? '1' : '0';
 
     camera.aspect = w / h;
+    /* Fit boxes are measured through the site camera, not the sequence rig. */
+    const holdFov = camera.fov;
+    const holdNear = camera.near;
+    const holdFar = camera.far;
+    const holdPos = camera.position.clone();
+    camera.fov = CAM_FOV;
+    camera.near = 0.1;
+    camera.far = 40;
+    camera.position.copy(siteCamPos);
+    camera.lookAt(0, 0, 0);
+    resetSeqCamera(camera);
     camera.updateProjectionMatrix();
     camera.updateMatrixWorld(true);
     camera.matrixWorldInverse.copy(camera.matrixWorld).invert();
@@ -1124,6 +1180,14 @@ function boot(root) {
       }
       frameRig(rig);
     }
+
+    camera.fov = holdFov;
+    camera.near = holdNear;
+    camera.far = holdFar;
+    camera.position.copy(holdPos);
+    camera.updateProjectionMatrix();
+    camera.updateMatrixWorld(true);
+    camera.matrixWorldInverse.copy(camera.matrixWorld).invert();
 
     renderer.setPixelRatio(pixelRatio());
     renderer.setSize(w, h, false);
@@ -1348,14 +1412,15 @@ function boot(root) {
   let typeIntroQueued = false;
   const INTRO_MS = 2100;
   const TYPE_INTRO_MS = 2600;
-  const TYPE_INTRO_SCROLL = 0.022;
 
   function startModelIntro() {
-    if (progress() > BOUNDS[0].to * 0.5) {
+    if (progress() > BOUNDS[0].from + (BOUNDS[0].to - BOUNDS[0].from) * 0.06) {
       introT = 1;
+      startTypeIntro();
       return;
     }
     introStart = performance.now();
+    window.setTimeout(() => startTypeIntro(), 280);
   }
 
   function startTypeIntro() {
@@ -1367,7 +1432,7 @@ function boot(root) {
 
   function maybeStartTypeIntro() {
     if (typeIntroQueued) return;
-    if (progress() > TYPE_INTRO_SCROLL) startTypeIntro();
+    if (progress() * TRACK_VH > 8) startTypeIntro();
   }
 
   let pointerX = 0;
@@ -1438,8 +1503,7 @@ function boot(root) {
       if (themeMeta) themeMeta.setAttribute('content', isDark ? '#08080a' : '#f8f8f9');
     }
 
-    /* Headlines are keyed by act now, not by model - acts 0 and 4 share the
-       Beaver rig but need their own titles. */
+    /* Headlines are keyed by act now, not by model. */
     for (const [key, type] of typeByAct) {
       const a = Number(key);
       const reveal = clamp01(a === 0 ? outCubic(f.types[a]) : outExpo(f.types[a]));
@@ -1453,7 +1517,14 @@ function boot(root) {
     for (const el of beats) {
       const act = Number(el.dataset.hmAct);
       const step = Number(el.dataset.hmStep);
-      let t = act === f.beatAct ? beatT(act, step, f.beatQ, beatCount, beatGate) : 0;
+      let t = 0;
+      if (act === 0) {
+        if (f.beatAct !== 0) t = 0;
+        else if (step === 0) t = f.types[0] || 0;
+        else t = (f.seqPanels && f.seqPanels[step]) || 0;
+      } else {
+        t = act === f.beatAct ? beatT(act, step, f.beatQ, beatCount, beatGate) : 0;
+      }
       /* A panel carried into the following handoff keeps its own value so the
          model underneath is never uncovered between the two. */
       if (tail && tail.act === act && tail.step === step) t = tail.t;
@@ -1514,7 +1585,11 @@ function boot(root) {
     }
 
     const lightWipe = Math.max(f.models[0].wipe, f.models[3].wipe);
-    if (shadowEl) shadowEl.style.opacity = ((1 - f.dark) * lightWipe).toFixed(3);
+    if (shadowEl) {
+      /* Close-ups have no gun in the middle of the stage; the oval would float. */
+      const closeUp = f.seqT > 1.35 && f.seqT < 8.15 ? 0 : 1;
+      shadowEl.style.opacity = ((1 - f.dark) * lightWipe * closeUp).toFixed(3);
+    }
 
     if (uaPromo) {
       uaPromo.style.setProperty('--scan', f.uaScan.toFixed(4));
@@ -1528,20 +1603,160 @@ function boot(root) {
     if (pullEl) {
       /* Up from the moment the page opens - it is the shortcut past the
          stage, so it cannot arrive after the visitor has started scrolling. */
-      const show = f.beatAct === 0 ? clamp01(Math.min((1 - f.beatQ) / 0.14, 1)) : 0;
+      const pullUntil = Math.max(SEQ_HOLD, 0.038);
+      const show = f.beatAct === 0 ? clamp01((pullUntil - f.beatQ) / 0.022) : 0;
       pullEl.style.setProperty('--pull-in', show.toFixed(3));
       pullEl.style.setProperty('--pull-hit', show > 0.5 ? 'auto' : 'none');
       pullEl.setAttribute('aria-hidden', show > 0.5 ? 'false' : 'true');
       pullEl.tabIndex = show > 0.5 ? 0 : -1;
     }
 
-    if (!hinted && progress() > 0.055) {
+    if (!hinted && f.beatAct === 0 && f.beatQ > 0.03) {
       hinted = true;
       root.dataset.hmHint = 'gone';
     }
   }
 
+  let seqBlend = 0;
+  let seqTarget = null;
+  let lastF = null;
+  let seqDt = 1 / 60;
+  const siteLook = new THREE.Vector3();
+  const blendLook = new THREE.Vector3();
+  const seqCamHold = {
+    pos: new THREE.Vector3(),
+    look: new THREE.Vector3(),
+    fov: VFOV_DEG,
+    near: 0.005,
+    far: 20,
+    armed: false
+  };
+
+  function applyBeaverSpin(rig, q, now) {
+    const spec = rig.spec;
+    const gain = spinGain(q);
+    if (gain <= 1e-5) {
+      rig.spin.rotation.set(0, 0, 0);
+      rig.seqSpin = 0;
+      rig.spinIdle0 = 0;
+      rig.spinDownFrom = null;
+      return;
+    }
+    if (!rig.spinIdle0) rig.spinIdle0 = now;
+    /* Same slow idle the other acts use. No extra scroll-driven turns on the hold. */
+    const idle = ((now - rig.spinIdle0) / 1000) * spec.idle * (Math.PI / 180) * 12;
+    let angle;
+    if (q < SEQ_HOLD) {
+      if (gain >= 0.999) {
+        angle = idle;
+        rig.spinDownFrom = null;
+      } else {
+        if (rig.spinDownFrom == null) {
+          const cur = rig.seqSpin != null ? rig.seqSpin : idle;
+          rig.spinDownFrom = Math.atan2(Math.sin(cur), Math.cos(cur));
+        }
+        angle = rig.spinDownFrom * gain;
+      }
+    } else {
+      angle = gain * idle;
+    }
+    rig.spin.rotation.set(0, 0, 0);
+    if (rig.view && rig.view.axis === 'x') rig.spin.rotation.x = angle;
+    else rig.spin.rotation.y = angle;
+    rig.seqSpin = angle;
+  }
+
+  function applyAxisClip(rig, m) {
+    if (!rig.view) return;
+    const localAxis = axisVec[rig.view.axis];
+    rig.spin.getWorldQuaternion(tmpQuat);
+    rig.axis.copy(localAxis).applyQuaternion(tmpQuat).normalize();
+    const reach = rig.rawLen * (rig.scaler.scale.x || 1) * 1.12;
+    const centre = rig.root.position.dot(rig.axis);
+    const w = 1 - m.wipe;
+    rig.plane.normal.copy(rig.axis);
+    rig.plane.constant = -(centre + mix(-reach, reach, w));
+  }
+
+  function paintBeaverRig(rig, m) {
+    const f = lastF;
+    const live = m.wipe > 0.04 && (m.grow > 0.02 || m.clip !== 'axis');
+    rig.root.visible = live;
+    if (!live || !rig.view || !rig.seqParts || !rig.seqRt) return;
+
+    const target = seqTarget || stateAt(f && f.seqT ? f.seqT : 0);
+    const w = canvas.clientWidth || window.innerWidth;
+    const h = canvas.clientHeight || window.innerHeight;
+    const fullSeq = seqBlend > 0.97;
+    const lift = tickSeq(rig.seqRt, rig.seqParts, target, seqDt, camera, w, h, fullSeq);
+    if (f) f.seqLift = Math.max(lift.explode, lift.extras);
+
+    applyBeaverSpin(rig, (f && f.beaverQ) || 0, performance.now());
+
+    const u = clamp01(1 - seqBlend);
+    const fitted = rig.fitScale || 1;
+    const introScale = u < 0.15 ? mix(0.86, 1, outExpo(m.arrive)) : 1;
+    const siteZ = mix(-1.15, 0, m.arrive);
+    rig.pose.rotation.set(0, 0, 0);
+    rig.scaler.scale.setScalar(mix(1, fitted, u));
+    rig.root.position.set(
+      mix(0, rig.center.x + parX * 0.055 + m.x, u),
+      mix(0, rig.center.y + parY * -0.035, u),
+      mix(0, rig.center.z + siteZ, u)
+    );
+    rig.root.scale.setScalar(introScale);
+    rig.root.rotation.set(parY * -0.05 * u, parX * 0.075 * u, 0);
+    rig.root.updateMatrixWorld(true);
+    applyAxisClip(rig, m);
+
+    if (fullSeq) {
+      seqCamHold.pos.copy(camera.position);
+      if (rig.seqRt.look) seqCamHold.look.copy(rig.seqRt.look);
+      seqCamHold.fov = camera.fov;
+      seqCamHold.near = camera.near;
+      seqCamHold.far = camera.far;
+      seqCamHold.armed = true;
+      return;
+    }
+
+    resetSeqCamera(camera);
+    if (!seqCamHold.armed) {
+      seqCamHold.pos.copy(camera.position);
+      if (rig.seqRt.look) seqCamHold.look.copy(rig.seqRt.look);
+      seqCamHold.fov = camera.fov;
+      seqCamHold.near = camera.near;
+      seqCamHold.far = camera.far;
+      seqCamHold.armed = true;
+    }
+
+    if (seqBlend > 0.02) {
+      camera.position.lerpVectors(seqCamHold.pos, siteCamPos, u);
+      siteLook.set(0, 0, 0);
+      blendLook.lerpVectors(seqCamHold.look, siteLook, u);
+      camera.lookAt(blendLook);
+      camera.fov = mix(seqCamHold.fov, CAM_FOV, u);
+      camera.near = mix(seqCamHold.near, 0.1, u);
+      camera.far = mix(seqCamHold.far, 40, u);
+      camera.updateProjectionMatrix();
+    }
+  }
+
+  function restoreSiteCamera() {
+    camera.fov = CAM_FOV;
+    camera.near = 0.1;
+    camera.far = 40;
+    camera.position.copy(siteCamPos);
+    camera.up.set(0, 1, 0);
+    camera.lookAt(0, 0, 0);
+    resetSeqCamera(camera);
+    camera.updateProjectionMatrix();
+  }
+
   function paintModel(rig, m) {
+    if (rig.spec.sequence) {
+      paintBeaverRig(rig, m);
+      return;
+    }
     /* A rig that cannot be taken apart still has to leave. Driving its exit
        off the clip plane meant a solid turret lost chunks of itself and was
        94% gone a third of the way into the swap - it read as vanishing, not
@@ -1613,11 +1828,13 @@ function boot(root) {
   let last = 0;
   let slowFrames = 0;
   let softBeatQ = 0;
+  let inBeaverAct = false;
 
   function tick(now) {
     if (!running) return;
     const dt = last ? Math.min(0.05, (now - last) / 1000) : 1 / 60;
     last = now;
+    seqDt = dt;
 
     if (introT < 1 && introStart) {
       introT = clamp01((now - introStart) / INTRO_MS);
@@ -1634,31 +1851,67 @@ function boot(root) {
     const p = progress();
     const ph = phaseAt(p);
     if (ph && ph.kind === 'act' && ph.act === 0) {
-      softBeatQ += (ph.local - softBeatQ) * (1 - Math.exp(-dt * 2.4));
-    } else if (ph && ph.kind === 'act') {
-      softBeatQ = ph.local;
+      if (!inBeaverAct) softBeatQ = ph.local;
+      else softBeatQ += (ph.local - softBeatQ) * (1 - Math.exp(-dt * 7));
+      inBeaverAct = true;
+    } else {
+      inBeaverAct = false;
+      if (ph) softBeatQ = ph.local;
     }
 
     pumpLoads(p);
 
     const f = frameAt(p, introT, typeIntroT);
-    if (f.beatAct === 0) f.beatQ = softBeatQ;
-    if (!typeIntroQueued && p > TYPE_INTRO_SCROLL) startTypeIntro();
+    if (f.beatAct === 0) {
+      f.beatQ = softBeatQ;
+      f.beaverQ = softBeatQ;
+      f.seqT = seqTimeFromQ(softBeatQ);
+      f.types[0] = heroOpacity(f.seqT) * (typeIntroT > 0 ? outCubic(typeIntroT) : 0);
+      f.seqPanels = {};
+      for (const pan of SEQ_PANELS) f.seqPanels[pan.step] = panelOpacity(f.seqT, pan.step);
+    }
+    if (!typeIntroQueued && p * TRACK_VH > 8) startTypeIntro();
     dark = f.dark;
+
+    seqBlend = 0;
+    seqTarget = null;
+    if (ph && ph.kind === 'act' && ph.act === 0) {
+      seqBlend = 1;
+      seqTarget = stateAt(f.seqT);
+    } else if (ph && ph.kind === 'swap' && ph.swap === 0) {
+      seqBlend = 1 - smooth(ph.local, 0, 0.4);
+      const assembled = stateAt(SEQ_T_MAX);
+      seqTarget = {
+        ...assembled,
+        extras: 0,
+        explode: 0,
+        rail: 0,
+        carrier: 0,
+        bullet: 0
+      };
+      f.seqT = SEQ_T_MAX;
+      f.beaverQ = 1;
+    }
+
+    applyBeaverLook(seqBlend > 0.5);
+    lastF = f;
     paintDom(f);
     for (let i = 0; i < rigs.length; i++) {
       if (rigs[i].loaded) paintModel(rigs[i], f.models[i]);
       else rigs[i].root.visible = false;
     }
 
-    scene.environmentIntensity = mix(1, 1.32, dark);
-    key.intensity = mix(1.5, 2.15, dark);
-    back.intensity = mix(0.75, 1.55, dark);
-    renderer.toneMappingExposure = mix(1.05, 1.26, dark);
+    if (seqBlend <= 0.02) {
+      restoreSiteCamera();
+      camera.aspect = (canvas.clientWidth || window.innerWidth) / Math.max(1, canvas.clientHeight || window.innerHeight);
+      camera.updateProjectionMatrix();
+    }
 
-    /* The key light rides the pointer, so machined faces flare as the cursor
-       crosses them. On a still object it is the difference between a render
-       and something that feels lit in the room. */
+    scene.environmentIntensity = mix(1, 1.32, dark);
+    key.intensity = mix(1.55, 2.15, dark);
+    back.intensity = mix(0.85, 1.55, dark);
+    edge.intensity = mix(0.62, 0.55, dark);
+    renderer.toneMappingExposure = mix(1.08, 1.26, dark);
     key.position.set(2.4 + parX * 2.1, 3.4 - parY * 1.6, 2.8);
     edge.position.set(-3.2 + parX * 1.2, 0.6 - parY * 0.8, 1.4);
 
@@ -1730,7 +1983,8 @@ function boot(root) {
   function scrollToAct(act) {
     const bound = BOUNDS.find((b) => b.kind === 'act' && b.act === act);
     if (!bound) return;
-    scrollToProgress(bound.from + (bound.to - bound.from) * 0.32);
+    const inner = act === 0 ? 0.04 : 0.32;
+    scrollToProgress(bound.from + (bound.to - bound.from) * inner);
   }
 
   for (const step of railSteps) {

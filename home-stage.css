@@ -182,7 +182,7 @@
 .hm-stage[data-hm-mode='live'] {
   position: relative;
   z-index: 1;
-  height: var(--hm-track, 424vh);
+  height: var(--hm-track, 2054vh);
 }
 
 .hm-stage[data-hm-mode='live'] .hm-stage__pin {
@@ -430,6 +430,46 @@
   bottom: clamp(4rem, 11vh, 7.5rem);
   left: var(--hm-gutter);
   --dy: 0.9rem;
+}
+
+.hm-stage[data-hm-mode='live'] .hm-beat.hm-seq {
+  position: absolute;
+  left: var(--hm-gutter);
+  top: 50%;
+  z-index: 7;
+  width: min(40ch, 38vw);
+  opacity: var(--t, 0);
+  transform: translate3d(0, calc(-50% + (1 - var(--t, 0)) * 2rem), 0);
+}
+
+.hm-seq__title {
+  margin: 0;
+  max-width: 16ch;
+  font-family: 'Russo One', sans-serif;
+  font-weight: 400;
+  font-synthesis: none;
+  font-size: clamp(1.85rem, 4.2vw, 3.4rem);
+  line-height: 1.02;
+  letter-spacing: 0.02em;
+  text-wrap: balance;
+}
+
+.hm-seq__body {
+  margin: 1.15rem 0 0;
+  max-width: 38ch;
+  font-size: clamp(0.92rem, 1.35vw, 1.08rem);
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--text) 78%, transparent);
+}
+
+@media (max-width: 900px) {
+  .hm-stage[data-hm-mode='live'] .hm-beat.hm-seq {
+    top: auto;
+    bottom: clamp(5.5rem, 14vh, 8rem);
+    width: calc(100% - 2.5rem);
+    max-width: 40ch;
+    transform: translate3d(0, calc((1 - var(--t, 0)) * 1.2rem), 0);
+  }
 }
 
 /* ===== Data plate =====

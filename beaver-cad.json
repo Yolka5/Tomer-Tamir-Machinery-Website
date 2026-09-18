@@ -1,0 +1,2194 @@
+{
+  "source": "public/models/beaver.glb",
+  "units": "millimetres, rifle frame [forward, up, right]",
+  "frame": {
+    "forward": [
+      0,
+      -1,
+      0
+    ],
+    "up": [
+      0,
+      0,
+      1
+    ],
+    "right": [
+      -1,
+      0,
+      0
+    ],
+    "originMetres": [
+      -0.000030171764592523687,
+      -0.047928156331181526,
+      0.022568371146917343
+    ]
+  },
+  "evidence": [
+    "Bore axis is glTF Y (longest extent, 690 mm).",
+    "Muzzle points toward glTF -Y: barrel centre is 256 mm forward of receiver centre.",
+    "Up is glTF +Z: rail centre is 36 mm above barrel centreline.",
+    "Right is glTF -X (forward x up, proper rotation, never mirrored).",
+    "Cross-check Gas Block: 7 mm above bore (consistent with above).",
+    "Cross-check Charging Handle: 18 mm above bore (consistent with above).",
+    "Cross-check Recoil Spring: 158 mm behind receiver centre (consistent with behind)."
+  ],
+  "overall": {
+    "min": [
+      -345,
+      -35,
+      -21
+    ],
+    "max": [
+      345,
+      35,
+      21
+    ]
+  },
+  "everything": {
+    "min": [
+      -423,
+      -167,
+      -38
+    ],
+    "max": [
+      345,
+      35,
+      38
+    ]
+  },
+  "travel": {
+    "carrierRearward": 223,
+    "railLift": 70,
+    "bulletMuzzle": 323,
+    "bulletForward": 823
+  },
+  "groups": {
+    "bcg": [
+      "Bolt",
+      "Bolt Carrier #1",
+      "Bolt Carrier #2",
+      "Recoil Spring",
+      "Recoil Buffer",
+      "Recoil Buffer Pin",
+      "Recoil Balls",
+      "Firing Pin",
+      "Firing Pin Lock Plate",
+      "Cam"
+    ],
+    "cartridge": [
+      "Primer Outer - TVCM 6.8mm",
+      "Primer Inner - TVCM 6.8mm",
+      "Gun Powder - TVCM 6.8mm",
+      "Insert - TVCM 6.8mm",
+      "Bullet - TVCM 6.8mm",
+      "Casing - TVCM 6.8mm"
+    ],
+    "gas": [
+      "Valve Detent Spring",
+      "Gas Tube",
+      "Gas Valve",
+      "Piston Spring Socket",
+      "Seal Bump",
+      "Gas Block Nut",
+      "Piston Sleeve",
+      "Gas Block Bottom Screw",
+      "Gas Block",
+      "Gas Lock Pin",
+      "Valve Detent Pin Lock",
+      "Piston Spring",
+      "Gas Piston",
+      "Valve Detent Pin"
+    ],
+    "rail": [
+      "Picatinny Top Rail",
+      "Top Rail Screw",
+      "Handguard Top Screw"
+    ],
+    "instanced": []
+  },
+  "parts": {
+    "STOCK_KORPUS": {
+      "center": [
+        -314,
+        -43,
+        0
+      ],
+      "size": [
+        183,
+        135,
+        75
+      ],
+      "min": [
+        -406,
+        -110,
+        -38
+      ],
+      "max": [
+        -223,
+        25,
+        38
+      ]
+    },
+    "UPOR_STOCK_": {
+      "center": [
+        -297,
+        -38,
+        0
+      ],
+      "size": [
+        16,
+        23,
+        16
+      ],
+      "min": [
+        -305,
+        -50,
+        -8
+      ],
+      "max": [
+        -289,
+        -27,
+        8
+      ]
+    },
+    "PIN_STOCK": {
+      "center": [
+        -284,
+        -53,
+        0
+      ],
+      "size": [
+        2,
+        2,
+        18
+      ],
+      "min": [
+        -285,
+        -54,
+        -9
+      ],
+      "max": [
+        -283,
+        -52,
+        9
+      ]
+    },
+    "FIX_STOCK": {
+      "center": [
+        -297,
+        -43,
+        0
+      ],
+      "size": [
+        2,
+        16,
+        12
+      ],
+      "min": [
+        -298,
+        -51,
+        -6
+      ],
+      "max": [
+        -295,
+        -35,
+        6
+      ]
+    },
+    "KNOPKA_FIX_STOCK_": {
+      "center": [
+        -310,
+        -68,
+        0
+      ],
+      "size": [
+        102,
+        59,
+        19
+      ],
+      "min": [
+        -360,
+        -98,
+        -9
+      ],
+      "max": [
+        -259,
+        -39,
+        9
+      ]
+    },
+    "SPRING_FIX_STOCK": {
+      "center": [
+        -297,
+        -34,
+        0
+      ],
+      "size": [
+        5,
+        12,
+        5
+      ],
+      "min": [
+        -299,
+        -41,
+        -2
+      ],
+      "max": [
+        -294,
+        -28,
+        2
+      ]
+    },
+    "STOCK_TILNIK": {
+      "center": [
+        -407,
+        -46,
+        1
+      ],
+      "size": [
+        33,
+        131,
+        59
+      ],
+      "min": [
+        -423,
+        -111,
+        -29
+      ],
+      "max": [
+        -390,
+        20,
+        30
+      ]
+    },
+    "STOCK_V": {
+      "center": [
+        -394,
+        -45,
+        0
+      ],
+      "size": [
+        18,
+        120,
+        59
+      ],
+      "min": [
+        -403,
+        -105,
+        -29
+      ],
+      "max": [
+        -385,
+        15,
+        29
+      ]
+    },
+    "SPRING_MAG_": {
+      "center": [
+        -56,
+        -148,
+        0
+      ],
+      "size": [
+        36,
+        20,
+        21
+      ],
+      "min": [
+        -74,
+        -158,
+        -11
+      ],
+      "max": [
+        -38,
+        -138,
+        10
+      ]
+    },
+    "PRT_BULLET_CORE_0002_4": {
+      "center": [
+        -31,
+        -72,
+        0
+      ],
+      "size": [
+        42,
+        116,
+        18
+      ],
+      "min": [
+        -52,
+        -130,
+        -9
+      ],
+      "max": [
+        -10,
+        -14,
+        8
+      ]
+    },
+    "PRT_PRIMER_0001_1": {
+      "center": [
+        -84,
+        -81,
+        0
+      ],
+      "size": [
+        16,
+        116,
+        16
+      ],
+      "min": [
+        -92,
+        -138,
+        -8
+      ],
+      "max": [
+        -76,
+        -23,
+        7
+      ]
+    },
+    "PRT_CASE_0001_4": {
+      "center": [
+        -60,
+        -78,
+        0
+      ],
+      "size": [
+        64,
+        128,
+        22
+      ],
+      "min": [
+        -92,
+        -142,
+        -12
+      ],
+      "max": [
+        -28,
+        -14,
+        11
+      ]
+    },
+    "KORPUS_MAGAZINA_7_62_X51": {
+      "center": [
+        -49,
+        -87,
+        0
+      ],
+      "size": [
+        95,
+        153,
+        30
+      ],
+      "min": [
+        -96,
+        -163,
+        -16
+      ],
+      "max": [
+        -1,
+        -10,
+        15
+      ]
+    },
+    "PRT_BUMP_FLOOR_0001_22": {
+      "center": [
+        -45,
+        -138,
+        0
+      ],
+      "size": [
+        76,
+        35,
+        21
+      ],
+      "min": [
+        -83,
+        -156,
+        -11
+      ],
+      "max": [
+        -7,
+        -121,
+        10
+      ]
+    },
+    "KRISHKA_MAGAZINA_7_62_X51": {
+      "center": [
+        -42,
+        -155,
+        0
+      ],
+      "size": [
+        83,
+        24,
+        32
+      ],
+      "min": [
+        -84,
+        -167,
+        -16
+      ],
+      "max": [
+        -1,
+        -143,
+        16
+      ]
+    },
+    "NAPRAVL_MAGAZ_7_62_51": {
+      "center": [
+        -41,
+        -154,
+        0
+      ],
+      "size": [
+        75,
+        23,
+        23
+      ],
+      "min": [
+        -79,
+        -166,
+        -12
+      ],
+      "max": [
+        -4,
+        -143,
+        11
+      ]
+    },
+    "Buffer Tube": {
+      "center": [
+        -274,
+        -4,
+        0
+      ],
+      "size": [
+        146,
+        31,
+        35
+      ],
+      "min": [
+        -347,
+        -20,
+        -18
+      ],
+      "max": [
+        -201,
+        11,
+        18
+      ]
+    },
+    "Bolt Catch Detent": {
+      "center": [
+        -102,
+        -32,
+        -9
+      ],
+      "size": [
+        3,
+        3,
+        6
+      ],
+      "min": [
+        -104,
+        -33,
+        -12
+      ],
+      "max": [
+        -101,
+        -30,
+        -6
+      ]
+    },
+    "Hammer Pin": {
+      "center": [
+        -150,
+        -38,
+        0
+      ],
+      "size": [
+        31,
+        24,
+        23
+      ],
+      "min": [
+        -166,
+        -50,
+        -11
+      ],
+      "max": [
+        -134,
+        -25,
+        11
+      ]
+    },
+    "Trigger + Sear Pin": {
+      "center": [
+        -115,
+        -40,
+        0
+      ],
+      "size": [
+        4,
+        4,
+        23
+      ],
+      "min": [
+        -117,
+        -42,
+        -11
+      ],
+      "max": [
+        -113,
+        -38,
+        11
+      ]
+    },
+    "Front Pivot Pin": {
+      "center": [
+        -4,
+        -30,
+        1
+      ],
+      "size": [
+        8,
+        10,
+        32
+      ],
+      "min": [
+        -8,
+        -35,
+        -15
+      ],
+      "max": [
+        0,
+        -25,
+        17
+      ]
+    },
+    "Bolt Catch": {
+      "center": [
+        -110,
+        -22,
+        1
+      ],
+      "size": [
+        40,
+        27,
+        44
+      ],
+      "min": [
+        -129,
+        -35,
+        -21
+      ],
+      "max": [
+        -90,
+        -9,
+        23
+      ]
+    },
+    "Bolt Catch Roll Pin": {
+      "center": [
+        -105,
+        -27,
+        -15
+      ],
+      "size": [
+        16,
+        2,
+        2
+      ],
+      "min": [
+        -113,
+        -28,
+        -16
+      ],
+      "max": [
+        -97,
+        -26,
+        -14
+      ]
+    },
+    "Front Pivot Pin Detent": {
+      "center": [
+        -9,
+        -30,
+        15
+      ],
+      "size": [
+        4,
+        2,
+        2
+      ],
+      "min": [
+        -11,
+        -31,
+        14
+      ],
+      "max": [
+        -7,
+        -28,
+        17
+      ]
+    },
+    "Bolt Catch Spring": {
+      "center": [
+        -102,
+        -32,
+        -3
+      ],
+      "size": [
+        3,
+        3,
+        7
+      ],
+      "min": [
+        -104,
+        -33,
+        -7
+      ],
+      "max": [
+        -101,
+        -30,
+        0
+      ]
+    },
+    "Front Pivot Pin Detent Spring": {
+      "center": [
+        -23,
+        -30,
+        15
+      ],
+      "size": [
+        23,
+        2,
+        2
+      ],
+      "min": [
+        -35,
+        -31,
+        14
+      ],
+      "max": [
+        -11,
+        -29,
+        16
+      ]
+    },
+    "Mag Release": {
+      "center": [
+        -102,
+        -48,
+        15
+      ],
+      "size": [
+        5,
+        13,
+        5
+      ],
+      "min": [
+        -105,
+        -54,
+        12
+      ],
+      "max": [
+        -100,
+        -41,
+        17
+      ]
+    },
+    "Mag Catch Body": {
+      "center": [
+        -99,
+        -49,
+        1
+      ],
+      "size": [
+        14,
+        8,
+        32
+      ],
+      "min": [
+        -106,
+        -53,
+        -15
+      ],
+      "max": [
+        -93,
+        -45,
+        17
+      ]
+    },
+    "Ambi Mag Release": {
+      "center": [
+        -98,
+        -51,
+        -17
+      ],
+      "size": [
+        64,
+        15,
+        11
+      ],
+      "min": [
+        -130,
+        -58,
+        -23
+      ],
+      "max": [
+        -66,
+        -44,
+        -12
+      ]
+    },
+    "Mag Catch Spring": {
+      "center": [
+        -102,
+        -49,
+        7
+      ],
+      "size": [
+        6,
+        6,
+        10
+      ],
+      "min": [
+        -105,
+        -52,
+        2
+      ],
+      "max": [
+        -100,
+        -46,
+        12
+      ]
+    },
+    "Ambi Mag Release Roll Pin": {
+      "center": [
+        -94,
+        -49,
+        -13
+      ],
+      "size": [
+        2,
+        8,
+        2
+      ],
+      "min": [
+        -95,
+        -53,
+        -14
+      ],
+      "max": [
+        -93,
+        -45,
+        -13
+      ]
+    },
+    "55CA5C4 CMMG Grip": {
+      "center": [
+        -191,
+        -97,
+        0
+      ],
+      "size": [
+        76,
+        124,
+        30
+      ],
+      "min": [
+        -229,
+        -159,
+        -15
+      ],
+      "max": [
+        -153,
+        -35,
+        15
+      ]
+    },
+    "Lower Reciever": {
+      "center": [
+        -106,
+        -40,
+        0
+      ],
+      "size": [
+        212,
+        103,
+        34
+      ],
+      "min": [
+        -211,
+        -91,
+        -17
+      ],
+      "max": [
+        0,
+        11,
+        17
+      ]
+    },
+    "Barrel Nut": {
+      "center": [
+        17,
+        -4,
+        0
+      ],
+      "size": [
+        30,
+        30,
+        30
+      ],
+      "min": [
+        2,
+        -19,
+        -15
+      ],
+      "max": [
+        32,
+        11,
+        15
+      ]
+    },
+    "Recoil Spring": {
+      "center": [
+        -249,
+        -4,
+        0
+      ],
+      "size": [
+        192,
+        25,
+        25
+      ],
+      "min": [
+        -345,
+        -17,
+        -12
+      ],
+      "max": [
+        -153,
+        8,
+        12
+      ]
+    },
+    "Bolt Carrier #1": {
+      "center": [
+        -51,
+        2,
+        0
+      ],
+      "size": [
+        71,
+        34,
+        24
+      ],
+      "min": [
+        -86,
+        -15,
+        -12
+      ],
+      "max": [
+        -15,
+        19,
+        12
+      ]
+    },
+    "Recoil Balls": {
+      "center": [
+        -163,
+        -4,
+        0
+      ],
+      "size": [
+        20,
+        15,
+        15
+      ],
+      "min": [
+        -173,
+        -12,
+        -8
+      ],
+      "max": [
+        -153,
+        3,
+        8
+      ]
+    },
+    "Bolt Carrier #2": {
+      "center": [
+        -127,
+        -4,
+        0
+      ],
+      "size": [
+        92,
+        25,
+        25
+      ],
+      "min": [
+        -173,
+        -17,
+        -13
+      ],
+      "max": [
+        -81,
+        8,
+        13
+      ]
+    },
+    "Primer Outer - TVCM 6.8mm": {
+      "center": [
+        -5,
+        -4,
+        0
+      ],
+      "size": [
+        2,
+        7,
+        7
+      ],
+      "min": [
+        -6,
+        -8,
+        -3
+      ],
+      "max": [
+        -4,
+        -1,
+        3
+      ]
+    },
+    "Primer Inner - TVCM 6.8mm": {
+      "center": [
+        -5,
+        -4,
+        0
+      ],
+      "size": [
+        2,
+        6,
+        6
+      ],
+      "min": [
+        -6,
+        -7,
+        -3
+      ],
+      "max": [
+        -4,
+        -1,
+        3
+      ]
+    },
+    "Gun Powder - TVCM 6.8mm": {
+      "center": [
+        18,
+        -4,
+        0
+      ],
+      "size": [
+        44,
+        14,
+        14
+      ],
+      "min": [
+        -4,
+        -11,
+        -7
+      ],
+      "max": [
+        41,
+        3,
+        7
+      ]
+    },
+    "Insert - TVCM 6.8mm": {
+      "center": [
+        -3,
+        -4,
+        0
+      ],
+      "size": [
+        7,
+        13,
+        13
+      ],
+      "min": [
+        -6,
+        -11,
+        -6
+      ],
+      "max": [
+        0,
+        2,
+        6
+      ]
+    },
+    "Bullet - TVCM 6.8mm": {
+      "center": [
+        40,
+        -4,
+        0
+      ],
+      "size": [
+        37,
+        7,
+        7
+      ],
+      "min": [
+        22,
+        -8,
+        -3
+      ],
+      "max": [
+        59,
+        -1,
+        3
+      ]
+    },
+    "Casing - TVCM 6.8mm": {
+      "center": [
+        19,
+        -4,
+        0
+      ],
+      "size": [
+        48,
+        15,
+        15
+      ],
+      "min": [
+        -5,
+        -12,
+        -8
+      ],
+      "max": [
+        43,
+        3,
+        8
+      ]
+    },
+    "Recoil Buffer": {
+      "center": [
+        -169,
+        -4,
+        0
+      ],
+      "size": [
+        31,
+        20,
+        20
+      ],
+      "min": [
+        -185,
+        -14,
+        -10
+      ],
+      "max": [
+        -153,
+        5,
+        10
+      ]
+    },
+    "Firing Pin Lock Plate": {
+      "center": [
+        -76,
+        9,
+        0
+      ],
+      "size": [
+        43,
+        17,
+        2
+      ],
+      "min": [
+        -97,
+        0,
+        -1
+      ],
+      "max": [
+        -55,
+        18,
+        1
+      ]
+    },
+    "Firing Pin": {
+      "center": [
+        -49,
+        -4,
+        0
+      ],
+      "size": [
+        85,
+        16,
+        16
+      ],
+      "min": [
+        -91,
+        -12,
+        -8
+      ],
+      "max": [
+        -6,
+        4,
+        8
+      ]
+    },
+    "Cam": {
+      "center": [
+        -40,
+        1,
+        -3
+      ],
+      "size": [
+        8,
+        21,
+        15
+      ],
+      "min": [
+        -44,
+        -9,
+        -11
+      ],
+      "max": [
+        -36,
+        12,
+        5
+      ]
+    },
+    "Bolt": {
+      "center": [
+        -34,
+        -4,
+        0
+      ],
+      "size": [
+        62,
+        18,
+        18
+      ],
+      "min": [
+        -65,
+        -13,
+        -9
+      ],
+      "max": [
+        -3,
+        5,
+        9
+      ]
+    },
+    "Recoil Buffer Pin": {
+      "center": [
+        -170,
+        -4,
+        0
+      ],
+      "size": [
+        2,
+        2,
+        19
+      ],
+      "min": [
+        -171,
+        -5,
+        -10
+      ],
+      "max": [
+        -169,
+        -3,
+        9
+      ]
+    },
+    "Valve Detent Spring": {
+      "center": [
+        222,
+        8,
+        -4
+      ],
+      "size": [
+        2,
+        3,
+        3
+      ],
+      "min": [
+        221,
+        7,
+        -5
+      ],
+      "max": [
+        223,
+        10,
+        -2
+      ]
+    },
+    "Gas Tube": {
+      "center": [
+        195,
+        16,
+        0
+      ],
+      "size": [
+        65,
+        15,
+        14
+      ],
+      "min": [
+        162,
+        9,
+        -7
+      ],
+      "max": [
+        227,
+        23,
+        7
+      ]
+    },
+    "Gas Valve": {
+      "center": [
+        228,
+        16,
+        0
+      ],
+      "size": [
+        23,
+        15,
+        16
+      ],
+      "min": [
+        216,
+        8,
+        -8
+      ],
+      "max": [
+        239,
+        23,
+        7
+      ]
+    },
+    "Piston Spring Socket": {
+      "center": [
+        154,
+        16,
+        0
+      ],
+      "size": [
+        16,
+        18,
+        18
+      ],
+      "min": [
+        146,
+        7,
+        -9
+      ],
+      "max": [
+        162,
+        25,
+        9
+      ]
+    },
+    "Seal Bump": {
+      "center": [
+        0,
+        16,
+        0
+      ],
+      "size": [
+        5,
+        14,
+        14
+      ],
+      "min": [
+        -3,
+        9,
+        -7
+      ],
+      "max": [
+        2,
+        23,
+        7
+      ]
+    },
+    "Gas Block Nut": {
+      "center": [
+        231,
+        -4,
+        0
+      ],
+      "size": [
+        7,
+        20,
+        23
+      ],
+      "min": [
+        227,
+        -14,
+        -11
+      ],
+      "max": [
+        234,
+        6,
+        11
+      ]
+    },
+    "Piston Sleeve": {
+      "center": [
+        44,
+        16,
+        0
+      ],
+      "size": [
+        84,
+        14,
+        14
+      ],
+      "min": [
+        2,
+        9,
+        -7
+      ],
+      "max": [
+        87,
+        23,
+        7
+      ]
+    },
+    "Gas Block Bottom Screw": {
+      "center": [
+        219,
+        -15,
+        0
+      ],
+      "size": [
+        4,
+        7,
+        4
+      ],
+      "min": [
+        218,
+        -18,
+        -2
+      ],
+      "max": [
+        221,
+        -11,
+        2
+      ]
+    },
+    "Gas Block": {
+      "center": [
+        219,
+        3,
+        0
+      ],
+      "size": [
+        21,
+        41,
+        25
+      ],
+      "min": [
+        208,
+        -18,
+        -12
+      ],
+      "max": [
+        229,
+        23,
+        12
+      ]
+    },
+    "13.7\" Barrel": {
+      "center": [
+        165,
+        -4,
+        0
+      ],
+      "size": [
+        360,
+        28,
+        28
+      ],
+      "min": [
+        -15,
+        -18,
+        -14
+      ],
+      "max": [
+        345,
+        10,
+        14
+      ]
+    },
+    "Gas Lock Pin": {
+      "center": [
+        224,
+        11,
+        0
+      ],
+      "size": [
+        2,
+        2,
+        15
+      ],
+      "min": [
+        223,
+        10,
+        -8
+      ],
+      "max": [
+        225,
+        12,
+        8
+      ]
+    },
+    "Valve Detent Pin Lock": {
+      "center": [
+        225,
+        7,
+        -5
+      ],
+      "size": [
+        1,
+        2,
+        7
+      ],
+      "min": [
+        225,
+        6,
+        -9
+      ],
+      "max": [
+        226,
+        7,
+        -2
+      ]
+    },
+    "Piston Spring": {
+      "center": [
+        117,
+        16,
+        0
+      ],
+      "size": [
+        72,
+        10,
+        10
+      ],
+      "min": [
+        82,
+        11,
+        -5
+      ],
+      "max": [
+        153,
+        21,
+        5
+      ]
+    },
+    "Gas Piston": {
+      "center": [
+        85,
+        16,
+        0
+      ],
+      "size": [
+        265,
+        10,
+        10
+      ],
+      "min": [
+        -48,
+        11,
+        -5
+      ],
+      "max": [
+        218,
+        21,
+        5
+      ]
+    },
+    "Valve Detent Pin": {
+      "center": [
+        227,
+        8,
+        -4
+      ],
+      "size": [
+        7,
+        3,
+        3
+      ],
+      "min": [
+        223,
+        7,
+        -5
+      ],
+      "max": [
+        231,
+        10,
+        -2
+      ]
+    },
+    "Charging Handle": {
+      "center": [
+        -113,
+        14,
+        0
+      ],
+      "size": [
+        194,
+        15,
+        22
+      ],
+      "min": [
+        -210,
+        7,
+        -11
+      ],
+      "max": [
+        -17,
+        22,
+        11
+      ]
+    },
+    "Handguard Side Insert": {
+      "center": [
+        172,
+        -9,
+        0
+      ],
+      "size": [
+        251,
+        34,
+        40
+      ],
+      "min": [
+        46,
+        -26,
+        -20
+      ],
+      "max": [
+        297,
+        8,
+        20
+      ]
+    },
+    "Picatinny Top Rail": {
+      "center": [
+        57,
+        31,
+        0
+      ],
+      "size": [
+        517,
+        7,
+        21
+      ],
+      "min": [
+        -201,
+        28,
+        -11
+      ],
+      "max": [
+        315,
+        35,
+        11
+      ]
+    },
+    "M5 Insert": {
+      "center": [
+        63,
+        -3,
+        -2
+      ],
+      "size": [
+        490,
+        62,
+        16
+      ],
+      "min": [
+        -182,
+        -34,
+        -10
+      ],
+      "max": [
+        307,
+        28,
+        6
+      ]
+    },
+    "Top Rail Screw": {
+      "center": [
+        62,
+        28,
+        0
+      ],
+      "size": [
+        488,
+        7,
+        10
+      ],
+      "min": [
+        -182,
+        25,
+        -5
+      ],
+      "max": [
+        306,
+        32,
+        5
+      ]
+    },
+    "Bottom Side Insert Scew": {
+      "center": [
+        7,
+        -29,
+        0
+      ],
+      "size": [
+        11,
+        11,
+        21
+      ],
+      "min": [
+        1,
+        -34,
+        -10
+      ],
+      "max": [
+        12,
+        -23,
+        10
+      ]
+    },
+    "Charging Handle Insert": {
+      "center": [
+        -186,
+        20,
+        -8
+      ],
+      "size": [
+        8,
+        16,
+        2
+      ],
+      "min": [
+        -190,
+        11,
+        -9
+      ],
+      "max": [
+        -182,
+        28,
+        -7
+      ]
+    },
+    "Handguard": {
+      "center": [
+        158,
+        -3,
+        0
+      ],
+      "size": [
+        315,
+        61,
+        42
+      ],
+      "min": [
+        0,
+        -34,
+        -21
+      ],
+      "max": [
+        315,
+        28,
+        21
+      ]
+    },
+    "Charging Handle Buffer": {
+      "center": [
+        -194,
+        27,
+        0
+      ],
+      "size": [
+        17,
+        2,
+        16
+      ],
+      "min": [
+        -203,
+        26,
+        -8
+      ],
+      "max": [
+        -186,
+        28,
+        8
+      ]
+    },
+    "Bottom Handguard Screw": {
+      "center": [
+        19,
+        -29,
+        0
+      ],
+      "size": [
+        21,
+        10,
+        10
+      ],
+      "min": [
+        9,
+        -34,
+        -5
+      ],
+      "max": [
+        30,
+        -24,
+        5
+      ]
+    },
+    "Handguard Top Screw": {
+      "center": [
+        2,
+        25,
+        0
+      ],
+      "size": [
+        11,
+        5,
+        5
+      ],
+      "min": [
+        -4,
+        22,
+        -2
+      ],
+      "max": [
+        7,
+        27,
+        2
+      ]
+    },
+    "Upper Reciever": {
+      "center": [
+        -91,
+        -4,
+        1
+      ],
+      "size": [
+        221,
+        62,
+        40
+      ],
+      "min": [
+        -201,
+        -35,
+        -19
+      ],
+      "max": [
+        20,
+        28,
+        21
+      ]
+    }
+  },
+  "explode": {
+    "Barrel Nut": [
+      54,
+      0,
+      0
+    ],
+    "Recoil Spring": [
+      -216,
+      0,
+      0
+    ],
+    "Bolt Carrier #1": [
+      -97,
+      0,
+      0
+    ],
+    "Recoil Balls": [
+      -164,
+      0,
+      0
+    ],
+    "Bolt Carrier #2": [
+      -142,
+      0,
+      0
+    ],
+    "Primer Outer - TVCM 6.8mm": [
+      -47,
+      25,
+      0
+    ],
+    "Primer Inner - TVCM 6.8mm": [
+      -47,
+      25,
+      0
+    ],
+    "Gun Powder - TVCM 6.8mm": [
+      22,
+      25,
+      0
+    ],
+    "Insert - TVCM 6.8mm": [
+      -41,
+      25,
+      0
+    ],
+    "Bullet - TVCM 6.8mm": [
+      88,
+      25,
+      0
+    ],
+    "Casing - TVCM 6.8mm": [
+      25,
+      25,
+      0
+    ],
+    "Recoil Buffer": [
+      -168,
+      0,
+      0
+    ],
+    "Firing Pin Lock Plate": [
+      -112,
+      0,
+      0
+    ],
+    "Firing Pin": [
+      -96,
+      0,
+      0
+    ],
+    "Cam": [
+      -90,
+      0,
+      0
+    ],
+    "Bolt": [
+      -87,
+      0,
+      0
+    ],
+    "Recoil Buffer Pin": [
+      -168,
+      0,
+      0
+    ],
+    "Valve Detent Spring": [
+      31,
+      58,
+      -6
+    ],
+    "Gas Tube": [
+      15,
+      70,
+      0
+    ],
+    "Gas Valve": [
+      34,
+      70,
+      0
+    ],
+    "Piston Spring Socket": [
+      -10,
+      70,
+      0
+    ],
+    "Seal Bump": [
+      -102,
+      70,
+      0
+    ],
+    "Gas Block Nut": [
+      36,
+      40,
+      0
+    ],
+    "Piston Sleeve": [
+      -76,
+      70,
+      0
+    ],
+    "Gas Block Bottom Screw": [
+      29,
+      40,
+      0
+    ],
+    "Gas Block": [
+      29,
+      51,
+      0
+    ],
+    "13.7\" Barrel": [
+      128,
+      0,
+      0
+    ],
+    "Gas Lock Pin": [
+      32,
+      63,
+      0
+    ],
+    "Valve Detent Pin Lock": [
+      33,
+      57,
+      -7
+    ],
+    "Piston Spring": [
+      -32,
+      70,
+      0
+    ],
+    "Gas Piston": [
+      -51,
+      70,
+      0
+    ],
+    "Valve Detent Pin": [
+      34,
+      58,
+      -6
+    ],
+    "Charging Handle": [
+      -3,
+      40,
+      0
+    ],
+    "Picatinny Top Rail": [
+      22,
+      77,
+      0
+    ],
+    "M5 Insert": [
+      0,
+      -61,
+      0
+    ],
+    "Bottom Side Insert Scew": [
+      15,
+      -55,
+      0
+    ],
+    "Charging Handle Insert": [
+      -14,
+      53,
+      -18
+    ],
+    "Handguard": [
+      0,
+      -61,
+      0
+    ],
+    "Charging Handle Buffer": [
+      -15,
+      68,
+      0
+    ],
+    "Bottom Handguard Screw": [
+      17,
+      -55,
+      0
+    ],
+    "Handguard Top Screw": [
+      14,
+      64,
+      0
+    ],
+    "Upper Reciever": [
+      0,
+      0,
+      0
+    ],
+    "Handguard Side Insert": [
+      0,
+      -71,
+      0
+    ],
+    "Top Rail Screw": [
+      22,
+      89,
+      0
+    ]
+  },
+  "extras": {
+    "STOCK_KORPUS": [
+      -425,
+      238,
+      0
+    ],
+    "UPOR_STOCK_": [
+      -410,
+      245,
+      0
+    ],
+    "PIN_STOCK": [
+      -398,
+      224,
+      0
+    ],
+    "FIX_STOCK": [
+      -410,
+      238,
+      0
+    ],
+    "KNOPKA_FIX_STOCK_": [
+      -422,
+      203,
+      0
+    ],
+    "SPRING_FIX_STOCK": [
+      -410,
+      251,
+      0
+    ],
+    "STOCK_TILNIK": [
+      -509,
+      234,
+      2
+    ],
+    "STOCK_V": [
+      -497,
+      235,
+      0
+    ],
+    "SPRING_MAG_": [
+      -4,
+      -494,
+      0
+    ],
+    "PRT_BULLET_CORE_0002_4": [
+      16,
+      -373,
+      0
+    ],
+    "PRT_PRIMER_0001_1": [
+      -26,
+      -387,
+      0
+    ],
+    "PRT_CASE_0001_4": [
+      -7,
+      -382,
+      0
+    ],
+    "KORPUS_MAGAZINA_7_62_X51": [
+      2,
+      -397,
+      0
+    ],
+    "PRT_BUMP_FLOOR_0001_22": [
+      5,
+      -478,
+      0
+    ],
+    "KRISHKA_MAGAZINA_7_62_X51": [
+      7,
+      -505,
+      0
+    ],
+    "NAPRAVL_MAGAZ_7_62_51": [
+      8,
+      -504,
+      0
+    ],
+    "Buffer Tube": [
+      -389,
+      293,
+      0
+    ],
+    "Bolt Catch Detent": [
+      -10,
+      -289,
+      -61
+    ],
+    "Hammer Pin": [
+      -72,
+      -296,
+      30
+    ],
+    "Trigger + Sear Pin": [
+      -27,
+      -298,
+      30
+    ],
+    "Front Pivot Pin": [
+      118,
+      -286,
+      34
+    ],
+    "Bolt Catch": [
+      -20,
+      -277,
+      34
+    ],
+    "Bolt Catch Roll Pin": [
+      -14,
+      -283,
+      -82
+    ],
+    "Front Pivot Pin Detent": [
+      111,
+      -286,
+      83
+    ],
+    "Bolt Catch Spring": [
+      -10,
+      -289,
+      -40
+    ],
+    "Front Pivot Pin Detent Spring": [
+      93,
+      -286,
+      83
+    ],
+    "Mag Release": [
+      -10,
+      -308,
+      83
+    ],
+    "Mag Catch Body": [
+      -6,
+      -309,
+      34
+    ],
+    "Ambi Mag Release": [
+      -5,
+      -311,
+      -89
+    ],
+    "Mag Catch Spring": [
+      -10,
+      -309,
+      55
+    ],
+    "Ambi Mag Release Roll Pin": [
+      1,
+      -309,
+      -75
+    ],
+    "55CA5C4 CMMG Grip": [
+      -125,
+      -367,
+      30
+    ],
+    "Lower Reciever": [
+      -15,
+      -298,
+      30
+    ]
+  }
+}

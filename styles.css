@@ -3332,6 +3332,10 @@ body.subpage { padding-top: var(--nav-h); }
   color: var(--hl-color-dark);
 }
 
+.about--film .hl {
+  color: #fff;
+}
+
 /* ═══════════════════════════════════════════════════════
    BEAVER - Open engineering / Milanote section
 ═══════════════════════════════════════════════════════ */
