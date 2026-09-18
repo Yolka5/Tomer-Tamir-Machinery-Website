@@ -1309,7 +1309,7 @@
         name: 'TTM Beaver',
         short: 'Beaver',
         href: 'beaver.html',
-        image: 'TTM%20Beaver/TTM%20Beaver%20Upper%201.webp',
+        image: 'TTM%20Beaver/TTM%20Beaver%201.png',
         logo: false,
         class: 'SOF battle rifle / PDW',
         cartridge: '6.8 TVCM (polymer casing)',
@@ -1819,7 +1819,7 @@
         id: 'beaver',
         name: 'TTM Beaver',
         href: 'beaver.html',
-        image: 'TTM%20Beaver/TTM%20Beaver%20Upper%201.webp',
+        image: 'TTM%20Beaver/TTM%20Beaver%201.png',
         logo: false,
         meta: '6.8 TVCM · SOF battle rifle · Original design'
       },

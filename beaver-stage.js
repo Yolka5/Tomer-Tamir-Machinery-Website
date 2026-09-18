@@ -21,6 +21,12 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import {
+  CAD_OFFSET,
+  CAD_TO_WORLD,
+  ensureCad,
+  prepare
+} from './beaver-seq.js?v=13';
 
 /* ---------------------------------------------------------------- timeline */
 
@@ -160,34 +166,20 @@ function beatPhase(q, i, count) {
 
 const MODEL_SPECS = [
   {
-    url: 'models/beaver-upper.glb',
+    url: 'models/beaver-meshopt.glb',
+    cad: true,
     turns: 1.35,
     idle: 0.9,
-    /* Onshape stands the receiver on end with the bore down -Y. Laying it on
-       world X reads as a rifle upper and, more usefully, lets it roll about
-       its own bore: the silhouette stays wide and constant, so the type behind
-       it never gets chewed up by the spin. */
     view: {
-      orient: [0, 0, -Math.PI / 2],
+      orient: [0, 0, 0],
       axis: 'x',
-      /* Slight yaw and pitch - a dead-flat side elevation reads as a drawing,
-         not a product. */
       pose: [0.11, -0.3, 0.05],
       fit: { wide: 0.8, narrow: 0.92 },
-      /* Room left for the corner copy on the cross axis. */
       cap: 0.74,
-      /* Sits below the optical centre so the receiver crosses the lower half of
-         the headline instead of erasing it, and so the contact shadow has
-         somewhere to fall. Fractions of the half-viewport, positive is up. */
       bias: -0.11
     },
-    /* Held upright, a phone has no width to lend a 400 mm part: laid on its
-       side the receiver is a five-pixel sliver. Stood on end it spends the
-       screen's long dimension instead and crosses the headline the other way,
-       which is the stronger shot regardless. */
     portrait: {
-      orient: [0, 0, Math.PI],
-      axis: 'y',
+      axis: 'x',
       pose: [0.07, 0, -0.025],
       fit: 0.52,
       cap: 0.66,
@@ -367,11 +359,19 @@ function buildEnvironment(renderer) {
 
 /* -------------------------------------------------------------------- boot */
 
-function boot(root) {
+async function boot(root) {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const canvas = root.querySelector('[data-bvr-gl]');
   if (!canvas) return;
   if (reduceMotion.matches) return;
+
+  try {
+    await ensureCad();
+  } catch (err) {
+    console.error('[beaver-stage] beaver cad failed', err);
+    root.dataset.bvrMode = 'static';
+    return;
+  }
 
   let renderer;
   try {
@@ -497,7 +497,13 @@ function boot(root) {
        after the pose swings one end toward the lens. A world-space box could
        not do that job: axis-aligned, it always reports a symmetric span, and so
        hides the very lopsidedness the framing pass exists to cancel. */
-    rig.orient.rotation.fromArray(view.orient);
+    if (rig.spec.cad) {
+      rig.orient.quaternion.copy(CAD_TO_WORLD);
+      rig.shift.position.copy(CAD_OFFSET);
+    } else {
+      rig.orient.quaternion.identity();
+      rig.orient.rotation.fromArray(view.orient);
+    }
     rig.root.updateMatrixWorld(true);
     rig.localBox.setFromObject(rig.orient);
     rig.localBox.getSize(tmpVec);
@@ -510,27 +516,29 @@ function boot(root) {
     const model = gltf.scene;
     rig.shift.add(model);
 
-    /* Centre on the geometry, not on whatever origin the CAD package chose.
-       `shift` sits below `orient` so the offset is measured and applied in the
-       model's own unrotated frame - subtracting a world-space centre from a
-       local position would drag the part off to one side. */
     rest(rig);
     rig.orient.rotation.set(0, 0, 0);
-    rig.shift.position.set(0, 0, 0);
-    rig.root.updateMatrixWorld(true);
-    tmpBox.setFromObject(model);
-    tmpBox.getCenter(tmpVec);
-    rig.shift.position.copy(tmpVec).negate();
-
-    model.traverse((node) => {
-      if (!node.isMesh) return;
-      node.frustumCulled = false;
-      const mats = Array.isArray(node.material) ? node.material : [node.material];
-      for (const m of mats) {
-        retuneMaterial(m, rig.spec.polymer === true);
-        m.clippingPlanes = [rig.plane];
-      }
-    });
+    if (rig.spec.cad) {
+      rig.orient.quaternion.copy(CAD_TO_WORLD);
+      rig.shift.position.copy(CAD_OFFSET);
+      prepare(model, rig.plane);
+    } else {
+      rig.orient.quaternion.identity();
+      rig.shift.position.set(0, 0, 0);
+      rig.root.updateMatrixWorld(true);
+      tmpBox.setFromObject(model);
+      tmpBox.getCenter(tmpVec);
+      rig.shift.position.copy(tmpVec).negate();
+      model.traverse((node) => {
+        if (!node.isMesh) return;
+        node.frustumCulled = false;
+        const mats = Array.isArray(node.material) ? node.material : [node.material];
+        for (const m of mats) {
+          retuneMaterial(m, rig.spec.polymer === true);
+          m.clippingPlanes = [rig.plane];
+        }
+      });
+    }
 
     rig.loaded = true;
     /* Layout resolves the view for the current window shape, which is what
