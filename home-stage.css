@@ -290,7 +290,7 @@
 }
 
 /* The model is centred, so a centred headline was being sliced through the
-   middle of every glyph — "MP7" read as "MD7". Lifting only the wordmark (not
+   middle of every glyph - "MP7" read as "MD7". Lifting only the wordmark (not
    the whole grid, or the eyebrow would collide with the header) puts the
    overlap on the lower third of the letterforms, which reads as depth, and
    backing the ink off a step keeps the object in front. */
@@ -907,7 +907,7 @@
     rotate(-3deg);
 }
 
-/* Stamp — punch in like a mill */
+/* Stamp - punch in like a mill */
 .hm-stage[data-hm-mode='live'] .hm-stamp__ch {
   display: inline-block;
   --lead: calc(var(--i, 0) / max(var(--n, 1), 1) * 0.72);
@@ -943,7 +943,7 @@
   transform-origin: 0% 80%;
 }
 
-/* Slam — hard stop, no fade-ease */
+/* Slam - hard stop, no fade-ease */
 .hm-stage[data-hm-mode='live'] .hm-slam__w {
   --lp: clamp(0, calc((var(--t, 0) - var(--i) * 0.2 - 0.08) / 0.03), 1);
   opacity: var(--lp);
@@ -1011,7 +1011,7 @@
   transform-origin: 0% 50%;
 }
 
-/* Length bar — drawing to metal */
+/* Length bar - drawing to metal */
 .hm-stage[data-hm-mode='live'] .hm-len__bar i {
   transform: scaleX(var(--t, 0));
   transform-origin: 0% 50%;
@@ -1115,7 +1115,7 @@
 }
 
 /* ===== Chapter rail =====
-   Was 8.8px of vertical mono at 0.28 opacity pinned to the viewport edge —
+   Was 8.8px of vertical mono at 0.28 opacity pinned to the viewport edge -
    present but unreadable. Now a machinist's scale: horizontal labels, a tick
    per act, and the active tick filling as the act runs. */
 .hm-rail {
@@ -1292,7 +1292,7 @@ body:has(.hm-stage[data-hm-pinned='1']) .product-story-rail {
   50% { opacity: 1; transform: scale(1); }
 }
 
-/* Rest of the site — slides in from the right after SPEAR */
+/* Rest of the site - slides in from the right after SPEAR */
 body.hm-page {
   overflow-x: hidden;
 }
@@ -1447,7 +1447,7 @@ body.hm-page {
   }
 }
 
-/* Dark chrome — header lives over the pin */
+/* Dark chrome - header lives over the pin */
 body.hm-dark {
   --text: #f4f4f6;
   --text-muted: rgba(244, 244, 246, 0.62);
@@ -1471,6 +1471,15 @@ body.hm-dark {
     background 0.55s ease;
 }
 
+.hm-page .nav__link--cta {
+  transition:
+    background-color 220ms cubic-bezier(0.23, 1, 0.32, 1),
+    color 220ms cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 220ms cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 220ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 220ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
 body.hm-dark .header {
   background: rgba(10, 10, 13, 0.72);
   border-bottom-color: rgba(255, 255, 255, 0.08);
@@ -1485,6 +1494,11 @@ body.hm-dark .nav__link--cta {
   background: rgba(255, 255, 255, 0.94);
   color: #0a0a0c;
   border-color: rgba(255, 255, 255, 0.3);
+}
+body.hm-dark .nav__link--cta:hover {
+  background: #fff;
+  color: #0a0a0c;
+  transform: translateY(-1px);
 }
 body.hm-dark .nav__dropdown-menu {
   background: rgba(14, 14, 17, 0.9);
@@ -1522,7 +1536,7 @@ body.hm-dark .hm-stage__shadow { opacity: 0 !important; }
     --dy: 1.25rem;
   }
   /* No room for a leader to travel on a phone, and the rows would sit under
-     the object rather than beside it — so the plate becomes a plain two-up
+     the object rather than beside it - so the plate becomes a plain two-up
      strip and the leaders are dropped rather than drawn into nothing. */
   .hm-stage[data-hm-mode='live'] .hm-plate {
     top: clamp(5rem, 11vh, 7.5rem);
@@ -1720,7 +1734,7 @@ body.hm-dark .hm-stage__shadow { opacity: 0 !important; }
   transform: translateY(-50%);
 }
 
-/* CAD library jump — drawing sheet, not the Ukraine map */
+/* CAD library jump - drawing sheet, not the Ukraine map */
 .ttm-cad {
   position: fixed;
   inset: 0;
@@ -1827,7 +1841,7 @@ body.hm-dark .hm-stage__shadow { opacity: 0 !important; }
   .hm-stage__boot-dot { animation: none; }
 }
 
-/* ===== Act-themed chapters — Forge OS downward ===== */
+/* ===== Act-themed chapters - Forge OS downward ===== */
 
 .hm-chapters {
   counter-reset: hm-chapter;
@@ -1979,7 +1993,7 @@ body.hm-dark .hm-stage__shadow { opacity: 0 !important; }
   transform: translate3d(calc((1 - var(--card-in)) * 1rem), calc((1 - var(--card-in)) * 1.75rem), 0) rotate(-2deg);
 }
 
-/* Chapter rail — left side, act chrome */
+/* Chapter rail - left side, act chrome */
 .hm-chapter-rail {
   position: fixed;
   top: 50%;
@@ -2097,7 +2111,7 @@ body:has(.hm-stage[data-hm-pinned='1']) .hm-chapter-rail {
    from the real gap between the wordmark and the nav, because a fixed offset
    landed left of the logo on wide viewports.
 
-   It has to be dragged. A click does nothing — pulling the systems grid down
+   It has to be dragged. A click does nothing - pulling the systems grid down
    should feel like pulling it. Keyboard activation still works. */
 .hm-pull {
   --pull-w: 2.6rem;
@@ -2147,12 +2161,12 @@ body.hm-dark .hm-pull {
 }
 body.hm-dark .hm-pull__logo { filter: invert(1); }
 
-/* The systems grid itself is what comes down — the real section, lifted out of
+/* The systems grid itself is what comes down - the real section, lifted out of
    flow for the duration of the pull and dropped back into it on release, so
    there is nothing to duplicate and nothing to re-sync. */
 /* Has to out-specify `.hm-stage[data-hm-mode='live'] ~ .hm-rest`, which is
    three class-level selectors and was still winning transform, margin-top and
-   z-index — the section stayed parked 100vh up and translated sideways. */
+   z-index - the section stayed parked 100vh up and translated sideways. */
 body.hm-page .hm-rest.hm-rest--pull {
   position: fixed;
   inset: 0;

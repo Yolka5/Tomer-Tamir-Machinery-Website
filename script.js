@@ -33,7 +33,7 @@
      which is what made scroll-linked motion (the hero pin, parallax) feel
      stepped/clanky no matter how much easing was layered on top of it.
      This intercepts wheel input, feeds it into a virtual target, and eases
-     the real scroll position toward that target every frame — so every
+     the real scroll position toward that target every frame - so every
      "scroll" event the rest of the page reacts to already arrives smooth.
      Keyboard, scrollbar-drag, and touch scrolling are left native; touch
      already has its own momentum and doesn't need this. */
@@ -57,7 +57,7 @@
     }
 
     /* Custom wheel easing is for the pinned hero only. Past merch, native
-       scroll must take over — the low EASE factor reads as lag on long pages. */
+       scroll must take over - the low EASE factor reads as lag on long pages. */
     function pastMerch() {
       var merch = document.getElementById('merch');
       if (!merch) return false;
@@ -83,7 +83,7 @@
       return false;
     }
 
-    /* behavior:'instant' is required here — html has scroll-behavior:smooth
+    /* behavior:'instant' is required here - html has scroll-behavior:smooth
        for anchor-link jumps, which would otherwise make the browser layer
        its own smoothing on top of every per-frame position we set,
        fighting our easing and making the motion arrive late/erratic. */
@@ -164,29 +164,63 @@
 
   if (navToggle) navToggle.addEventListener('click', toggleMenu);
 
-  document.querySelectorAll('.nav__dropdown-toggle').forEach(function (btn) {
+  var hoverNav = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+  function setDropdownOpen(dropdown, open) {
+    if (!dropdown) return;
+    dropdown.classList.toggle('is-open', !!open);
+    var toggle = dropdown.querySelector('.nav__dropdown-toggle');
+    if (toggle) toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
+  function closeAllDropdowns(except) {
+    document.querySelectorAll('.nav__dropdown').forEach(function (d) {
+      if (d !== except) setDropdownOpen(d, false);
+    });
+  }
+
+  document.querySelectorAll('.nav__dropdown').forEach(function (dropdown) {
+    var btn = dropdown.querySelector('.nav__dropdown-toggle');
+    var closeTimer = null;
+
+    function cancelClose() {
+      if (closeTimer) {
+        clearTimeout(closeTimer);
+        closeTimer = null;
+      }
+    }
+
+    dropdown.addEventListener('mouseenter', function () {
+      if (!hoverNav.matches) return;
+      cancelClose();
+      closeAllDropdowns(dropdown);
+      setDropdownOpen(dropdown, true);
+    });
+
+    dropdown.addEventListener('mouseleave', function () {
+      if (!hoverNav.matches) return;
+      cancelClose();
+      closeTimer = setTimeout(function () {
+        setDropdownOpen(dropdown, false);
+      }, 140);
+    });
+
+    if (!btn) return;
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
-      var dropdown = this.closest('.nav__dropdown');
+      if (hoverNav.matches) return;
       var isOpen = dropdown.classList.contains('is-open');
-      document.querySelectorAll('.nav__dropdown').forEach(function (d) {
-        d.classList.remove('is-open');
-        var t = d.querySelector('.nav__dropdown-toggle');
-        if (t) t.setAttribute('aria-expanded', 'false');
-      });
-      if (!isOpen) {
-        dropdown.classList.add('is-open');
-        this.setAttribute('aria-expanded', 'true');
-      }
+      closeAllDropdowns();
+      if (!isOpen) setDropdownOpen(dropdown, true);
     });
   });
 
   document.addEventListener('click', function () {
-    document.querySelectorAll('.nav__dropdown.is-open').forEach(function (d) {
-      d.classList.remove('is-open');
-      var t = d.querySelector('.nav__dropdown-toggle');
-      if (t) t.setAttribute('aria-expanded', 'false');
-    });
+    closeAllDropdowns();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeAllDropdowns();
   });
 
   document.querySelectorAll('.nav__dropdown-menu').forEach(function (menu) {
@@ -247,7 +281,7 @@
     el.style.setProperty('--delay', (i * 0.1) + 's');
   });
 
-  /* 3D viewer — model-viewer loads only after the user clicks */
+  /* 3D viewer - model-viewer loads only after the user clicks */
   var modelViewerScriptPromise = null;
 
   function loadModelViewerScript() {
@@ -275,7 +309,7 @@
       loadModelViewerScript().then(function () {
         var mv = document.createElement('model-viewer');
         mv.setAttribute('src', shell.dataset.model);
-        mv.setAttribute('alt', (shell.dataset.name || '3D model') + ' — interactive 3D view');
+        mv.setAttribute('alt', (shell.dataset.name || '3D model') + ' - interactive 3D view');
         mv.setAttribute('camera-controls', '');
         mv.setAttribute('auto-rotate', '');
         mv.setAttribute('auto-rotate-delay', '1500');
@@ -290,12 +324,12 @@
           if (overlay) overlay.remove();
         });
         mv.addEventListener('error', function () {
-          overlay.innerHTML = '<span class="viewer3d__loading">Failed to load the model — try refreshing.</span>';
+          overlay.innerHTML = '<span class="viewer3d__loading">Failed to load the model - try refreshing.</span>';
         });
 
         shell.appendChild(mv);
       }).catch(function () {
-        overlay.innerHTML = '<span class="viewer3d__loading">Failed to load the 3D viewer — check your connection.</span>';
+        overlay.innerHTML = '<span class="viewer3d__loading">Failed to load the 3D viewer - check your connection.</span>';
       });
     }, { once: true });
   });
@@ -308,25 +342,157 @@
     el.style.setProperty('--delay', (i * 0.1) + 's');
   });
 
-  document.querySelectorAll('.about__stat-num').forEach(function (el) {
-    const counterObserver = new IntersectionObserver(function (entries) {
+  (function initAboutFilm() {
+    var videos = document.querySelectorAll('.about__video');
+    if (!videos.length) return;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    videos.forEach(function (video) {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.setAttribute('muted', '');
+      video.volume = 0;
+      if (reduce) {
+        video.pause();
+        video.removeAttribute('autoplay');
+      }
+    });
+    if (reduce) return;
+    var stacked = document.querySelector('[data-film-stack]');
+    var standalone = [];
+    videos.forEach(function (video) {
+      if (stacked && stacked.contains(video)) return;
+      standalone.push(video);
+    });
+    if (!standalone.length || typeof IntersectionObserver === 'undefined') {
+      standalone.forEach(function (video) { video.play().catch(function () {}); });
+      return;
+    }
+    var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        const target = parseInt(el.getAttribute('data-target'), 10);
-        const start = performance.now();
-        function step(now) {
-          const progress = Math.min((now - start) / 1500, 1);
-          const ease = 1 - Math.pow(1 - progress, 3);
-          el.textContent = Math.round(target * ease);
-          if (progress < 1) requestAnimationFrame(step);
-          else el.textContent = target;
-        }
-        requestAnimationFrame(step);
-        counterObserver.unobserve(el);
+        if (entry.isIntersecting) entry.target.play().catch(function () {});
+        else entry.target.pause();
       });
-    }, { threshold: 0.5 });
-    counterObserver.observe(el);
-  });
+    }, { threshold: 0.2 });
+    standalone.forEach(function (video) { observer.observe(video); });
+  })();
+
+  (function initFilmStack() {
+    var stack = document.querySelector('[data-film-stack]');
+    if (!stack) return;
+    var track = stack.querySelector('.film-stack__track') || stack;
+    var baseVid = stack.querySelector('.film-stack__base .about__video');
+    var sheetVid = stack.querySelector('#fit .about__video');
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var active = false;
+    var ticking = false;
+
+    function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+    function outCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+    function rawProgress() {
+      var rect = track.getBoundingClientRect();
+      var travel = Math.max(1, track.offsetHeight - window.innerHeight);
+      return clamp01(-rect.top / travel);
+    }
+
+    function coverSpan(t, start, end) {
+      if (t <= start) return 0;
+      if (t >= end) return 1;
+      return outCubic((t - start) / (end - start));
+    }
+
+    function coversFromProgress(t) {
+      return {
+        a: coverSpan(t, 0.08, 0.36),
+        b: coverSpan(t, 0.50, 0.78)
+      };
+    }
+
+    function syncVideos(coverA, coverB) {
+      if (!baseVid || !sheetVid || reduce.matches) return;
+      if (coverB > 0.45) {
+        baseVid.pause();
+        sheetVid.pause();
+        return;
+      }
+      if (coverA < 0.42) {
+        baseVid.play().catch(function () {});
+        sheetVid.pause();
+      } else {
+        sheetVid.play().catch(function () {});
+        if (coverA > 0.58) baseVid.pause();
+      }
+    }
+
+    var pin = stack.querySelector('.film-stack__pin');
+
+    function paint() {
+      if (pin) pin.scrollTop = 0;
+      if (reduce.matches) {
+        stack.style.setProperty('--cover-a', '1');
+        stack.style.setProperty('--cover-b', '1');
+        return;
+      }
+      var covers = coversFromProgress(rawProgress());
+      stack.style.setProperty('--cover-a', covers.a.toFixed(4));
+      stack.style.setProperty('--cover-b', covers.b.toFixed(4));
+      if (covers.b >= 0.995) stack.classList.add('film-stack--settled');
+      else stack.classList.remove('film-stack--settled');
+      if (active) syncVideos(covers.a, covers.b);
+    }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        ticking = false;
+        paint();
+      });
+    }
+
+    function scrollToPlate(which) {
+      var rect = track.getBoundingClientRect();
+      var travel = Math.max(0, track.offsetHeight - window.innerHeight);
+      var y = window.scrollY + rect.top;
+      if (which === 'fit' || which === 'sheet') y += travel * 0.43;
+      else if (which === 'field') y += travel;
+      if (smoothScrollTo && !reduce.matches) smoothScrollTo(y);
+      else window.scrollTo({ top: y, left: 0, behavior: reduce.matches ? 'auto' : 'smooth' });
+    }
+
+    if (sheetVid) sheetVid.pause();
+    if (pin) pin.scrollTop = 0;
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', paint, { passive: true });
+
+    if (typeof IntersectionObserver !== 'undefined') {
+      new IntersectionObserver(function (entries) {
+        active = entries[0].isIntersecting;
+        if (active) paint();
+        else {
+          if (baseVid) baseVid.pause();
+          if (sheetVid) sheetVid.pause();
+        }
+      }, { rootMargin: '20% 0px' }).observe(track);
+    } else {
+      active = true;
+      paint();
+    }
+
+    window.__ttmFilmStackScroll = scrollToPlate;
+    paint();
+
+    function applyHash() {
+      var hash = (location.hash || '').replace('#', '');
+      if (hash === 'fit') scrollToPlate('fit');
+      else if (hash === 'field' || hash === 'workshop') scrollToPlate('field');
+      else return;
+      paint();
+    }
+    if (document.readyState === 'complete') applyHash();
+    else window.addEventListener('load', applyHash);
+  })();
 
   document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
     anchor.addEventListener('click', function (e) {
@@ -335,6 +501,17 @@
       const target = document.querySelector(href);
       if (target) {
         e.preventDefault();
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var id = href.slice(1);
+        if (window.__ttmFilmStackScroll && !reduce && (id === 'about' || id === 'fit' || id === 'field' || id === 'workshop')) {
+          window.__ttmFilmStackScroll(id === 'about' ? 'base' : (id === 'fit' ? 'fit' : 'field'));
+          return;
+        }
+        var stack = target.closest && target.closest('[data-film-stack]');
+        if (stack && window.__ttmFilmStackScroll && !reduce) {
+          window.__ttmFilmStackScroll(target.classList.contains('film-stack__sheet--field') ? 'field' : (target.classList.contains('film-stack__sheet') ? 'fit' : 'base'));
+          return;
+        }
         if (smoothScrollTo) {
           smoothScrollTo(target.getBoundingClientRect().top + window.scrollY);
         } else {
@@ -349,7 +526,7 @@
      element" card with ghost depth-layers behind it, tilts with the mouse,
      then swings side to side as two separate text beats stagger in and
      hand off past it. This never touches the slide fade/cycle logic below
-     — it only transforms the new wrapper elements around the untouched
+     - it only transforms the new wrapper elements around the untouched
      slider. */
   (function initHeroPin() {
     var section = document.getElementById('hero');
@@ -379,14 +556,14 @@
     var HOLD2_END = 0.48;
     var MOVE2_END = 0.68;
 
-    /* Text handoff — a posT boundary (0=center, 1=text#1, 2=text#2) where
+    /* Text handoff - a posT boundary (0=center, 1=text#1, 2=text#2) where
        reveal #1 finishes clearing out and reveal #2 starts staggering in.
        Splitting it here (rather than 50/50) gives #1 a quick, snappy exit
        and gives #2 the bulk of the room for its own word cascade. */
     var SPLIT = 1.25;
     var REVEAL_DURATION = 0.34;
 
-    /* Cushioned "physics" state — the card's rendered scale/position/base
+    /* Cushioned "physics" state - the card's rendered scale/position/base
        rotation each chase their own target with independent decay, instead
        of being a rigid function of the (already-eased) scroll value. That
        extra stage of lag is what makes the card feel like it has weight
@@ -436,7 +613,7 @@
     }
 
     /* Gate #1: rises 0→1 as the card arrives at position 1 (posT 0→1),
-       then falls back to 0 quickly once it leaves (posT 1→SPLIT) — fully
+       then falls back to 0 quickly once it leaves (posT 1→SPLIT) - fully
        clear before reveal #2 is allowed to start. */
     function computeGate1(posT) {
       if (posT <= 1) return posT;
@@ -463,7 +640,7 @@
 
       var vw = window.innerWidth, vh = window.innerHeight;
       /* Scale-like presence: card stays the hero of the composition once
-         shrunk — roughly half the viewport, not a small inset thumbnail. */
+         shrunk - roughly half the viewport, not a small inset thumbnail. */
       var targetW = Math.min(vw * 0.54, 780);
       var targetH = Math.min(vh * 0.72, 780);
       var scaleTarget = Math.min(targetW / vw, targetH / vh);
@@ -484,14 +661,14 @@
       var tiltIntensity = shrinkT;
 
       /* Mouse contribution rides on top of the cushioned base rotation,
-         already smoothed via mouseSmoothX/Y — no extra lag stacked on
+         already smoothed via mouseSmoothX/Y - no extra lag stacked on
          top, so the tilt still tracks the cursor directly. */
       var rotY = curBaseRotY + mouseSmoothX * 8 * tiltIntensity;
       var rotX = clamp(-mouseSmoothY * 5 * tiltIntensity, -8, 8);
 
       var radius = lerp(0, 28, shrinkT);
 
-      /* When the WebGL stage is up it owns the card entirely — same timeline
+      /* When the WebGL stage is up it owns the card entirely - same timeline
          values, but resolved by a projection matrix against layers at real Z
          depths instead of the faked 2D offsets below. hero3d.js keeps its own
          rAF running, so it stays animated after scroll settles. */
@@ -523,7 +700,7 @@
 
       /* Depth is faked with plain 2D offsets driven by the mouse (bigger
          multiplier = "further back") rather than real translateZ inside a
-         preserve-3d group — nesting real 3D depth-sorted, backdrop-filtered
+         preserve-3d group - nesting real 3D depth-sorted, backdrop-filtered
          siblings under a rotating card is unreliable across engines (it
          can flip which layer paints on top past certain tilt angles). This
          reads the same to the eye and never breaks.
@@ -562,7 +739,7 @@
     }
 
     /* Intro copy + the two scroll-in text blocks. Shared by both the DOM and
-       WebGL paths — only the card itself differs between them. */
+       WebGL paths - only the card itself differs between them. */
     function renderChrome(targets) {
       var introOpacity = clamp(1 - smooth / (SHRINK_END * 0.72), 0, 1);
       intro.style.opacity = introOpacity.toFixed(3);
@@ -674,6 +851,7 @@
     var ring = document.getElementById('hero-orbit-ring');
     var nameEl = document.getElementById('hero-orbit-name');
     if (!orbit || !ring || !nameEl) return;
+    if (orbit.closest('[hidden], .hm-parked')) return;
 
     var tiles = Array.prototype.slice.call(ring.querySelectorAll('.hero-orbit__tile'));
     if (!tiles.length) return;
@@ -689,7 +867,7 @@
     var lastTs = 0;
     var spin = 0;
     var spinning = true;
-    /* One full revolution ~90s — Scale-slow, readable while browsing */
+    /* One full revolution ~90s - Scale-slow, readable while browsing */
     var SPIN_RATE = (Math.PI * 2) / 90;
     var mouseX = 0;
     var mouseY = 0;
@@ -936,6 +1114,65 @@
     if (parallaxOn) requestTick();
   })();
 
+  /* Beaver field strip - a short parallax window, not a full-portrait pan. */
+  (function initFieldStripParallax() {
+    var section = document.querySelector('.forge-strip--field');
+    var photo = section && section.querySelector('.forge-strip__photo');
+    if (!section || !photo) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var target = 0;
+    var current = 0;
+    var ticking = false;
+    var active = false;
+
+    function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+    function computeTarget() {
+      var rect = section.getBoundingClientRect();
+      var view = window.innerHeight || 1;
+      var travel = view + rect.height;
+      if (travel <= 0) return 0;
+      var progress = clamp((view - rect.top) / travel, 0, 1);
+      var range = Math.max(80, (photo.offsetHeight - section.offsetHeight) * 0.42);
+      return (0.5 - progress) * range;
+    }
+
+    function frameTick() {
+      ticking = false;
+      if (!active) return;
+      target = computeTarget();
+      current += (target - current) * 0.16;
+      photo.style.transform = 'translate3d(0,' + current.toFixed(1) + 'px,0)';
+      if (Math.abs(target - current) > 0.35) requestTick();
+    }
+
+    function requestTick() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(frameTick);
+      }
+    }
+
+    if (typeof IntersectionObserver !== 'undefined') {
+      new IntersectionObserver(function (entries) {
+        active = entries[0].isIntersecting;
+        if (active) requestTick();
+        else ticking = false;
+      }, { rootMargin: '35% 0px' }).observe(section);
+    } else {
+      active = true;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (active) requestTick();
+    }, { passive: true });
+    window.addEventListener('resize', function () {
+      if (active) requestTick();
+    }, { passive: true });
+    requestTick();
+  })();
+
   var heroSlides = document.querySelectorAll('.hero__slide');
   var heroDots = document.querySelectorAll('.hero__dot');
   var slideIndex = 0;
@@ -1033,30 +1270,6 @@
     });
   });
 
-  var backToTop = document.getElementById('back-to-top');
-  if (backToTop) {
-    function updateBackToTop() {
-      if (window.scrollY > 400) {
-        backToTop.removeAttribute('hidden');
-        backToTop.classList.add('is-visible');
-      } else {
-        backToTop.classList.remove('is-visible');
-        backToTop.setAttribute('hidden', '');
-      }
-    }
-    window.addEventListener('scroll', updateBackToTop, { passive: true });
-    updateBackToTop();
-    backToTop.addEventListener('click', function () {
-      if (smoothScrollTo) {
-        smoothScrollTo(0);
-        return;
-      }
-      var hero = document.getElementById('hero');
-      if (hero) hero.scrollIntoView({ behavior: 'smooth' });
-      else window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  }
-
   /* Scroll progress bar */
   var scrollProgress = document.getElementById('scroll-progress');
   var scrollBar = scrollProgress && scrollProgress.querySelector('.scroll-progress__bar');
@@ -1104,7 +1317,7 @@
         role: 'SOF assault · near-peer CQB · Level 4 armor defeat',
         magazine: 'DPMS / SR-25 steel pattern',
         feed: 'SR-25 detachable box magazine',
-        barrel: 'TBD — CAD phase (5.56-class envelope target)',
+        barrel: 'TBD - CAD phase (5.56-class envelope target)',
         twist: 'TBD (target)',
         oal: '5.56-class footprint · integrated collapsible stock (target)',
         weight: '< 7.5 lb unloaded (target)',
@@ -1118,7 +1331,7 @@
         controls: 'Fully ambidextrous',
         stock: 'Integrated collapsible',
         suppressor: 'Tucked geometry · QD ready',
-        notes: 'Original design from scratch — first TTM original platform. 6.8 TVCM polymer casing: 30% lighter than brass, 65,000 PSI, Level 4 defeat at 500 m in a 5.56-class footprint. Two-piece cylindrical BCG in Maraging Stainless + Carpenter 158 for zero carrier tilt. All specs are engineering targets.',
+        notes: 'Original design from scratch - first TTM original platform. 6.8 TVCM polymer casing: 30% lighter than brass, 65,000 PSI, Level 4 defeat at 500 m in a 5.56-class footprint. Two-piece cylindrical BCG in Maraging Stainless + Carpenter 158 for zero carrier tilt. All specs are engineering targets.',
         manufacturing: 'TTM in-house · original design',
         lead: 'Yoni',
         provisional: true
@@ -1150,7 +1363,7 @@
         controls: 'Ambidextrous core controls',
         stock: 'Folding / collapsible',
         suppressor: 'SLX QD suppressor ready',
-        notes: 'Hybrid-case 6.8×51 runs much higher pressure than 5.56/7.62 NATO — heavier rifle, fewer rounds carried, longer effective reach.',
+        notes: 'Hybrid-case 6.8×51 runs much higher pressure than 5.56/7.62 NATO - heavier rifle, fewer rounds carried, longer effective reach.',
         manufacturing: '100% TTM in-house',
         lead: 'Yoni',
         provisional: false
@@ -1278,7 +1491,7 @@
         controls: 'Right-biased service layout',
         stock: 'Side-folding',
         suppressor: 'Integral muzzle brake / device',
-        notes: 'Two-round hyperburst lands before full recoil is felt — high hit probability, high mechanical complexity and parts count.',
+        notes: 'Two-round hyperburst lands before full recoil is felt - high hit probability, high mechanical complexity and parts count.',
         manufacturing: '100% TTM in-house',
         lead: 'TTM manufacturing cell',
         provisional: false
@@ -1310,7 +1523,7 @@
         controls: 'Bolt · ambi safety · mag catch',
         stock: 'Folding adjustable MSR chassis',
         suppressor: '5/8×24 thread ready',
-        notes: 'Marksman/precision role — not a volume-of-fire rifle. Best ballistic coefficient and wind hold of the small-arms set.',
+        notes: 'Marksman/precision role - not a volume-of-fire rifle. Best ballistic coefficient and wind hold of the small-arms set.',
         manufacturing: '100% TTM in-house',
         lead: 'TTM manufacturing cell',
         provisional: false
@@ -1670,7 +1883,7 @@
         picks: [
           { id: 'm4a1', badge: 'Primary', why: 'Lightest full-size carbine in the set, STANAG logistics, proven CQB ergonomics.' },
           { id: 'mp7', badge: 'Alternate', why: 'Smaller footprint and soft-armor PDW performance when a rifle is too long.' },
-          { id: 'an94', badge: 'Alternate', why: 'Hyperburst puts two rounds on target before full recoil builds — high hit probability up close.' }
+          { id: 'an94', badge: 'Alternate', why: 'Hyperburst puts two rounds on target before full recoil builds - high hit probability up close.' }
         ],
         compare: ['m4a1', 'mp7']
       },
@@ -1681,9 +1894,9 @@
         title: 'Vehicle crew & security',
         desc: 'Space and carry weight dominate. You want something that leaves the cab cleanly and still defeats soft armor at short range.',
         picks: [
-          { id: 'mp7', badge: 'Primary', why: 'PDW envelope with retractable stock — built for crews and confined mounts.' },
+          { id: 'mp7', badge: 'Primary', why: 'PDW envelope with retractable stock - built for crews and confined mounts.' },
           { id: 'm4a1', badge: 'Alternate', why: 'When you need rifle ballistics after dismount, still compact enough with a collapsed stock.' },
-          { id: 'beaver', badge: 'Watch', why: 'Target: 5.56-class footprint with 6.8 TVCM Level 4 defeat — if specs land, the strongest vehicle-to-ground transition in the catalog. Provisional.' }
+          { id: 'beaver', badge: 'Watch', why: 'Target: 5.56-class footprint with 6.8 TVCM Level 4 defeat - if specs land, the strongest vehicle-to-ground transition in the catalog. Provisional.' }
         ],
         compare: ['mp7', 'm4a1']
       },
@@ -1696,7 +1909,7 @@
         picks: [
           { id: 'm4a1', badge: 'Primary', why: 'Best weight-to-capability trade and deepest NATO mag/ammo base for general issue.' },
           { id: 'mk47', badge: 'Alternate', why: 'AR controls with 7.62×39 punch when intermediate barrier performance matters more than 5.56.' },
-          { id: 'beaver', badge: 'Watch', why: '6.8 TVCM polymer is 30% lighter than brass and defeats Level 4 at 500 m — if specs land, the definitive near-peer patrol rifle. Provisional.' }
+          { id: 'beaver', badge: 'Watch', why: '6.8 TVCM polymer is 30% lighter than brass and defeats Level 4 at 500 m - if specs land, the definitive near-peer patrol rifle. Provisional.' }
         ],
         compare: ['m4a1', 'mk47']
       },
@@ -1707,7 +1920,7 @@
         title: 'Designated marksman / long range',
         desc: 'Prioritize ballistic coefficient, free-floated barrels, and first-round hits. Volume of fire is not the job.',
         picks: [
-          { id: 'ruger', badge: 'Primary', why: 'Bolt-action precision chassis — best wind hold and group potential in the catalog.' },
+          { id: 'ruger', badge: 'Primary', why: 'Bolt-action precision chassis - best wind hold and group potential in the catalog.' },
           { id: 'sigspear', badge: 'Alternate', why: 'Semi-auto 6.8×51 for extended reach when you still need a fighting rifle cadence.' },
           { id: 'an94', badge: 'Situational', why: 'Hyperburst aids rapid pair hits at rifle distances, not a true DMR substitute.' }
         ],
@@ -1718,11 +1931,11 @@
         name: 'SOF assault',
         blurb: 'Suppressed, compact, Level 4 armor defeat at 500 m.',
         title: 'SOF assault / near-peer urban warfare',
-        desc: 'Modern near-peer engagements demand compactness, suppressed operation, and the ability to defeat Level 4 body armor at realistic infantry ranges — simultaneously. This is the mission the Beaver was designed for.',
+        desc: 'Modern near-peer engagements demand compactness, suppressed operation, and the ability to defeat Level 4 body armor at realistic infantry ranges - simultaneously. This is the mission the Beaver was designed for.',
         picks: [
-          { id: 'beaver', badge: 'Primary', why: 'Purpose-built: 6.8 TVCM polymer in a 5.56-class footprint — defeats Level 4 at 500 m, 30% lighter ammo, zero carrier tilt, fully tucked suppressor geometry. The only platform in the catalog designed specifically for this mission. Provisional.' },
+          { id: 'beaver', badge: 'Primary', why: 'Purpose-built: 6.8 TVCM polymer in a 5.56-class footprint - defeats Level 4 at 500 m, 30% lighter ammo, zero carrier tilt, fully tucked suppressor geometry. The only platform in the catalog designed specifically for this mission. Provisional.' },
           { id: 'sigspear', badge: 'Alternate', why: '.277 Fury / 6.8×51 has more reach and terminal performance, at the cost of a heavier, larger platform not optimized for suppressed CQB.' },
-          { id: 'm4a1', badge: 'Fallback', why: '5.56 cannot defeat Level 4 — only viable if body armor defeat is not a requirement.' }
+          { id: 'm4a1', badge: 'Fallback', why: '5.56 cannot defeat Level 4 - only viable if body armor defeat is not a requirement.' }
         ],
         compare: ['beaver', 'sigspear']
       },
@@ -1733,9 +1946,9 @@
         title: 'AK-theater logistics',
         desc: 'Keep the supply chain you already have. Choose platforms that run AK magazines and 7.62×39 without forcing a parallel ammo pipeline.',
         picks: [
-          { id: 'mk47', badge: 'Primary', why: 'Production-ready AR ergonomics on the same AK magazine and cartridge logistics — the right tool for this specific constraint.' },
-          { id: 'm4a1', badge: 'Fallback', why: 'Only if NATO 5.56 is already in the pipe — otherwise you split the supply chain.' },
-          { id: 'beaver', badge: 'Wrong fit', why: 'The Beaver now uses 6.8 TVCM / SR-25 mags — it no longer fits AK-theater logistics. See SOF Assault for its actual mission profile.' }
+          { id: 'mk47', badge: 'Primary', why: 'Production-ready AR ergonomics on the same AK magazine and cartridge logistics - the right tool for this specific constraint.' },
+          { id: 'm4a1', badge: 'Fallback', why: 'Only if NATO 5.56 is already in the pipe - otherwise you split the supply chain.' },
+          { id: 'beaver', badge: 'Wrong fit', why: 'The Beaver now uses 6.8 TVCM / SR-25 mags - it no longer fits AK-theater logistics. See SOF Assault for its actual mission profile.' }
         ],
         compare: ['mk47', 'm4a1']
       },
@@ -1746,7 +1959,7 @@
         title: 'Extended reach / barrier defeat',
         desc: 'You need energy and retained velocity past typical 5.56 engagement bands. Accept heavier rifles and fewer rounds carried.',
         picks: [
-          { id: 'sigspear', badge: 'Primary', why: '.277 Fury / 6.8×51 was built for this — high pressure, long reach, SR-25 feed.' },
+          { id: 'sigspear', badge: 'Primary', why: '.277 Fury / 6.8×51 was built for this - high pressure, long reach, SR-25 feed.' },
           { id: 'ruger', badge: 'Alternate', why: 'When the shot is deliberate and distance is the only problem, bolt-action 6.5 CM wins.' },
           { id: 'mk47', badge: 'Alternate', why: '7.62×39 is not 6.8, but it out-barriers 5.56 inside typical carbine ranges.' }
         ],

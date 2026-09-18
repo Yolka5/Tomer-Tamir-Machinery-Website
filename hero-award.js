@@ -1,6 +1,6 @@
-/* ===== AWARD-6 — award polish layer =====
+/* ===== AWARD-6 - award polish layer =====
    Revert map (everything introduced by the "add all 6" prompt):
-     - This file (hero-award.js) — delete entirely
+     - This file (hero-award.js) - delete entirely
      - index.html: remove hero-award.js script, sound toggle, callout markup,
        and the award-product-first class on <html>
      - styles.css: delete the block between AWARD-6 BEGIN / AWARD-6 END
@@ -204,7 +204,7 @@
     master.gain.linearRampToValueAtTime(1, audioCtx.currentTime + 0.6);
   }
 
-  /* Short metallic click on slide change — only while unmuted. */
+  /* Short metallic click on slide change - only while unmuted. */
   function playSlideClick() {
     if (!unmuted || !ensureAudio()) return;
     if (audioCtx.state === 'suspended') audioCtx.resume();
@@ -231,7 +231,7 @@
     soundBtn.addEventListener('click', function () {
       setUnmuted(!unmuted);
     });
-    /* Reflect stored preference in the button, but don't autoplay — browsers
+    /* Reflect stored preference in the button, but don't autoplay - browsers
        block that; first click (or a prior unlock) is what starts audio. */
     soundBtn.classList.toggle('is-on', unmuted);
     soundBtn.setAttribute('aria-pressed', unmuted ? 'true' : 'false');

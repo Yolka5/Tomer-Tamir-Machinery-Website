@@ -288,7 +288,7 @@ if (!isConfigured()) {
     if (greetSub) {
       greetSub.textContent = new Date().toLocaleDateString(undefined, {
         weekday: 'long', month: 'long', day: 'numeric'
-      }) + ' — here\'s the state of the floor.';
+      }) + ' - here\'s the state of the floor.';
     }
   }
 

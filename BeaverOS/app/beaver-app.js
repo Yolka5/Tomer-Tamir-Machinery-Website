@@ -75,14 +75,14 @@ function setGreeting(name) {
   if (greetSub) {
     greetSub.textContent = new Date().toLocaleDateString(undefined, {
       weekday: 'long', month: 'long', day: 'numeric'
-    }) + ' — your world at a glance.';
+    }) + ' - your world at a glance.';
   }
 }
 
 if (!isConfigured()) {
   authView.hidden = false;
   googleBtn.disabled = true;
-  authError.textContent = 'Firebase is not configured — check firebase-config.js in the site root.';
+  authError.textContent = 'Firebase is not configured - check firebase-config.js in the site root.';
   authError.hidden = false;
 } else {
   const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');

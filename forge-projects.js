@@ -1,4 +1,4 @@
-/* TTM FORGE OS — Projects module (shared) + My Space (personal, per-user) */
+/* TTM FORGE OS - Projects module (shared) + My Space (personal, per-user) */
 
 let db, user, toast, logActivity;
 let fs;

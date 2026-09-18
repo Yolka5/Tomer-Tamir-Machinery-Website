@@ -1,4 +1,4 @@
-/* ===== BeaverOS — additions on top of forge.css ===== */
+/* ===== BeaverOS - additions on top of forge.css ===== */
 
 .beaver-sidebar-divider {
   height: 1px;
@@ -232,7 +232,7 @@
 .beaver-chat__form input::placeholder { color: #6b6b73; }
 
 /* ============================================================
-   BeaverOS v2 — futuristic layer
+   BeaverOS v2 - futuristic layer
    ============================================================ */
 
 :root {
@@ -620,7 +620,7 @@
 }
 
 /* ============================================================
-   BeaverOS v3 — monochrome liquid glass
+   BeaverOS v3 - monochrome liquid glass
    (overrides the v2 color layer: black, white, and silver only)
    ============================================================ */
 
@@ -811,7 +811,7 @@
 }
 
 /* ============================================================
-   Marcus — premium interface
+   Marcus - premium interface
    ============================================================ */
 
 .marcus-shell {

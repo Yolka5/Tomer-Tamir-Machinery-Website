@@ -1,5 +1,5 @@
 /* Field-band → T-90M: a black world map zooms Ukraine, then the product page.
-   Scoped for the same reason as cad-jump.js — see the note there. */
+   Scoped for the same reason as cad-jump.js - see the note there. */
 (function () {
   'use strict';
 

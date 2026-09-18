@@ -3,14 +3,14 @@
    the talking; each handoff is a different move so the page never repeats
    the same swap three times.
 
-   Act 0 — Beaver, black on white. Brand lockup.
-   Swap 0 — class change: rifle shears out, turret grows in, curtain down.
-   Act 1 — T-90M, white on black. Rangefinder HUD.
-   Swap 1 — collapse: turret recedes, MP7 punches through.
-   Act 2 — MP7, still dark. Length bar + rate.
-   Swap 2 — bench swap: a vertical clip plane hands MP7 to SPEAR, curtain up.
-   Act 3 — SIG Spear, black on white. Pressure gauge.
-   Outro — Spear holds; the rest of the site slides in from the right.
+   Act 0 - Beaver, black on white. Brand lockup.
+   Swap 0 - class change: rifle shears out, turret grows in, curtain down.
+   Act 1 - T-90M, white on black. Rangefinder HUD.
+   Swap 1 - collapse: turret recedes, MP7 punches through.
+   Act 2 - MP7, still dark. Length bar + rate.
+   Swap 2 - bench swap: a vertical clip plane hands MP7 to SPEAR, curtain up.
+   Act 3 - SIG Spear, black on white. Pressure gauge.
+   Outro - Spear holds; the rest of the site slides in from the right.
 
    Without this module the markup reads as four stacked editorials. */
 
@@ -138,7 +138,7 @@ function frameAt(p, introT, typeIntroT) {
   };
 
   if (ph.kind === 'act' && ph.act === 0) {
-    /* This read `smooth(span(p, 0.05, 0.32))` — one argument, so span's
+    /* This read `smooth(span(p, 0.05, 0.32))` - one argument, so span's
        `b === a` branch fired on two undefineds and returned 1 every time,
        quietly pinning the gate open. Written correctly it also has to be
        measured against the act's own local progress. */
@@ -157,7 +157,7 @@ function frameAt(p, introT, typeIntroT) {
     f.railAct = 0;
     f.railQ = q * 0.34;
   } else if (ph.kind === 'blow') {
-    /* The rifle comes apart and stays apart — its own beat, not a handoff. */
+    /* The rifle comes apart and stays apart - its own beat, not a handoff. */
     f.types[0] = 1 - inCubic(span(q, 0.0, 0.26));
     f.teardown = smooth(q, 0.08, 0.55);
     f.railAct = 0;
@@ -417,7 +417,7 @@ const MODEL_SPECS = [
     url: 'models/mp7.glb',
     turns: 1.4,
     idle: 1.05,
-    /* No teardown on this one — it arrives and leaves on depth alone. */
+    /* No teardown on this one - it arrives and leaves on depth alone. */
     noExplode: true,
     view: {
       orient: [0, 0, -Math.PI / 2],
@@ -496,7 +496,7 @@ function retuneMaterial(material) {
   material.envMapIntensity = 1;
 
   /* Near-black CAD fills read as holes in the environment once they are
-     treated as metal — give them a dark phosphate albedo instead. */
+     treated as metal - give them a dark phosphate albedo instead. */
   if (luma < 0.05) {
     material.color.setRGB(0.2, 0.205, 0.22);
     luma = 0.205;
@@ -521,7 +521,7 @@ function retuneMaterial(material) {
 
 /* ===== Shell splitting =====
    The Beaver's receiver exports as a single mesh with the full-length top rail
-   welded into it as a second, disconnected shell — so "keep only the upper
+   welded into it as a second, disconnected shell - so "keep only the upper
    receiver" kept the rail too, and there was no second node to exclude.
 
    Connected components over the triangle graph separates them exactly: the
@@ -530,8 +530,8 @@ function retuneMaterial(material) {
    quantised position first, because a CAD tessellation duplicates vertices
    along shared edges and would otherwise shatter one solid into many islands.
 
-   The split geometries share the original's attribute buffers — only the index
-   is rebuilt — so this costs an index array, not a copy of the mesh. */
+   The split geometries share the original's attribute buffers - only the index
+   is rebuilt - so this costs an index array, not a copy of the mesh. */
 function splitShells(mesh) {
   const geo = mesh.geometry;
   const pos = geo && geo.attributes && geo.attributes.position;
@@ -589,7 +589,7 @@ function splitShells(mesh) {
     const g = new THREE.BufferGeometry();
     for (const key in geo.attributes) g.setAttribute(key, geo.attributes[key]);
     g.setIndex(new THREE.BufferAttribute(arr, 1));
-    /* Set explicitly — computeBoundingBox would measure the shared position
+    /* Set explicitly - computeBoundingBox would measure the shared position
        buffer and hand every island the whole mesh's bounds. */
     g.boundingBox = box;
     g.boundingSphere = box.getBoundingSphere(new THREE.Sphere());
@@ -767,7 +767,7 @@ function boot(root) {
     rig.pose.rotation.fromArray(view.pose);
   }
 
-  /* A real exploded view separates every part along its own assembly vector —
+  /* A real exploded view separates every part along its own assembly vector -
      the line from the centre of the assembly out through the part. Offsetting
      along one shared axis instead only spreads a rifle lengthwise and leaves
      anything stacked above or beside the bore sitting inside its neighbours.
@@ -810,7 +810,7 @@ function boot(root) {
          order things come apart so the assembly peels from one end. */
       const t = Math.max(-1, Math.min(1, (partCentre[axis] - centre[axis]) / half));
 
-      /* Both points into the parent's space, then subtract — transformDirection
+      /* Both points into the parent's space, then subtract - transformDirection
          would normalise and throw away the distance we need. */
       partAnchor.copy(centre);
       if (node.parent) {
@@ -820,7 +820,7 @@ function boot(root) {
       }
       const delta = partCentre.clone().sub(partAnchor);
 
-      /* Walk up for a name — GLTFLoader splits a multi-primitive mesh into
+      /* Walk up for a name - GLTFLoader splits a multi-primitive mesh into
          child meshes that inherit nothing but their parent's name. */
       let named = node;
       let label = '';
@@ -829,7 +829,7 @@ function boot(root) {
         named = named.parent;
       }
       /* GLTFLoader runs names through PropertyBinding.sanitizeNodeName, which
-         turns every space into an underscore — "Upper Reciever" arrives as
+         turns every space into an underscore - "Upper Reciever" arrives as
          "Upper_Reciever". Normalise separators before matching. */
       const clean = label.replace(/[\s_.\-]+/g, ' ').trim();
       const keep = !!(rig.spec.isolateKeep && rig.spec.isolateKeep.test(clean));
@@ -1019,7 +1019,7 @@ function boot(root) {
     if (loadingIndex >= 0) return;
     for (let i = 0; i < rigs.length; i++) {
       if (rigs[i].loaded || rigs[i].failed) continue;
-      /* Strictly in order — a later act is never fetched ahead of an earlier
+      /* Strictly in order - a later act is never fetched ahead of an earlier
          one, so bandwidth always goes to whatever the viewer meets next. */
       if (p >= NEED_AT[i] || (i <= 1 && idleKick)) startLoad(i);
       return;
@@ -1438,7 +1438,7 @@ function boot(root) {
       if (themeMeta) themeMeta.setAttribute('content', isDark ? '#08080a' : '#f8f8f9');
     }
 
-    /* Headlines are keyed by act now, not by model — acts 0 and 4 share the
+    /* Headlines are keyed by act now, not by model - acts 0 and 4 share the
        Beaver rig but need their own titles. */
     for (const [key, type] of typeByAct) {
       const a = Number(key);
@@ -1526,7 +1526,7 @@ function boot(root) {
     }
 
     if (pullEl) {
-      /* Up from the moment the page opens — it is the shortcut past the
+      /* Up from the moment the page opens - it is the shortcut past the
          stage, so it cannot arrive after the visitor has started scrolling. */
       const show = f.beatAct === 0 ? clamp01(Math.min((1 - f.beatQ) / 0.14, 1)) : 0;
       pullEl.style.setProperty('--pull-in', show.toFixed(3));
@@ -1544,7 +1544,7 @@ function boot(root) {
   function paintModel(rig, m) {
     /* A rig that cannot be taken apart still has to leave. Driving its exit
        off the clip plane meant a solid turret lost chunks of itself and was
-       94% gone a third of the way into the swap — it read as vanishing, not
+       94% gone a third of the way into the swap - it read as vanishing, not
        departing. A single-mesh rig instead recedes and shrinks away along the
        same `explode` value the others scatter on, so both kinds of handoff
        run on one curve and neither ends on a jump. */
@@ -1777,7 +1777,7 @@ function boot(root) {
   function placePull() {
     if (!pullEl) return;
     /* Below the nav breakpoint the menu is parked off-canvas, so its box says
-       nothing about where the gap is — the stylesheet pins the tab instead. */
+       nothing about where the gap is - the stylesheet pins the tab instead. */
     if (window.innerWidth <= 900) { pullEl.style.removeProperty('--pull-x'); return; }
     const brand = document.querySelector('.nav__logo');
     const menu = document.querySelector('.nav__menu');
@@ -1890,7 +1890,7 @@ bootSheets();
 
 function bootSheets() {
   const turn = document.querySelector('[data-hm-turn]');
-  if (!turn) return;
+  if (!turn || turn.closest('[hidden], .hm-parked')) return;
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   const track = turn.querySelector('.hm-turn__track') || turn;
   let sheetActive = false;
@@ -1988,9 +1988,9 @@ function bootChapters() {
   const stageEl = document.querySelector('[data-hm-stage]');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   const labels = [
-    'Forge OS',
+    'Beaver',
     'Library',
-    'Custom',
+    'Work',
     'Process',
     'Team',
     'Careers',

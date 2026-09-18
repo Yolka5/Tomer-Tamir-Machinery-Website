@@ -122,7 +122,7 @@
     /* Cursor spotlight, the GL twin of .hero__spotlight. */
     '  float sd2 = distance(vec2(vUv.x * uAspect, vUv.y), vec2(uSpot.x * uAspect, uSpot.y));',
     '  col += uSpotAmt * exp(-sd2 * sd2 * 5.0) * 0.17;',
-    /* AWARD-6:#2 — kept very quiet after feedback; glass sheen stays, photo
+    /* AWARD-6:#2 - kept very quiet after feedback; glass sheen stays, photo
        specular is barely there so it doesn't read as a plastic material pass. */
     '  vec2 n = normalize(vec2((vUv.x - 0.5) * uAspect, vUv.y - 0.5) + 1e-4);',
     '  float ndl = clamp(dot(n, normalize(uLight)), 0.0, 1.0);',
@@ -138,7 +138,7 @@
     '  vec2 p = vec2((vUv.x - 0.5) * uAspect, vUv.y - 0.5);',
     '  float d = sdRound(p, vec2(0.5 * uAspect, 0.5), uRadius);',
     '  float aa = max(fwidth(d), 1e-5);',
-    /* AWARD-6:#1 — soft bleed past the frame instead of a hard clip. */
+    /* AWARD-6:#1 - soft bleed past the frame instead of a hard clip. */
     '  float mask = 1.0 - smoothstep(-aa - uBleed, aa + uBleed * 0.35, d);',
     '  float rim = mask * smoothstep(-uBorderW - aa, -uBorderW + aa, d) * uBorder;',
     '  col = mix(col, vec3(0.05, 0.05, 0.06), rim * 0.5);',
@@ -159,7 +159,7 @@
     SDF,
     'void main(){',
     '  vec2 p = vec2((vUv.x - 0.5) * uAspect, vUv.y - 0.5);',
-    /* Cast shadow: the same rounded rect as the card, inset and feathered —
+    /* Cast shadow: the same rounded rect as the card, inset and feathered -
        the GL equivalent of .hero-card__border's box-shadow. Its plane is
        oversized so the feather has somewhere to fall off. */
     '  if (uStyle == 0) {',
@@ -174,14 +174,14 @@
     '  float edge = smoothstep(-uBorderW - aa, -uBorderW + aa, d);',
     '  vec3 col; float a;',
     '  if (uStyle == 1) {',
-    /* Ghost sheets: hairline frames only — no milky fill. */
+    /* Ghost sheets: hairline frames only - no milky fill. */
     '    col = vec3(0.06, 0.06, 0.07);',
     '    a = edge * 0.55;',
     '    a *= mask * uOpacity;',
     '    frag = vec4(col * a, a);',
     '    return;',
     '  } else {',
-    /* AWARD-6:#2 redesign — technical viewport, not frosted glass slab.
+    /* AWARD-6:#2 redesign - technical viewport, not frosted glass slab.
        Near-clear fill + crisp rim + corner ticks. */
     '    col = vec3(1.0);',
     '    a = 0.03;',
@@ -340,11 +340,11 @@
      x/y are in CSS pixels at full card size and scale with the card; z is the
      real depth the perspective divide acts on and is opened up by shrinkT, so
      the deck fans apart in space as it lifts off the page. */
-  /* Painter's order — no depth buffer, so the array order is the draw order.
+  /* Painter's order - no depth buffer, so the array order is the draw order.
      The shadow sits between the ghost sheets and the photo so the card casts
      onto the sheets behind it, the way the DOM box-shadow did.
-     AWARD-6:#1 — extra soft page contact shadow under the stack.
-     AWARD-6:#3 — id tags drive the scroll-story opacity stagger. */
+     AWARD-6:#1 - extra soft page contact shadow under the stack.
+     AWARD-6:#3 - id tags drive the scroll-story opacity stagger. */
   var SHADOW_GROW = 1.5;
   var LAYERS = [
     { id: 'pageShadow', style: 0, x: 10, y: 48, z: -55, rz: 0, op: 0.28, grow: 1.55 },
@@ -352,7 +352,7 @@
     { id: 'ghost1', style: 1, x: -44, y: 32, z: -190, rz: -0.8, op: 0.95, grow: 1 },
     { id: 'cardShadow', style: 0, x: 0, y: 28, z: -28, rz: 0, op: 0.42, grow: SHADOW_GROW },
     { id: 'photo', style: -1, x: 0, y: 0, z: 0, rz: 0, op: 1, grow: 1 },
-    /* Glass hugs the photo — slight forward Z + small offset, not a floating slab. */
+    /* Glass hugs the photo - slight forward Z + small offset, not a floating slab. */
     { id: 'glass', style: 2, x: -18, y: 14, z: 95, rz: -0.3, op: 1, grow: 1.01 }
   ];
 
@@ -363,7 +363,7 @@
   var mouseX = 0, mouseY = 0, spotX = 0.5, spotY = 0.5, spotAmt = 0, hovered = false;
   var curIdx = 0, prevIdx = 0, mix = 1;
   var intro = 0;
-  /* AWARD-6:#4 — stamp overshoot settles after the shrink kick. */
+  /* AWARD-6:#4 - stamp overshoot settles after the shrink kick. */
   var stamp = 0, stampVel = 0, prevShrink = 0;
   var ready = false, running = false, onScreen = false, lost = false;
   var vw = 0, vh = 0;
@@ -408,7 +408,7 @@
   function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
   function clamp01(v) { return Math.max(0, Math.min(1, v)); }
 
-  /* AWARD-6:#3 — staged reveal as the card lifts off the page. */
+  /* AWARD-6:#3 - staged reveal as the card lifts off the page. */
   function storyPhases(shrink) {
     return {
       pageShadow: clamp01((shrink - 0.02) / 0.18),
@@ -432,7 +432,7 @@
     var aspect = vw / vh;
     var story = storyPhases(shrink);
 
-    /* AWARD-6:#4 — kick the stamp spring when shrink first surges. */
+    /* AWARD-6:#4 - kick the stamp spring when shrink first surges. */
     var dShrink = shrink - prevShrink;
     if (dShrink > 0.004 && shrink > 0.05 && shrink < 0.85) {
       stampVel += dShrink * 14;
@@ -444,7 +444,7 @@
     if (Math.abs(stamp) < 0.0005 && Math.abs(stampVel) < 0.001) { stamp = 0; stampVel = 0; }
 
     /* Camera distance chosen so the plane at z=0 with scale 1 exactly fills
-       the viewport — keeps GL geometry in the same pixel space the scroll
+       the viewport - keeps GL geometry in the same pixel space the scroll
        timeline already speaks in. */
     var dist = vh / (2 * Math.tan(FOV / 2));
     mPersp(mProj, FOV, aspect, dist * 0.05, dist * 4);
@@ -453,7 +453,7 @@
 
     /* Idle life: a slow breath on rotation and depth so the stage never sits
        perfectly still, scaled by shrinkT so the full-bleed photo stays calm.
-       AWARD-6:#6 — tiny breath even at rest so the product feels alive on load. */
+       AWARD-6:#6 - tiny breath even at rest so the product feels alive on load. */
     var breathAmp = 0.12 + shrink * 0.88;
     var breathX = Math.sin(t * 0.31) * 0.4 * breathAmp;
     var breathY = Math.sin(t * 0.23 + 1.3) * 0.55 * breathAmp;
@@ -474,12 +474,12 @@
     var planeH = vh * s * introScale;
     var radius = st.radius / (vh * s);
     var borderW = 3 / (vh * s);
-    /* AWARD-6:#2 — sheen tracks cursor so glass feels hand-lit. */
+    /* AWARD-6:#2 - sheen tracks cursor so glass feels hand-lit. */
     var sheen = 0.65 + Math.sin(t * 0.22) * 0.35 + mouseX * 0.38 - mouseY * 0.18;
     var lightX = mouseX * 0.65 + Math.sin(t * 0.27) * 0.2;
     var lightY = -mouseY * 0.55 + 0.35;
 
-    /* AWARD-6:#4 — wash clears faster once glass is arriving (coolant dissolve). */
+    /* AWARD-6:#4 - wash clears faster once glass is arriving (coolant dissolve). */
     var overlay = (1 - shrink) * (1 - story.glass * 0.55);
 
     gl.viewport(0, 0, canvas.width, canvas.height);
@@ -501,10 +501,10 @@
       var op = L.style === -1 ? 1 : L.op * phase;
       if (op < 0.004) continue;
 
-      /* AWARD-6:#1 — photo slightly overscales the frame so it breaks out. */
+      /* AWARD-6:#1 - photo slightly overscales the frame so it breaks out. */
       var grow = L.grow;
       if (L.id === 'photo') grow = 1 + 0.075 * shrink;
-      /* AWARD-6:#4 — ghosts stamp outward then settle. */
+      /* AWARD-6:#4 - ghosts stamp outward then settle. */
       if (L.id === 'ghost1' || L.id === 'ghost2') {
         grow *= 1 + stamp * (L.id === 'ghost2' ? 0.08 : 0.05);
       }
@@ -564,7 +564,7 @@
     }
     gl.bindVertexArray(null);
 
-    /* AWARD-6:#3 — drive the DOM callout from the same story clock. */
+    /* AWARD-6:#3 - drive the DOM callout from the same story clock. */
     if (window.__ttmHeroAward && window.__ttmHeroAward.syncStory) {
       window.__ttmHeroAward.syncStory({
         callout: story.callout,
@@ -575,7 +575,7 @@
     }
   }
 
-  /* Everything below advances on elapsed time, not per-frame constants — this
+  /* Everything below advances on elapsed time, not per-frame constants - this
      runs at whatever the display refreshes at (240Hz here), and the crossfade
      has to stay locked to the DOM slideshow's 1.4s CSS transition. */
   function loop(now) {

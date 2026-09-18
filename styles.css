@@ -1,4 +1,4 @@
-/* ===== TTM — Liquid glass monochrome theme ===== */
+/* ===== TTM - Liquid glass monochrome theme ===== */
 :root {
   --bg: #f8f8f9;
   --bg-elevated: #ffffff;
@@ -161,7 +161,7 @@ button:focus-visible,
 .nav__logo-img {
   height: 44px; width: auto;
   object-fit: contain;
-  /* Logo is black line art — no invert on white background */
+  /* Logo is black line art - no invert on white background */
 }
 
 .nav__wordmark {
@@ -192,6 +192,16 @@ button:focus-visible,
 .nav__actions { display: flex; gap: 1.5rem; align-items: center; }
 
 .nav__dropdown { position: relative; }
+
+.nav__dropdown::before {
+  content: '';
+  position: absolute;
+  left: -0.65rem;
+  right: -0.65rem;
+  top: 100%;
+  height: 1rem;
+  display: none;
+}
 
 .nav__dropdown-toggle {
   background: none;
@@ -229,8 +239,11 @@ button:focus-visible,
   padding: 0.5rem;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(-8px) scale(0.98);
-  transition: opacity 0.25s var(--ease-out), transform 0.25s var(--ease-out), visibility 0.25s;
+  transform: translateY(-6px) scale(0.98);
+  transition:
+    opacity 180ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 180ms cubic-bezier(0.23, 1, 0.32, 1),
+    visibility 180ms;
   z-index: 1001;
 }
 
@@ -238,6 +251,17 @@ button:focus-visible,
   opacity: 1;
   visibility: visible;
   transform: translateY(0) scale(1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav__dropdown::before { display: block; }
+
+  .nav__dropdown:hover .nav__dropdown-menu,
+  .nav__dropdown:focus-within .nav__dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .nav__dropdown-link {
@@ -286,15 +310,29 @@ button:focus-visible,
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transform: translateY(0);
+  transition:
+    background-color 220ms cubic-bezier(0.23, 1, 0.32, 1),
+    color 220ms cubic-bezier(0.23, 1, 0.32, 1),
+    border-color 220ms cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 220ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 220ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .nav__link--cta::after { display: none; }
 
-.nav__link--cta:hover {
-  background: rgba(20, 20, 22, 0.92);
-  color: #fff;
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+@media (hover: hover) and (pointer: fine) {
+  .nav__link--cta:hover {
+    background: rgba(20, 20, 22, 0.94);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  }
+}
+
+.nav__link--cta:active {
+  transform: translateY(0) scale(0.97);
+  transition-duration: 100ms;
 }
 
 .nav__toggle {
@@ -307,7 +345,7 @@ button:focus-visible,
 .nav__toggle.active span:nth-child(2) { opacity: 0; }
 .nav__toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* ===== Hero — cinematic scroll pin ===== */
+/* ===== Hero - cinematic scroll pin ===== */
 .hero-pin {
   position: relative;
   height: 320vh;
@@ -322,7 +360,7 @@ button:focus-visible,
   perspective: 1600px;
 }
 
-/* Phase 0 — intro copy overlaid on the full-bleed slider, fades as it shrinks */
+/* Phase 0 - intro copy overlaid on the full-bleed slider, fades as it shrinks */
 .hero-pin__intro {
   position: absolute;
   inset: 0;
@@ -333,10 +371,10 @@ button:focus-visible,
   will-change: opacity, transform;
 }
 
-/* Mid-page product orbit — sits between About and Workshop */
+/* Mid-page product orbit - sits after the film stack */
 .systems-orbit {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-top: 6.5rem;
+  padding-bottom: 3.5rem;
   overflow: hidden;
 }
 
@@ -522,8 +560,8 @@ button:focus-visible,
 
 @media (max-width: 860px) {
   .systems-orbit {
-    padding-top: 2rem;
-    padding-bottom: 2.5rem;
+    padding-top: 4.5rem;
+    padding-bottom: 3rem;
   }
 
   .hero-orbit {
@@ -571,10 +609,10 @@ button:focus-visible,
   }
 }
 
-/* The card that shrinks, tilts, and slides aside — wraps the untouched slider */
+/* The card that shrinks, tilts, and slides aside - wraps the untouched slider */
 /* WebGL hero stage (hero3d.js). Only shown once the context, shaders and
-   textures are all up; until then — and on mobile, under reduced motion, or
-   after a lost context — the DOM card below stays in charge. */
+   textures are all up; until then - and on mobile, under reduced motion, or
+   after a lost context - the DOM card below stays in charge. */
 .hero-gl {
   position: absolute;
   inset: 0;
@@ -589,8 +627,8 @@ button:focus-visible,
    stage to mirror, and so the <img> textures stay resident. */
 .hero-pin__viewport--gl .hero-card { display: none; }
 
-/* ===== AWARD-6 BEGIN — revert by deleting this whole block ===== */
-/* HUD designation plate — corner brackets + mono, no Material card. */
+/* ===== AWARD-6 BEGIN - revert by deleting this whole block ===== */
+/* HUD designation plate - corner brackets + mono, no Material card. */
 .hero-award-callout {
   --hud-ink: rgba(10, 10, 12, 0.92);
   --hud-mute: rgba(10, 10, 12, 0.48);
@@ -773,36 +811,7 @@ button:focus-visible,
   100% { opacity: 1; transform: translateY(0); }
 }
 
-.hero-sound-toggle {
-  position: fixed;
-  bottom: calc(2rem + 60px);
-  left: 2rem;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1px solid rgba(10, 10, 12, 0.14);
-  background: rgba(255, 255, 255, 0.88);
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 901;
-  cursor: pointer;
-  box-shadow: 0 8px 24px rgba(10, 10, 12, 0.1);
-  transition: transform 0.3s var(--ease-spring), background 0.25s, color 0.25s;
-}
-
-.hero-sound-toggle:hover { transform: scale(1.06); }
-.hero-sound-toggle__on { display: none; }
-.hero-sound-toggle.is-on {
-  background: var(--text);
-  color: #fff;
-  border-color: transparent;
-}
-.hero-sound-toggle.is-on .hero-sound-toggle__off { display: none; }
-.hero-sound-toggle.is-on .hero-sound-toggle__on { display: block; }
-
-/* AWARD-6:#6 — product first; chrome waits for .award-chrome-in */
+/* AWARD-6:#6 - product first; chrome waits for .award-chrome-in */
 html.award-product-first .hero-animate {
   animation: none;
   opacity: 0;
@@ -827,7 +836,6 @@ html.award-product-first.award-chrome-in .hero__dots { opacity: 1; }
 
 @media (max-width: 860px) {
   .hero-award-callout { display: none; }
-  .hero-sound-toggle { bottom: calc(1.25rem + 56px); left: 1.25rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -900,7 +908,7 @@ html.award-product-first.award-chrome-in .hero__dots { opacity: 1; }
 .hero-card__corner--bl { bottom: -1.5px; left: -1.5px; border-bottom: 1.5px solid rgba(10, 10, 12, 0.65); border-left: 1.5px solid rgba(10, 10, 12, 0.65); border-bottom-left-radius: 4px; }
 .hero-card__corner--br { bottom: -1.5px; right: -1.5px; border-bottom: 1.5px solid rgba(10, 10, 12, 0.65); border-right: 1.5px solid rgba(10, 10, 12, 0.65); border-bottom-right-radius: 4px; }
 
-/* Ghost sheets fanned out behind the frame — hairline-bordered glass panels
+/* Ghost sheets fanned out behind the frame - hairline-bordered glass panels
    drifted diagonally by JS as the card shrinks, then parallaxed by the mouse.
    NOTE: children of .hero-card render smaller once shrunk, so border
    widths, fonts, and pattern spacings here are authored larger than their
@@ -930,7 +938,7 @@ html.award-product-first.award-chrome-in .hero__dots { opacity: 1; }
     repeating-linear-gradient(90deg, rgba(20, 20, 22, 0.07) 0 3px, transparent 3px 96px);
 }
 
-/* Front glass plate — same depth as before, without schematic outlines */
+/* Front glass plate - same depth as before, without schematic outlines */
 .hero-card__glass {
   position: absolute;
   inset: 0;
@@ -945,8 +953,8 @@ html.award-product-first.award-chrome-in .hero__dots { opacity: 1; }
   will-change: transform, opacity;
 }
 
-/* Phase 2 — side copy that rises in as the card slides aside.
-   Visibility is driven entirely by the text masks inside (see below) —
+/* Phase 2 - side copy that rises in as the card slides aside.
+   Visibility is driven entirely by the text masks inside (see below) -
    this wrapper just gates hit-testing once JS takes over on desktop. */
 .hero-pin__reveal {
   position: absolute;
@@ -961,7 +969,7 @@ html.award-product-first.award-chrome-in .hero__dots { opacity: 1; }
   max-width: min(440px, 34vw);
 }
 
-/* Phase 3 — mirror composition: card swings to the other side for a second beat */
+/* Phase 3 - mirror composition: card swings to the other side for a second beat */
 .hero-pin__reveal--alt {
   justify-content: flex-end;
 }
@@ -974,7 +982,7 @@ html.award-product-first.award-chrome-in .hero__dots { opacity: 1; }
   max-width: 46ch;
 }
 
-/* Staggered text masking — each word/line sits in an overflow:hidden mask
+/* Staggered text masking - each word/line sits in an overflow:hidden mask
    and is translated up from below while fading in, driven by JS per-word
    so the headline cascades in rather than fading as one flat block. */
 .reveal-mask {
@@ -1017,7 +1025,7 @@ html.award-product-first.award-chrome-in .hero__dots { opacity: 1; }
     transform: none !important;
   }
 
-  /* Stacked fallback: intro copy, then the framed slider, then the reveal copy —
+  /* Stacked fallback: intro copy, then the framed slider, then the reveal copy -
      all in normal flow instead of the desktop pin/shrink/slide choreography. */
   .hero-pin__intro {
     position: relative;
@@ -1321,7 +1329,7 @@ html.award-product-first.award-chrome-in .hero__dots { opacity: 1; }
   filter: saturate(1.05) contrast(1.08);
 }
 
-/* Beaver tile — a CAD grab that ships with its own white background. Left on
+/* Beaver tile - a CAD grab that ships with its own white background. Left on
    a gradient it read as a screenshot pasted into the tile, with a visible seam
    where the image ended. Multiply drops the white out so the receiver sits on
    the tile's own ground like the studio renders beside it. */
@@ -1571,43 +1579,252 @@ html.award-product-first.award-chrome-in .hero__dots { opacity: 1; }
 }
 
 /* ===== About ===== */
-.about__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-.about__lead { font-size: 1rem; color: var(--text-muted); line-height: 1.75; margin: 1rem 0 2rem; }
-.about__stats { display: flex; gap: 1rem; flex-wrap: wrap; }
-.about__stats li {
-  flex: 1;
-  min-width: 100px;
-  padding: 1rem 1.25rem;
-  background: var(--glass-white-strong);
-  backdrop-filter: blur(18px) saturate(1.4);
-  -webkit-backdrop-filter: blur(18px) saturate(1.4);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-xs), var(--glass-inset);
-  transition: transform 0.3s var(--ease-spring), box-shadow 0.3s;
+.about--film {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 7rem 0;
+  min-height: 92vh;
+  overflow: hidden;
+  color: #fff;
+  background: #0b0c0e;
 }
-.about__stats li:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-sm), var(--glass-inset);
+
+.about__video {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 145%;
+  height: 145%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  pointer-events: none;
 }
-.about__stat-num {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 2.35rem;
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: -0.04em;
+
+.about__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(10, 11, 13, 0.78) 0%, rgba(10, 11, 13, 0.5) 36%, rgba(10, 11, 13, 0.16) 68%, rgba(10, 11, 13, 0.08) 100%);
 }
-.about__stat-label { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
-.about__visual {
+
+.about--film .container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.about__panel {
+  max-width: 42rem;
+  padding: 2rem 2.15rem 2.2rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: var(--radius-lg);
+  backdrop-filter: blur(22px) saturate(1.45);
+  -webkit-backdrop-filter: blur(22px) saturate(1.45);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 24px 56px rgba(0, 0, 0, 0.28);
+}
+
+.about--film .section__eyebrow {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.about__title {
+  color: #fff;
+  font-size: clamp(2rem, 4.8vw, 3.35rem);
+  line-height: 0.98;
+  max-width: 14em;
+}
+
+.about__title--stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.02em;
+  max-width: none;
+}
+
+.about__you {
+  font-family: 'Shadows Into Light', cursive;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+  padding-bottom: 0.12em;
+  font-size: 1.2em;
+  color: #fff;
+}
+
+.about--film .about__lead {
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.75;
+  margin: 1rem 0 1.35rem;
+  max-width: 54ch;
+}
+
+.about__points {
+  list-style: none;
+  margin: 0 0 2rem;
+  padding: 0;
+  max-width: 480px;
+}
+
+.about__points li {
+  position: relative;
+  padding: 0.5rem 0 0.5rem 1.35rem;
+  font-size: 0.8425rem;
+  color: #c9c9cd;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.about__points li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #fff;
+}
+
+@media (max-width: 1024px) {
+  .about--film { padding: 5rem 0; min-height: 88vh; }
+}
+
+@media (max-width: 640px) {
+  .about--film { min-height: 100svh; }
+  .about__panel { padding: 1.5rem 1.25rem 1.65rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about__video { display: none; }
+}
+
+/* Three film plates: about holds, fit covers, field covers, then the rest. */
+.film-stack {
+  --cover-a: 0;
+  --cover-b: 0;
+  position: relative;
+}
+
+.film-stack__track {
+  height: 390vh;
+}
+
+.film-stack__pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  overflow: clip;
+  isolation: isolate;
+  background: #0b0c0e;
+}
+
+.film-stack .about--film {
+  min-height: 100%;
+  height: 100%;
+  padding: 7rem 0;
+}
+
+.film-stack__base {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transform: translate3d(0, calc(var(--cover-a) * -2.5%), 0) scale(calc(1 - var(--cover-a) * 0.055));
+  transform-origin: center center;
+  opacity: calc(1 - var(--cover-a) * 0.2);
+}
+
+.film-stack__sheet {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  min-height: 100%;
+  height: 100%;
   will-change: transform;
 }
-.about__img {
-  width: 100%;
-  aspect-ratio: 4/3;
-  object-fit: cover;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+
+.film-stack__sheet:not(.film-stack__sheet--field) {
+  transform: translate3d(calc(var(--cover-b) * -4%), calc((1 - var(--cover-a)) * 100%), 0) scale(calc(1 - var(--cover-b) * 0.04));
+  opacity: calc(1 - var(--cover-b) * 0.35);
+  box-shadow: 0 -2.25rem 3.5rem rgba(0, 0, 0, calc(var(--cover-a) * 0.42 * (1 - var(--cover-b))));
+}
+
+.film-stack__sheet--field {
+  z-index: 3;
+  transform:
+    translate3d(calc((1 - var(--cover-b)) * -100%), 0, 0)
+    scale(calc(0.94 + var(--cover-b) * 0.06));
+  box-shadow: 2.5rem 0 4rem rgba(0, 0, 0, calc(var(--cover-b) * 0.35));
+}
+
+.film-stack .field-band {
+  min-height: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.film-stack .field-band__content {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 7rem 0;
+}
+
+.film-stack__base .about__panel {
+  opacity: calc(1 - var(--cover-a) * 1.45);
+  transform: translateY(calc(var(--cover-a) * -14px));
+}
+
+.film-stack__sheet:not(.film-stack__sheet--field) .about__panel {
+  opacity: calc(clamp(0, calc((var(--cover-a) - 0.52) / 0.3), 1) * (1 - var(--cover-b) * 1.45));
+  transform: translate3d(calc(var(--cover-b) * -12px), calc((1 - clamp(0, calc((var(--cover-a) - 0.52) / 0.3), 1)) * 22px), 0);
+}
+
+.film-stack__sheet--field .field-band__panel {
+  opacity: clamp(0, calc((var(--cover-b) - 0.42) / 0.32), 1);
+  transform: translate3d(calc((1 - clamp(0, calc((var(--cover-b) - 0.42) / 0.32), 1)) * -28px), 0, 0);
+}
+
+.film-stack--settled .film-stack__sheet,
+.film-stack--settled .film-stack__base {
+  will-change: auto;
+}
+
+@media (max-width: 1024px) {
+  .film-stack .about--film { padding: 5rem 0; }
+  .film-stack .field-band__content { padding: 5rem 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-stack__track { height: auto; }
+  .film-stack__pin {
+    position: relative;
+    height: auto;
+    overflow: visible;
+  }
+  .film-stack__base,
+  .film-stack__sheet {
+    position: relative;
+    height: auto;
+    min-height: 88vh;
+    transform: none;
+    opacity: 1;
+    box-shadow: none;
+  }
+  .film-stack .about--film,
+  .film-stack .field-band { min-height: 88vh; height: auto; }
+  .film-stack__base .about__panel,
+  .film-stack__sheet:not(.film-stack__sheet--field) .about__panel,
+  .film-stack__sheet--field .field-band__panel {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* ===== Workshop ===== */
@@ -2001,7 +2218,7 @@ html.award-product-first.award-chrome-in .hero__dots { opacity: 1; }
 }
 
 .career-card__reqs li::before {
-  content: '—';
+  content: '-';
   position: absolute;
   left: 0;
   color: var(--text);
@@ -2167,7 +2384,7 @@ html.award-product-first.award-chrome-in .hero__dots { opacity: 1; }
   transform: translateY(-1px);
 }
 
-/* ===== Buttons — liquid glass ===== */
+/* ===== Buttons - liquid glass ===== */
 .btn {
   position: relative;
   display: inline-flex;
@@ -2293,29 +2510,6 @@ html.award-product-first.award-chrome-in .hero__dots { opacity: 1; }
   letter-spacing: 0.01em;
   color: rgba(107, 107, 115, 0.72);
   max-width: 62ch;
-}
-
-.back-to-top {
-  position: fixed; bottom: 2rem; right: 2rem; width: 48px; height: 48px;
-  border-radius: 50%;
-  background: var(--glass-dark);
-  color: #fff;
-  border: 1px solid var(--glass-border-dark);
-  backdrop-filter: blur(12px);
-  font-size: 1.25rem;
-  cursor: pointer;
-  z-index: 900;
-  opacity: 0;
-  transform: translateY(10px);
-  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  transition: opacity 0.3s, transform 0.35s var(--ease-spring), box-shadow 0.35s;
-}
-
-.back-to-top.is-visible { opacity: 1; transform: translateY(0); }
-
-.back-to-top:hover {
-  transform: translateY(-4px) scale(1.05);
-  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 /* Moved off the left gutter: the stage's data plate and closing statement both
@@ -2795,7 +2989,7 @@ body.subpage { padding-top: var(--nav-h); }
   gap: 0.75rem;
 }
 
-/* Beaver program — content always paints; only items animate in */
+/* Beaver program - content always paints; only items animate in */
 .beaver-pillars,
 .beaver-roadmap {
   min-height: 1px;
@@ -3038,7 +3232,7 @@ body.subpage { padding-top: var(--nav-h); }
 
 .beaver-cta__email:hover { color: var(--text); }
 
-/* ===== Beaver hero — actual CAD image ===== */
+/* ===== Beaver hero - actual CAD image ===== */
 .beaver-hero__img-wrap {
   position: relative;
   width: 100%;
@@ -3115,7 +3309,7 @@ body.subpage { padding-top: var(--nav-h); }
 }
 
 /* ═══════════════════════════════════════════════════════
-   BEAVER — Shadows Into Light highlight system
+   BEAVER - Shadows Into Light highlight system
 ═══════════════════════════════════════════════════════ */
 :root {
   --hl-color:      #b56a20;   /* amber on light backgrounds */
@@ -3139,7 +3333,7 @@ body.subpage { padding-top: var(--nav-h); }
 }
 
 /* ═══════════════════════════════════════════════════════
-   BEAVER — Open engineering / Milanote section
+   BEAVER - Open engineering / Milanote section
 ═══════════════════════════════════════════════════════ */
 .beaver-openeng {
   background: #0c0c0f;
@@ -3362,7 +3556,7 @@ body.subpage { padding-top: var(--nav-h); }
   50%       { box-shadow: 0 0 0 6px rgba(255,255,255,0); }
 }
 
-/* Image wrap on dark — engineering-drawing look */
+/* Image wrap on dark - engineering-drawing look */
 .beaver-hero__img-wrap {
   background: radial-gradient(circle at 50% 40%, rgba(255,255,255,0.97), rgba(218,218,224,0.93));
   border-color: rgba(255,255,255,0.14);
@@ -3399,7 +3593,7 @@ body.subpage { padding-top: var(--nav-h); }
   background: rgba(255,255,255,0.88);
 }
 
-/* --- Pillar cards — decorative background number --- */
+/* --- Pillar cards - decorative background number --- */
 .beaver-pillar {
   position: relative;
   overflow: hidden;
@@ -3699,7 +3893,7 @@ body.subpage { padding-top: var(--nav-h); }
 }
 
 .beaver-trade__col ul li::before {
-  content: '—';
+  content: '-';
   position: absolute;
   left: 0;
   color: rgba(0, 0, 0, 0.18);
@@ -4000,50 +4194,67 @@ body.subpage { padding-top: var(--nav-h); }
   .lib-strip__grid { grid-template-columns: 1fr; gap: 2rem; }
 }
 
-/* ===== Custom Works homepage strip ===== */
+/* ===== Hiring homepage strip ===== */
 .custom-strip {
   position: relative;
-  padding: 5.5rem 0;
-  background: linear-gradient(150deg, #0e0f12 0%, #1a1c21 55%, #0e0f12 100%);
+  padding: 7rem 0;
   color: #fff;
   overflow: hidden;
-}
-
-.custom-strip::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.028) 0 2px, transparent 2px 28px);
-  pointer-events: none;
+  background-color: #1a1c21;
+  background-image:
+    linear-gradient(90deg, rgba(10, 11, 13, 0.78) 0%, rgba(10, 11, 13, 0.52) 36%, rgba(10, 11, 13, 0.16) 68%, rgba(10, 11, 13, 0.08) 100%),
+    url("TTMHQInside.jpeg");
+  background-size: cover;
+  background-position: center 42%;
+  background-repeat: no-repeat;
 }
 
 .custom-strip .container { position: relative; z-index: 1; }
 
 .custom-strip__grid {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 3rem;
-  align-items: center;
+  max-width: 36rem;
 }
 
-.custom-strip .section__eyebrow { color: #8a8a92; }
+.custom-strip .section__eyebrow { color: rgba(255, 255, 255, 0.72); }
 .custom-strip .section__title { color: #fff; }
 
+.custom-strip__title,
+.forge-strip--field .forge-strip__title {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.02em;
+}
+
+.custom-strip__here,
+.forge-strip__change {
+  font-family: 'Shadows Into Light', cursive;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+  padding-bottom: 0.12em;
+  font-size: 1.2em;
+  color: #fff;
+}
+
 .custom-strip__desc {
-  color: #a8a8b0;
+  color: rgba(255, 255, 255, 0.82);
   line-height: 1.75;
   margin: 1rem 0 1.35rem;
   max-width: 54ch;
 }
 
-.custom-strip__points {
+.custom-strip__points,
+.forge-strip--field .forge-strip__points {
   list-style: none;
   margin: 0 0 2rem;
   padding: 0;
   max-width: 480px;
 }
 
-.custom-strip__points li {
+.custom-strip__points li,
+.forge-strip--field .forge-strip__points li {
   position: relative;
   padding: 0.5rem 0 0.5rem 1.35rem;
   font-size: 0.8425rem;
@@ -4051,7 +4262,8 @@ body.subpage { padding-top: var(--nav-h); }
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.custom-strip__points li::before {
+.custom-strip__points li::before,
+.forge-strip--field .forge-strip__points li::before {
   content: '→';
   position: absolute;
   left: 0;
@@ -4088,29 +4300,36 @@ body.subpage { padding-top: var(--nav-h); }
 .custom-strip__panel .redacted { color: #3d3f45; }
 
 .btn--invert {
-  background: #fff;
+  background: rgba(255, 255, 255, 0.94);
   color: #0b0c0e;
-  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px) saturate(1.4);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255, 255, 255, 0.95);
 }
 
 .btn--invert:hover {
-  background: #e8e8ea;
+  background: #fff;
   color: #0b0c0e;
   transform: translateY(-3px) scale(1.02);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.98);
 }
 
 .btn--invert:active { transform: translateY(-1px) scale(0.99); }
 
 .btn--invert-ghost {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.1);
   color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 10px 28px rgba(0, 0, 0, 0.18);
 }
 
 .btn--invert-ghost:hover {
-  background: rgba(255, 255, 255, 0.13);
+  background: rgba(255, 255, 255, 0.18);
   color: #fff;
   transform: translateY(-3px) scale(1.02);
 }
@@ -4118,7 +4337,83 @@ body.subpage { padding-top: var(--nav-h); }
 .btn--invert-ghost:active { transform: translateY(-1px) scale(0.99); }
 
 @media (max-width: 1024px) {
-  .custom-strip__grid { grid-template-columns: 1fr; gap: 2rem; }
+  .custom-strip { padding: 5rem 0; }
+}
+
+/* ===== Beaver field homepage strip (Forge OS slot) ===== */
+.forge-strip.forge-strip--field {
+  position: relative;
+  padding: 7rem 0;
+  color: #fff;
+  overflow: hidden;
+  background-color: #1a1c21;
+}
+
+.forge-strip__photo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -42%;
+  height: 184%;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("TTMBeaverSoldier.jpeg");
+  background-size: cover;
+  background-position: 82% 22%;
+  background-repeat: no-repeat;
+  will-change: transform;
+}
+
+.forge-strip.forge-strip--field::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(10, 11, 13, 0.8) 0%, rgba(10, 11, 13, 0.54) 34%, rgba(10, 11, 13, 0.16) 66%, rgba(10, 11, 13, 0.04) 100%);
+}
+
+.forge-strip.forge-strip--field::after {
+  display: none;
+}
+
+.forge-strip.forge-strip--field .container {
+  position: relative;
+  z-index: 2;
+}
+
+.forge-strip.forge-strip--field .forge-strip__grid {
+  display: block;
+  max-width: 40rem;
+}
+
+.forge-strip.forge-strip--field .section__eyebrow {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.forge-strip.forge-strip--field .section__title {
+  color: #fff;
+}
+
+.forge-strip.forge-strip--field .forge-strip__lead {
+  white-space: nowrap;
+}
+
+.forge-strip.forge-strip--field .forge-strip__desc {
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.75;
+  margin: 1rem 0 1.35rem;
+  max-width: 54ch;
+}
+
+@media (max-width: 1024px) {
+  .forge-strip.forge-strip--field { padding: 5rem 0; }
+}
+
+@media (max-width: 640px) {
+  .forge-strip.forge-strip--field .forge-strip__lead {
+    white-space: normal;
+  }
 }
 
 /* ===== CAD Reference Library ===== */
@@ -5433,7 +5728,7 @@ body.lightbox-open {
 
 /* ===== Responsive ===== */
 @media (max-width: 1024px) {
-  .about__grid, .contact__grid, .product-hero__grid, .beaver-hero__grid, .beaver-cta__grid { grid-template-columns: 1fr; gap: 2rem; }
+  .contact__grid, .product-hero__grid, .beaver-hero__grid, .beaver-cta__grid { grid-template-columns: 1fr; gap: 2rem; }
   .process__grid, .team__grid { grid-template-columns: repeat(2, 1fr); }
   .workshop__grid { grid-template-columns: repeat(2, 1fr); }
   .specs-grid, .resources__grid { grid-template-columns: 1fr; }
@@ -5445,7 +5740,7 @@ body.lightbox-open {
 @media (max-width: 900px) {
   .nav__tagline { display: none; }
   /* The drawer trigger. Without this the menu parks off-canvas at right:-100%
-     and nothing on the page can bring it back — the whole site becomes a
+     and nothing on the page can bring it back - the whole site becomes a
      single page on a phone. */
   .nav__toggle { display: flex; margin-left: auto; }
   .nav__menu, .nav__actions {
@@ -5461,7 +5756,7 @@ body.lightbox-open {
   /* Two sibling panels, one drawer: the link list fills the sheet and the CTA
      sits on its bottom edge. Both are pinned with top/height rather than
      bottom, because .header carries a backdrop-filter and that makes it the
-     containing block for its fixed descendants — a `bottom: 0` here resolved
+     containing block for its fixed descendants - a `bottom: 0` here resolved
      against the 72px header, not the viewport, and threw the CTA off the top
      of the screen. */
   .nav__menu,
@@ -5489,6 +5784,7 @@ body.lightbox-open {
   .nav__menu.open, .nav__actions.open { right: 0; }
   .nav__toggle { position: relative; z-index: 1001; }
   .nav__dropdown { width: 100%; }
+  .nav__dropdown::before { display: none; }
   .nav__dropdown-menu {
     position: static;
     opacity: 1;
@@ -5529,7 +5825,6 @@ body.lightbox-open {
   .careers__steps { grid-template-columns: 1fr; }
   .careers__step:not(:last-child)::after { display: none; }
   .field-band__panel { padding: 1.85rem 1.5rem 2rem; }
-  .about__stats { flex-direction: column; gap: 1rem; }
   .footer__top { flex-direction: column; gap: 1.5rem; }
   .footer__cols { flex-direction: column; gap: 1.5rem; }
   .project-card { grid-template-columns: 1fr; }

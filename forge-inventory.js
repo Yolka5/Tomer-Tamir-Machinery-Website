@@ -1,4 +1,4 @@
-/* TTM FORGE OS — Inventory module (Firestore-backed, real-time) */
+/* TTM FORGE OS - Inventory module (Firestore-backed, real-time) */
 
 let db, user, toast, logActivity;
 let fs; // firestore functions
@@ -93,7 +93,7 @@ function renderTable() {
     return `
     <tr class="${stock === 'out' ? 'is-out' : (stock === 'low' ? 'is-low' : '')}" data-id="${esc(item.id)}">
       <td><span class="os-dot os-dot--${stock}"></span>${esc(item.name)}${item.notes ? ` <span class="dim" title="${esc(item.notes)}">✎</span>` : ''}</td>
-      <td>${esc(item.sku) || '—'}</td>
+      <td>${esc(item.sku) || '-'}</td>
       <td>${esc(categoryName(item.categoryId))}</td>
       <td>
         <span class="os-qty">
@@ -102,8 +102,8 @@ function renderTable() {
           <button type="button" data-act="inc" aria-label="Increase">+</button>
         </span>
       </td>
-      <td>${item.minQty != null && item.minQty !== '' ? esc(item.minQty) : '—'}</td>
-      <td>${esc(item.location) || '—'}</td>
+      <td>${item.minQty != null && item.minQty !== '' ? esc(item.minQty) : '-'}</td>
+      <td>${esc(item.location) || '-'}</td>
       <td class="os-td-actions">
         <button type="button" class="os-btn--icon os-btn" data-act="edit">Edit</button>
         <button type="button" class="os-btn--icon os-btn" data-act="del">✕</button>
@@ -209,7 +209,7 @@ function renderCategoryManager() {
           <button type="button" class="os-btn os-btn--icon" data-act="del">✕</button>
         </div>
       `).join('')
-    : '<p class="dim" style="font-size:0.8125rem; color:#6b6b73;">No categories yet — add one below.</p>';
+    : '<p class="dim" style="font-size:0.8125rem; color:#6b6b73;">No categories yet - add one below.</p>';
 
   list.querySelectorAll('button[data-act]').forEach((btn) => {
     btn.addEventListener('click', async () => {

@@ -2,10 +2,10 @@
    Layered on top of styles.css and only ever loaded by beaver.html.
 
    Two states, switched by `data-bvr-mode` on the stage element:
-     static  — the default, and what ships without JS, WebGL or with
+     static  - the default, and what ships without JS, WebGL or with
                prefers-reduced-motion. Everything reads as one long editorial
                section, top to bottom.
-     live    — beaver-stage.js has a renderer up. The stage pins for the
+     live    - beaver-stage.js has a renderer up. The stage pins for the
                length of its track and the layers stack around the canvas.
 
    Inside the pin the paint order is deliberate: page tint, then the type,
@@ -167,7 +167,7 @@
 .bvr-stage[data-bvr-mode='live'] {
   /* The module sets the real track from its own phase table as soon as it runs.
      The fallback only covers the gap between the inline switch in beaver.html
-     and that module, so it is kept equal to the table's current total — a stale
+     and that module, so it is kept equal to the table's current total - a stale
      value here would move section 3 once on load. */
   height: var(--bvr-track, 540vh);
 }
@@ -201,7 +201,7 @@
   display: none;
 }
 
-/* Layer 1 — the page tint. Act 2 runs white on black; this panel only covers
+/* Layer 1 - the page tint. Act 2 runs white on black; this panel only covers
    the pin, so the sections above and below keep the site's own background.
 
    It arrives as a curtain travelling down the pin rather than a crossfade.
@@ -224,7 +224,7 @@
   will-change: clip-path;
 }
 
-/* Layer 2 — the type, sitting behind the product. */
+/* Layer 2 - the type, sitting behind the product. */
 .bvr-stage[data-bvr-mode='live'] .bvr-type {
   position: absolute;
   inset: 0;
@@ -243,7 +243,7 @@
 
 /* Hidden until the module says otherwise, rather than shown until it says to
    hide. The pinned layout is switched on while the document is still parsing,
-   so between then and the module's first frame no act has been chosen yet —
+   so between then and the module's first frame no act has been chosen yet -
    defaulting to visible would stack both headlines on top of each other. */
 .bvr-stage[data-bvr-mode='live'] .bvr-type:not([data-bvr-on='1']) {
   visibility: hidden;
@@ -251,7 +251,7 @@
 
 /* The two mono lines are pulled out of the flow and parked near the edges of
    the pin. Left in the flow they would sit tight against the headline, which
-   puts them exactly where the product is — the model would cut straight
+   puts them exactly where the product is - the model would cut straight
    through them at every window size. */
 .bvr-stage[data-bvr-mode='live'] .bvr-type__label,
 .bvr-stage[data-bvr-mode='live'] .bvr-type__sub {
@@ -321,7 +321,7 @@
   will-change: transform, opacity;
 }
 
-/* Act 2's headline climbs out of the dark instead of flipping up — the
+/* Act 2's headline climbs out of the dark instead of flipping up - the
    handwriting face has no weight to flip. */
 .bvr-stage[data-bvr-mode='live'] .bvr-type--script .bvr-word__ch {
   transform-origin: 50% 60%;
@@ -334,7 +334,7 @@
     0 0 calc(var(--lp) * 90px) rgba(190, 210, 255, calc(var(--lp) * 0.16));
 }
 
-/* Layer 3 — the contact shadow. Above the type so the product casts onto it,
+/* Layer 3 - the contact shadow. Above the type so the product casts onto it,
    below the canvas so the model still occludes it. */
 .bvr-stage__shadow {
   position: absolute;
@@ -355,7 +355,7 @@
   will-change: opacity;
 }
 
-/* Layer 4 — the product. */
+/* Layer 4 - the product. */
 .bvr-stage__gl {
   position: absolute;
   inset: 0;
@@ -365,7 +365,7 @@
   pointer-events: none;
 }
 
-/* Layer 5 — the copy that changes as the product turns. */
+/* Layer 5 - the copy that changes as the product turns. */
 .bvr-stage[data-bvr-mode='live'] .bvr-beats {
   position: absolute;
   inset: 0;
@@ -447,7 +447,7 @@
   line-height: 1.6;
 }
 
-/* Layer 6 — persistent chrome: act rail and the first-scroll nudge. */
+/* Layer 6 - persistent chrome: act rail and the first-scroll nudge. */
 .bvr-stage__chrome {
   position: absolute;
   inset: 0;
@@ -552,7 +552,7 @@ body:has(.bvr-stage[data-bvr-pinned='1']) .product-story-rail {
   45% { transform: scaleY(1); opacity: 1; transform-origin: 50% 0; }
 }
 
-/* Loading state — the pin must never be a blank screen. */
+/* Loading state - the pin must never be a blank screen. */
 .bvr-stage__boot {
   position: absolute;
   left: 50%;
@@ -729,10 +729,10 @@ body.bvr-dark .bvr-stage__shadow { opacity: 0 !important; }
   .bvr-stage[data-bvr-mode='live'] .bvr-type__sub { margin-top: 0.75rem; }
 }
 
-/* Portrait — a phone held upright, or anything else taller than it is wide.
+/* Portrait - a phone held upright, or anything else taller than it is wide.
    The part stands on end here (see the framing pass), so the copy cannot sit
    beside it: it stacks into a band above and a band below instead. Figures go
-   up, prose goes down, whichever corner the desktop layout assigned them —
+   up, prose goes down, whichever corner the desktop layout assigned them -
    short blocks read fine under the header, and a paragraph does not.
 
    Keyed off the attribute the framing pass sets rather than an orientation

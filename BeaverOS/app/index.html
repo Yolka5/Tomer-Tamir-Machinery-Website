@@ -38,8 +38,8 @@
       </div>
       <div class="os-topbar__meta">
         <span class="beaver-status"><span class="beaver-pulse"></span>online</span>
-        <span id="os-clock">—</span>
-        <span class="os-user" id="os-user">—</span>
+        <span id="os-clock">-</span>
+        <span class="os-user" id="os-user">-</span>
         <button type="button" class="os-logout" id="os-logout">Log out</button>
       </div>
     </header>
@@ -89,19 +89,19 @@
           <div class="os-kpis">
             <div class="os-kpi os-kpi--green">
               <span class="os-kpi__label">Active projects</span>
-              <span class="os-kpi__value" id="kpi-projects">—</span>
+              <span class="os-kpi__value" id="kpi-projects">-</span>
             </div>
             <div class="os-kpi os-kpi--amber">
               <span class="os-kpi__label">School due soon</span>
-              <span class="os-kpi__value" id="kpi-school">—</span>
+              <span class="os-kpi__value" id="kpi-school">-</span>
             </div>
             <div class="os-kpi os-kpi--blue">
               <span class="os-kpi__label">Events today</span>
-              <span class="os-kpi__value" id="kpi-events">—</span>
+              <span class="os-kpi__value" id="kpi-events">-</span>
             </div>
             <div class="os-kpi os-kpi--white">
               <span class="os-kpi__label">Hobby sessions</span>
-              <span class="os-kpi__value" id="kpi-hobbies">—</span>
+              <span class="os-kpi__value" id="kpi-hobbies">-</span>
             </div>
           </div>
           <div class="os-grid">
@@ -131,7 +131,7 @@
 
         <!-- Projects -->
         <section class="os-section" id="section-projects" hidden>
-          <div class="os-heading"><h1>Projects</h1><span class="os-proto" id="projects-count">—</span></div>
+          <div class="os-heading"><h1>Projects</h1><span class="os-proto" id="projects-count">-</span></div>
           <form id="project-form" class="os-announce-form" style="max-width:520px;">
             <input type="text" id="project-input" maxlength="120" placeholder="Start a new project…" autocomplete="off">
             <button type="submit" class="os-btn os-btn--primary">Add</button>
@@ -139,13 +139,13 @@
           <div id="projects-groups"></div>
           <div class="os-empty" id="projects-empty" hidden>
             <strong>No projects yet</strong>
-            Add one above — click its status pill to move it: Idea → Active → Done.
+            Add one above - click its status pill to move it: Idea → Active → Done.
           </div>
         </section>
 
         <!-- School -->
         <section class="os-section" id="section-school" hidden>
-          <div class="os-heading"><h1>School</h1><span class="os-proto" id="school-count">—</span></div>
+          <div class="os-heading"><h1>School</h1><span class="os-proto" id="school-count">-</span></div>
           <form id="school-form" class="beaver-row-form">
             <input type="text" id="school-title" maxlength="120" placeholder="Assignment / exam…" required>
             <input type="text" id="school-course" maxlength="60" placeholder="Course">
@@ -156,14 +156,14 @@
             <ul class="os-list" id="school-list"></ul>
             <div class="os-empty" id="school-empty" hidden>
               <strong>Nothing due</strong>
-              Add assignments and exams with due dates — overdue turns red, due-soon turns amber.
+              Add assignments and exams with due dates - overdue turns red, due-soon turns amber.
             </div>
           </div>
         </section>
 
         <!-- Hobbies -->
         <section class="os-section" id="section-hobbies" hidden>
-          <div class="os-heading"><h1>Hobbies</h1><span class="os-proto" id="hobbies-count">—</span></div>
+          <div class="os-heading"><h1>Hobbies</h1><span class="os-proto" id="hobbies-count">-</span></div>
           <form id="hobby-form" class="os-announce-form" style="max-width:520px;">
             <input type="text" id="hobby-input" maxlength="80" placeholder="Add a hobby to track…" autocomplete="off">
             <button type="submit" class="os-btn os-btn--primary">Add</button>
@@ -171,7 +171,7 @@
           <div class="os-projects" id="hobbies-grid"></div>
           <div class="os-empty" id="hobbies-empty" hidden>
             <strong>No hobbies yet</strong>
-            Add what you love doing — log sessions and watch the streaks build.
+            Add what you love doing - log sessions and watch the streaks build.
           </div>
         </section>
 
@@ -216,13 +216,13 @@
                 <span>Voice replies</span>
               </label>
               <p class="marcus-memory" id="marcus-memory-count">Memory · loading…</p>
-              <p class="marcus-hint">Click the mic and speak. Click again to send — Marcus hears you and talks back with a natural voice. He remembers you across sessions on this account.</p>
+              <p class="marcus-hint">Click the mic and speak. Click again to send - Marcus hears you and talks back with a natural voice. He remembers you across sessions on this account.</p>
             </aside>
             <div class="beaver-chat os-panel">
               <div class="beaver-chat__messages" id="marcus-messages">
                 <div class="beaver-msg beaver-msg--ai">
                   <span class="beaver-msg__who">MARCUS</span>
-                  <p>I'm Marcus — your ops agent. I can see your projects, school deadlines, hobbies, and calendar. Ask me anything, or tell me to add something: "add an assignment: physics lab report due Friday."</p>
+                  <p>I'm Marcus - your ops agent. I can see your projects, school deadlines, hobbies, and calendar. Ask me anything, or tell me to add something: "add an assignment: physics lab report due Friday."</p>
                 </div>
               </div>
               <form class="beaver-chat__form" id="marcus-form">

@@ -1,4 +1,4 @@
-/* MarcusAI — BeaverOS agent powered by Gemini.
+/* MarcusAI - BeaverOS agent powered by Gemini.
    Context-aware chat, actions, and full voice mode:
    mic audio goes straight to Gemini (multimodal), replies are spoken via TTS. */
 
@@ -20,8 +20,8 @@ function esc(str) {
     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
-const SYSTEM_PROMPT = `You are Marcus, the AI ops agent inside BeaverOS — the personal command center of your operator.
-Personality: sharp, loyal, a little dry. You call the user "boss" occasionally. Keep answers short and conversational — this is an ops console, and your replies may be read aloud, so no markdown formatting, no bullet symbols, no asterisks.
+const SYSTEM_PROMPT = `You are Marcus, the AI ops agent inside BeaverOS - the personal command center of your operator.
+Personality: sharp, loyal, a little dry. You call the user "boss" occasionally. Keep answers short and conversational - this is an ops console, and your replies may be read aloud, so no markdown formatting, no bullet symbols, no asterisks.
 
 You receive a CONTEXT block with the operator's live data (school deadlines, projects, hobbies, calendar). Use it to give grounded answers about their week, priorities, and workload.
 
@@ -342,7 +342,7 @@ async function sendVoice(blob) {
       role: 'user',
       parts: [
         { inlineData: { mimeType: blob.type || 'audio/webm', data: b64 } },
-        { text: '(voice message — remember to start your reply with the [heard] transcript line)' }
+        { text: '(voice message - remember to start your reply with the [heard] transcript line)' }
       ]
     }]);
 
@@ -411,7 +411,7 @@ async function toggleRecording() {
       setState(null);
       const blob = new Blob(recChunks, { type: 'audio/webm' });
       if (blob.size > 2000) sendVoice(blob);
-      else toast('Too short — hold the thought a bit longer', true);
+      else toast('Too short - hold the thought a bit longer', true);
     };
 
     mediaRecorder.start();
@@ -462,7 +462,7 @@ export async function initMarcus(api, currentUser, showToast) {
     if (!text || busy) return;
 
     if (!isMarcusConfigured()) {
-      toast('Marcus needs a Gemini API key — see marcus-config.js', true);
+      toast('Marcus needs a Gemini API key - see marcus-config.js', true);
       return;
     }
 

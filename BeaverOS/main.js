@@ -94,7 +94,7 @@ async function createWindow() {
     return { action: 'deny' };
   });
 
-  // Use localhost (not 127.0.0.1) — it's in Firebase's authorized domains by default.
+  // Use localhost (not 127.0.0.1) - it's in Firebase's authorized domains by default.
   win.loadURL('http://localhost:' + PORT + '/BeaverOS/app/index.html');
 }
 

@@ -1,5 +1,5 @@
 // ============================================================
-// TTM FORGE OS — Firebase configuration (ttm-forgeos)
+// TTM FORGE OS - Firebase configuration (ttm-forgeos)
 // ============================================================
 
 export const firebaseConfig = {

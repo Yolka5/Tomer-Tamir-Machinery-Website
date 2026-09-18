@@ -4,14 +4,14 @@
    page theme flips between them, so the reader is only ever looking at a
    centred product with type behind it while the copy in the corners changes.
 
-   Act 1 — the Beaver upper, black on white.
-   Act 2 — the 6.8 TVCM cartridge, white on black.
-   Act 3 — normal page flow, which starts once the stage scrolls away.
+   Act 1 - the Beaver upper, black on white.
+   Act 2 - the 6.8 TVCM cartridge, white on black.
+   Act 3 - normal page flow, which starts once the stage scrolls away.
 
    The DOM contract is data attributes only, so the markup keeps working
    without this file: the stage stays unpinned, the headings and the beat
    copy read top to bottom as an ordinary editorial section. `data-bvr-mode`
-   on the stage element is the switch — CSS only pins and stacks the layers
+   on the stage element is the switch - CSS only pins and stacks the layers
    once it reads "live".
 
    Everything scroll-linked reads window.scrollY directly. script.js already
@@ -32,7 +32,7 @@ const PHASES = [
   { kind: 'swap', vh: 76 },
   { kind: 'act', act: 1, vh: 210 },
   /* The pin still needs a viewport of travel to scroll away after the outro
-     finishes, so the outro itself stays short and runs right to its end —
+     finishes, so the outro itself stays short and runs right to its end -
      otherwise the reader sits through an empty pin twice over. */
   { kind: 'outro', vh: 44 }
 ];
@@ -83,7 +83,7 @@ function phaseAt(p) {
 
    `wipe` is how much of the model is uncovered by its clipping plane, 0→1.
 
-   `arrive` is the settle of the product itself — depth and scale.
+   `arrive` is the settle of the product itself - depth and scale.
 
    `type` is the headline behind it, kept separate from `arrive` so the word can
    lead the product in and trail it out. It also has to reach zero before the
@@ -170,7 +170,7 @@ const MODEL_SPECS = [
     view: {
       orient: [0, 0, -Math.PI / 2],
       axis: 'x',
-      /* Slight yaw and pitch — a dead-flat side elevation reads as a drawing,
+      /* Slight yaw and pitch - a dead-flat side elevation reads as a drawing,
          not a product. */
       pose: [0.11, -0.3, 0.05],
       fit: { wide: 0.8, narrow: 0.92 },
@@ -201,8 +201,8 @@ const MODEL_SPECS = [
     idle: 1.4,
     /* This one is a polymer-cased round, not a machined part. */
     polymer: true,
-    /* The cartridge stands bullet-up — a standing round is the shot everyone
-       recognises — and turns on its own axis. The CAD has it nose-down. */
+    /* The cartridge stands bullet-up - a standing round is the shot everyone
+       recognises - and turns on its own axis. The CAD has it nose-down. */
     view: {
       orient: [0, 0, Math.PI],
       axis: 'y',
@@ -212,14 +212,14 @@ const MODEL_SPECS = [
       bias: 0
     },
     /* Already standing. A cartridge is a small object, so it keeps a margin
-       inside the band the copy leaves rather than filling it — blown up to the
+       inside the band the copy leaves rather than filling it - blown up to the
        same height as a 400 mm receiver it stops reading as ammunition. */
     portrait: { fit: 0.5, fill: 0.82 }
   }
 ];
 
 /* Which framing a model uses depends on the shape of the window, not only its
-   width — a tablet on its side wants the landscape composition at a smaller
+   width - a tablet on its side wants the landscape composition at a smaller
    size, a phone upright wants a different one entirely.
 
    In portrait the copy stacks above and below the part rather than beside it,
@@ -238,7 +238,7 @@ function viewFor(spec, portrait, narrow, band) {
    anodised aluminium, so re-derive a plausible PBR response from the colour
    itself: saturation picks the family, luminance picks the polish.
 
-   `polymer` opts a model into a dielectric reading for its pale blue parts —
+   `polymer` opts a model into a dielectric reading for its pale blue parts -
    the tint Onshape gives composites. Only the cartridge asks for it; on the
    receiver the same tint is bead-blasted aluminium. */
 function retuneMaterial(material, polymer) {
@@ -269,7 +269,7 @@ function retuneMaterial(material, polymer) {
     material.roughness = 0.3;
     material.envMapIntensity = 1.15;
   } else if (luma < 0.28) {
-    /* Anodising is a dielectric skin over metal — never a clean mirror. */
+    /* Anodising is a dielectric skin over metal - never a clean mirror. */
     material.metalness = 0.72;
     material.roughness = 0.44;
     material.envMapIntensity = 0.85;
@@ -281,7 +281,7 @@ function retuneMaterial(material, polymer) {
   }
 
   /* A base colour on a metal is its reflectance, not its albedo, and Onshape's
-       values sit well above anything real — left raw, every part blows out into
+       values sit well above anything real - left raw, every part blows out into
        a flat white smear under the key light. */
   material.color.multiplyScalar(0.84);
   material.needsUpdate = true;
@@ -295,7 +295,7 @@ function retuneMaterial(material, polymer) {
    rather than shaded.
 
    The dome is deliberately dark. A bright, even surround is the mistake that
-   turns polished aluminium into flat white plastic — a mirror with nothing
+   turns polished aluminium into flat white plastic - a mirror with nothing
    dark to reflect has no shape. Nearly all the light here comes from a few
    small, very bright panels instead. */
 function buildEnvironment(renderer) {
@@ -401,7 +401,7 @@ function boot(root) {
   scene.environmentIntensity = 1;
 
   /* Long lens. Wide angles bend a 600 mm receiver into a banana. Dead-on and
-     centred, so world origin lands exactly at the middle of the pin — every
+     centred, so world origin lands exactly at the middle of the pin - every
      bit of art direction happens on the model's own pose instead. */
   const CAM_FOV = 26;
   const CAM_DIST = 3.4;
@@ -492,7 +492,7 @@ function boot(root) {
     const view = rig.view;
     rest(rig);
 
-    /* Keep the box in the frame the scale is applied in — the scaler's. Being
+    /* Keep the box in the frame the scale is applied in - the scaler's. Being
        tight to the part, its corners are close to the real silhouette even
        after the pose swings one end toward the lens. A world-space box could
        not do that job: axis-aligned, it always reports a symmetric span, and so
@@ -512,7 +512,7 @@ function boot(root) {
 
     /* Centre on the geometry, not on whatever origin the CAD package chose.
        `shift` sits below `orient` so the offset is measured and applied in the
-       model's own unrotated frame — subtracting a world-space centre from a
+       model's own unrotated frame - subtracting a world-space centre from a
        local position would drag the part off to one side. */
     rest(rig);
     rig.orient.rotation.set(0, 0, 0);
@@ -616,7 +616,7 @@ function boot(root) {
 
     /* Seed from the bounding box. CAD units are metres or millimetres by
        accident of export, so at scale 1 a 600 mm receiver may well be 600 units
-       long with most of it behind the camera — and projecting a point behind
+       long with most of it behind the camera - and projecting a point behind
        the lens returns nonsense, which would poison the first refinement. */
     rig.scaler.scale.setScalar((2 * (onX ? visHalfW : visHalfH) * frac) / rig.rawLen);
 
@@ -644,7 +644,7 @@ function boot(root) {
      paragraph is three lines on one handset and six on another, and a fraction
      tuned against one of them prints the other straight over the model.
 
-     Layout positions, not bounding rectangles — the copy spends most of the
+     Layout positions, not bounding rectangles - the copy spends most of the
      scroll part-way through a transform, and a rect would report wherever it
      happens to have slid to. */
   function portraitBand() {
@@ -685,7 +685,7 @@ function boot(root) {
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
     /* Framing projects points by hand, and Vector3.project reads the camera's
-       inverse world matrix — which only the renderer normally maintains. On the
+       inverse world matrix - which only the renderer normally maintains. On the
        first layout, before any frame has been drawn, it is still the identity. */
     camera.updateMatrixWorld(true);
     camera.matrixWorldInverse.copy(camera.matrixWorld).invert();
@@ -831,8 +831,8 @@ function boot(root) {
     if (voidEl) voidEl.style.setProperty('--slide', f.slide.toFixed(4));
 
     /* The theme flips when the curtain covers the top of the pin, not when it
-       is half way down it. Everything this class restyles — the header, the
-       scroll bar — lives up there, and inverting it while it still sits on the
+       is half way down it. Everything this class restyles - the header, the
+       scroll bar - lives up there, and inverting it while it still sits on the
        old background is the one moment of the transition a reader would
        notice. The curtain occupies slide-1 … slide of the pin's height. */
     const isDark = f.slide > 0.05 && f.slide < 1.03;
@@ -938,7 +938,7 @@ function boot(root) {
       if (introT >= 1) root.dataset.bvrIntro = 'done';
     }
 
-    /* Critically damped pointer follow — instant tracking reads as jitter. */
+    /* Critically damped pointer follow - instant tracking reads as jitter. */
     const k = 1 - Math.exp(-dt * 4.5);
     parX += (pointerX - parX) * k;
     parY += (pointerY - parY) * k;

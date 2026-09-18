@@ -1,4 +1,4 @@
-/* BeaverOS — data modules: projects, school, hobbies, calendar, dashboard.
+/* BeaverOS - data modules: projects, school, hobbies, calendar, dashboard.
    All collections are per-user (uid field). */
 
 let db, user, toast, fs;
@@ -93,7 +93,7 @@ function renderProjects() {
   if (!wrap) return;
 
   const active = projects.filter((p) => p.status === 'active').length;
-  if (count) count.textContent = projects.length ? active + ' active · ' + projects.length + ' total' : '—';
+  if (count) count.textContent = projects.length ? active + ' active · ' + projects.length + ' total' : '-';
 
   if (!projects.length) {
     wrap.innerHTML = '';
@@ -144,7 +144,7 @@ function renderSchool() {
   if (!list) return;
 
   const open = school.filter((s) => !s.done);
-  if (count) count.textContent = school.length ? open.length + ' open' : '—';
+  if (count) count.textContent = school.length ? open.length + ' open' : '-';
 
   if (!school.length) {
     list.innerHTML = '';
@@ -195,7 +195,7 @@ function renderHobbies() {
   const count = $('hobbies-count');
   if (!grid) return;
 
-  if (count) count.textContent = hobbies.length ? hobbies.length + ' tracked' : '—';
+  if (count) count.textContent = hobbies.length ? hobbies.length + ' tracked' : '-';
 
   if (!hobbies.length) {
     grid.innerHTML = '';
@@ -232,7 +232,7 @@ function renderHobbies() {
           sessions: (Number(h.sessions) || 0) + 1,
           lastDone: toDateStr(new Date())
         });
-        toast('Session logged — nice.');
+        toast('Session logged - nice.');
       } else {
         if (!confirm('Delete "' + h.name + '"?')) return;
         await deleteRow('beaverHobbies', id);
@@ -362,7 +362,7 @@ function renderDashboard() {
     dashProjects.innerHTML = activeProjects.length
       ? activeProjects.slice(0, 5).map((p) =>
           `<li><span>${esc(p.name)}</span><span class="os-status os-status--run">Active</span></li>`).join('')
-      : '<li><span class="dim">No active projects — start one.</span></li>';
+      : '<li><span class="dim">No active projects - start one.</span></li>';
   }
 
   const dashEvents = $('dash-events');
@@ -398,8 +398,8 @@ function marcusContext() {
     .sort((a, b) => (b.createdAtMs || 0) - (a.createdAtMs || 0))
     .slice(0, 40)
     .map((m) => '- ' + m.text);
-  lines.push('MEMORY (facts Marcus learned in BeaverOS — not gemini.google.com chats):');
-  lines.push(memLines.length ? memLines.join('\n') : '(none yet — ask Marcus to remember something)');
+  lines.push('MEMORY (facts Marcus learned in BeaverOS - not gemini.google.com chats):');
+  lines.push(memLines.length ? memLines.join('\n') : '(none yet - ask Marcus to remember something)');
 
   const openSchool = school.filter((s) => !s.done)
     .sort((a, b) => String(a.due).localeCompare(String(b.due)));

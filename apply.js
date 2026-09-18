@@ -81,14 +81,14 @@
       var positionLabel = positionSelect.options[positionSelect.selectedIndex].text;
       var payload = new FormData();
 
-      payload.append('_subject', 'TTM Job Application — ' + positionLabel);
+      payload.append('_subject', 'TTM Job Application - ' + positionLabel);
       payload.append('_template', 'table');
       payload.append('_captcha', 'false');
       payload.append('First Name', form.querySelector('#first-name').value);
       payload.append('Last Name', form.querySelector('#last-name').value);
       payload.append('Email', form.querySelector('#email').value);
       payload.append('Phone', form.querySelector('#phone').value);
-      payload.append('Location', form.querySelector('#location').value || '—');
+      payload.append('Location', form.querySelector('#location').value || '-');
       payload.append('Position', positionLabel);
       payload.append('Position ID', positionSelect.value);
       if (form.querySelector('#other-position').value) {
@@ -96,21 +96,21 @@
       }
       payload.append('Availability', form.querySelector('#availability').value);
       payload.append('Years of Experience', form.querySelector('#experience').value);
-      payload.append('CAD Software', getCheckedValues('cad-software') || '—');
-      payload.append('CNC Experience', form.querySelector('#cnc-experience').value || '—');
-      payload.append('Programming', getCheckedValues('programming') || '—');
-      payload.append('Other Skills', form.querySelector('#relevant-skills').value || '—');
-      payload.append('Current Company', form.querySelector('#current-company').value || '—');
-      payload.append('Current Role', form.querySelector('#current-role').value || '—');
+      payload.append('CAD Software', getCheckedValues('cad-software') || '-');
+      payload.append('CNC Experience', form.querySelector('#cnc-experience').value || '-');
+      payload.append('Programming', getCheckedValues('programming') || '-');
+      payload.append('Other Skills', form.querySelector('#relevant-skills').value || '-');
+      payload.append('Current Company', form.querySelector('#current-company').value || '-');
+      payload.append('Current Role', form.querySelector('#current-role').value || '-');
       payload.append('Work Experience', form.querySelector('#work-experience').value);
-      payload.append('Education Level', form.querySelector('#education-level').value || '—');
-      payload.append('Field of Study', form.querySelector('#degree-field').value || '—');
-      payload.append('University', form.querySelector('#university').value || '—');
+      payload.append('Education Level', form.querySelector('#education-level').value || '-');
+      payload.append('Field of Study', form.querySelector('#degree-field').value || '-');
+      payload.append('University', form.querySelector('#university').value || '-');
       payload.append('Why TTM', form.querySelector('#why-ttm').value);
-      payload.append('Projects of Interest', getCheckedValues('projects-interest') || '—');
-      payload.append('Portfolio URL', form.querySelector('#portfolio').value || '—');
-      payload.append('LinkedIn', form.querySelector('#linkedin').value || '—');
-      payload.append('Additional Info', form.querySelector('#additional-info').value || '—');
+      payload.append('Projects of Interest', getCheckedValues('projects-interest') || '-');
+      payload.append('Portfolio URL', form.querySelector('#portfolio').value || '-');
+      payload.append('LinkedIn', form.querySelector('#linkedin').value || '-');
+      payload.append('Additional Info', form.querySelector('#additional-info').value || '-');
 
       if (resumeInput && resumeInput.files[0]) {
         payload.append('attachment', resumeInput.files[0]);
