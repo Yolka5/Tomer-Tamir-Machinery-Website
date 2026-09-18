@@ -32,7 +32,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
   font-family: var(--font);
   background:
@@ -2351,7 +2351,7 @@ html.award-product-first.award-chrome-in .hero__dots { opacity: 1; }
   width: 100%;
   padding: 0.85rem 1rem;
   font-family: var(--font);
-  font-size: 0.9375rem;
+  font-size: 1rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   background: rgba(255, 255, 255, 0.7);

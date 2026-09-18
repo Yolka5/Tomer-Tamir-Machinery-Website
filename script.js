@@ -234,6 +234,7 @@
   });
 
   navLinks.forEach(function (link) {
+    if (link.classList.contains('nav__dropdown-toggle')) return;
     link.addEventListener('click', function () {
       if (navMenu && navMenu.classList.contains('open')) toggleMenu();
     });

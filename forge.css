@@ -317,7 +317,7 @@
   width: 100%;
   padding: 0.85rem 1rem;
   font-family: inherit;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   color: #fff;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -423,6 +423,13 @@
   gap: 1rem;
   font-size: 0.75rem;
   color: #8a8a92;
+}
+
+@media (max-width: 640px) {
+  .os-topbar { padding: 0.75rem 1rem; gap: 0.5rem; }
+  .os-topbar__meta { gap: 0.5rem; }
+  .os-kbd { display: none; }
+  #os-clock { display: none; }
 }
 
 .os-user {
