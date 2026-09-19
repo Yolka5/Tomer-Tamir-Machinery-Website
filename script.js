@@ -362,13 +362,16 @@
     if (!stack) return;
     var track = stack.querySelector('.film-stack__track') || stack;
     var baseVid = stack.querySelector('.film-stack__base .about__video');
-    var sheetVid = stack.querySelector('#fit .about__video');
+    var fitVid = stack.querySelector('#fit .about__video');
+    var doorVid = stack.querySelector('#door .about__video');
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     var active = false;
     var ticking = false;
 
     function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
     function outCubic(t) { return 1 - Math.pow(1 - t, 3); }
+    function pauseVid(video) { if (video) video.pause(); }
+    function playVid(video) { if (video) video.play().catch(function () {}); }
 
     function rawProgress() {
       var rect = track.getBoundingClientRect();
@@ -384,24 +387,34 @@
 
     function coversFromProgress(t) {
       return {
-        a: coverSpan(t, 0.08, 0.36),
-        b: coverSpan(t, 0.50, 0.78)
+        a: coverSpan(t, 0.05, 0.24),
+        b: coverSpan(t, 0.36, 0.54),
+        c: coverSpan(t, 0.66, 0.86)
       };
     }
 
-    function syncVideos(coverA, coverB) {
-      if (!baseVid || !sheetVid || reduce.matches) return;
-      if (coverB > 0.45) {
-        baseVid.pause();
-        sheetVid.pause();
+    function syncVideos(coverA, coverB, coverC) {
+      if (reduce.matches) return;
+      if (coverC > 0.45) {
+        pauseVid(baseVid);
+        pauseVid(fitVid);
+        pauseVid(doorVid);
+        return;
+      }
+      if (coverB > 0.42) {
+        playVid(doorVid);
+        pauseVid(baseVid);
+        pauseVid(fitVid);
         return;
       }
       if (coverA < 0.42) {
-        baseVid.play().catch(function () {});
-        sheetVid.pause();
+        playVid(baseVid);
+        pauseVid(fitVid);
+        pauseVid(doorVid);
       } else {
-        sheetVid.play().catch(function () {});
-        if (coverA > 0.58) baseVid.pause();
+        playVid(fitVid);
+        pauseVid(doorVid);
+        if (coverA > 0.58) pauseVid(baseVid);
       }
     }
 
@@ -412,14 +425,16 @@
       if (reduce.matches) {
         stack.style.setProperty('--cover-a', '1');
         stack.style.setProperty('--cover-b', '1');
+        stack.style.setProperty('--cover-c', '1');
         return;
       }
       var covers = coversFromProgress(rawProgress());
       stack.style.setProperty('--cover-a', covers.a.toFixed(4));
       stack.style.setProperty('--cover-b', covers.b.toFixed(4));
-      if (covers.b >= 0.995) stack.classList.add('film-stack--settled');
+      stack.style.setProperty('--cover-c', covers.c.toFixed(4));
+      if (covers.c >= 0.995) stack.classList.add('film-stack--settled');
       else stack.classList.remove('film-stack--settled');
-      if (active) syncVideos(covers.a, covers.b);
+      if (active) syncVideos(covers.a, covers.b, covers.c);
     }
 
     function onScroll() {
@@ -435,13 +450,15 @@
       var rect = track.getBoundingClientRect();
       var travel = Math.max(0, track.offsetHeight - window.innerHeight);
       var y = window.scrollY + rect.top;
-      if (which === 'fit' || which === 'sheet') y += travel * 0.43;
+      if (which === 'fit' || which === 'sheet') y += travel * 0.30;
+      else if (which === 'door') y += travel * 0.60;
       else if (which === 'field') y += travel;
       if (smoothScrollTo && !reduce.matches) smoothScrollTo(y);
       else window.scrollTo({ top: y, left: 0, behavior: reduce.matches ? 'auto' : 'smooth' });
     }
 
-    if (sheetVid) sheetVid.pause();
+    pauseVid(fitVid);
+    pauseVid(doorVid);
     if (pin) pin.scrollTop = 0;
 
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -452,8 +469,9 @@
         active = entries[0].isIntersecting;
         if (active) paint();
         else {
-          if (baseVid) baseVid.pause();
-          if (sheetVid) sheetVid.pause();
+          pauseVid(baseVid);
+          pauseVid(fitVid);
+          pauseVid(doorVid);
         }
       }, { rootMargin: '20% 0px' }).observe(track);
     } else {
@@ -467,6 +485,7 @@
     function applyHash() {
       var hash = (location.hash || '').replace('#', '');
       if (hash === 'fit') scrollToPlate('fit');
+      else if (hash === 'door') scrollToPlate('door');
       else if (hash === 'field' || hash === 'workshop') scrollToPlate('field');
       else return;
       paint();
@@ -484,13 +503,17 @@
         e.preventDefault();
         var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         var id = href.slice(1);
-        if (window.__ttmFilmStackScroll && !reduce && (id === 'about' || id === 'fit' || id === 'field' || id === 'workshop')) {
-          window.__ttmFilmStackScroll(id === 'about' ? 'base' : (id === 'fit' ? 'fit' : 'field'));
+        if (window.__ttmFilmStackScroll && !reduce && (id === 'about' || id === 'fit' || id === 'door' || id === 'field' || id === 'workshop')) {
+          window.__ttmFilmStackScroll(id === 'about' ? 'base' : (id === 'fit' ? 'fit' : (id === 'door' ? 'door' : 'field')));
           return;
         }
         var stack = target.closest && target.closest('[data-film-stack]');
         if (stack && window.__ttmFilmStackScroll && !reduce) {
-          window.__ttmFilmStackScroll(target.classList.contains('film-stack__sheet--field') ? 'field' : (target.classList.contains('film-stack__sheet') ? 'fit' : 'base'));
+          var plate = 'base';
+          if (target.classList.contains('film-stack__sheet--field')) plate = 'field';
+          else if (target.classList.contains('film-stack__sheet--door')) plate = 'door';
+          else if (target.classList.contains('film-stack__sheet')) plate = 'fit';
+          window.__ttmFilmStackScroll(plate);
           return;
         }
         if (smoothScrollTo) {

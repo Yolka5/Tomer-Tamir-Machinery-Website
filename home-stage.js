@@ -1943,11 +1943,23 @@ async function bootLive(root, canvas, reduceMotion) {
   }
   function stop() { running = false; }
 
+  function settleRestPast(rect) {
+    root.style.setProperty('--rest', '1');
+    if (!restEl) return;
+    restEl.style.setProperty('--rest', '1');
+    restEl.dataset.hmOn = '1';
+    restEl.classList.add('hm-rest--settled');
+    const travel = Math.max(0, root.offsetHeight - window.innerHeight);
+    const scrolled = Math.max(0, -rect.top);
+    restEl.style.setProperty('--lift', Math.min(0, scrolled - travel).toFixed(1) + 'px');
+  }
+
   function evaluate() {
     if (root.dataset.hmMode !== 'live') { stop(); return; }
     const rect = root.getBoundingClientRect();
     if (rect.bottom < window.innerHeight * 0.06) {
       onScreen = false;
+      settleRestPast(rect);
       stop();
       return;
     }

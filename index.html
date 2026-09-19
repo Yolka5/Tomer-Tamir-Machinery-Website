@@ -22,7 +22,7 @@
   <link rel="apple-touch-icon" href="TTMNewLogo.png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#f8f8f9">
-  <link rel="stylesheet" href="styles.css?v=62">
+  <link rel="stylesheet" href="styles.css?v=73">
   <link rel="stylesheet" href="forge.css?v=5">
   <link rel="stylesheet" href="home-stage.css?v=28">
   <link rel="preload" href="models/beaver-meshopt.glb" as="fetch" type="model/gltf-binary" crossorigin>
@@ -491,7 +491,7 @@
               </div>
             </div>
           </section>
-          <section class="about about--film film-stack__sheet" id="fit">
+          <section class="about about--film film-stack__sheet film-stack__sheet--fit" id="fit">
             <video class="about__video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
               <source src="TTMVideo2.mp4" type="video/mp4">
             </video>
@@ -516,9 +516,30 @@
               </div>
             </div>
           </section>
+          <section class="door-film film-stack__sheet film-stack__sheet--door" id="door">
+            <video class="about__video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
+              <source src="TTMVideo3.mp4" type="video/mp4">
+            </video>
+            <div class="door-film__scrim" aria-hidden="true"></div>
+            <div class="container door-film__layout">
+              <div class="door-film__copy">
+                <h2 class="door-film__title">
+                  <span class="door-film__title-lead">Want a</span>
+                  <span class="door-film__through">Beaver?</span>
+                </h2>
+                <p class="door-film__desc">Original TTM rifle, machined at HQ. Read the brief, or put your name on a build.</p>
+                <div class="hero__actions">
+                  <a href="beaver.html" class="btn btn--invert-ghost">More on the Beaver</a>
+                  <a href="beaver-order.html" class="btn btn--invert-ghost door-order" aria-label="Order The Beaver">
+                    <span class="door-order__keep">Order</span><span class="door-order__rest" aria-hidden="true"><span> The Beaver</span></span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
           <section class="field-band film-stack__sheet film-stack__sheet--field" id="field">
             <div class="field-band__bg">
-              <img src="UkraineTTMFlag.webp" alt="" width="1019" height="663" decoding="async">
+              <img src="UkraineTTMsoldiers.jpeg" alt="" width="1024" height="666" decoding="async">
               <div class="field-band__overlay"></div>
             </div>
             <div class="container field-band__content">
@@ -713,7 +734,7 @@
           <div class="team__card animate-in">
             <div class="team__photo team__photo--private"><img src="team/yoni.jpg" alt="" draggable="false" loading="lazy" decoding="async" width="420" height="420"></div>
             <h3 class="team__name">Yoni</h3>
-            <p class="team__role">Lead Engineer</p>
+            <p class="team__role">Lead Engineer & Founder</p>
             <p class="team__desc">SIG SPEAR &amp; Beaver program lead; turret and fire-control on T-90M.</p>
           </div>
           <div class="team__card animate-in">
