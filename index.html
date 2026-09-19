@@ -371,6 +371,7 @@
       (function () {
         try {
           if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          if (matchMedia('(max-width: 900px)').matches) return;
           document.querySelector('[data-hm-stage]').dataset.hmMode = 'live';
         } catch (err) { /* static layout is already on screen */ }
       })();

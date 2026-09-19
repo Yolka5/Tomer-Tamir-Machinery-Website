@@ -1342,6 +1342,21 @@ body.hm-page {
   background: var(--bg);
 }
 
+/* Mobile skips the cinematic hero entirely and opens straight to "Our
+   systems" - the acts are a scroll-driven, WebGL-heavy tour built for a
+   pointer and a big viewport, not a phone. home-stage.js matches this
+   breakpoint and never boots the live rig, so .hm-rest never gets the
+   off-canvas slide-in treatment above and just renders in normal flow
+   right after the header. */
+@media (max-width: 900px) {
+  .hm-stage { display: none; }
+  /* .hm-rest is normally reached by scrolling past the hero, so the fixed
+     header floats over it by design. With the hero gone it is now the
+     first thing on the page, so it needs the same top clearance every
+     other page gives itself via body.subpage. */
+  .hm-rest { padding-top: var(--nav-h); }
+}
+
 .hm-stage[data-hm-mode='live'] ~ .hm-rest,
 .hm-rest--live {
   --rest: 0;

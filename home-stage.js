@@ -649,6 +649,11 @@ function boot(root) {
   const canvas = root.querySelector('[data-hm-gl]');
   if (!canvas) return;
   if (reduceMotion.matches) return;
+  /* Mobile skips the whole cinematic hero and opens straight to "Our
+     systems" (see the matching display:none in home-stage.css) - no
+     point paying for four GLTF loads and a live WebGL loop for acts
+     nobody scrolls through. */
+  if (window.matchMedia('(max-width: 900px)').matches) return;
 
   bootLive(root, canvas, reduceMotion);
 }
