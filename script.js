@@ -56,26 +56,12 @@
       return Math.max(0, Math.min(maxScroll(), y));
     }
 
-    /* Custom wheel easing is for the pinned hero only. Past the hero, native
-       scroll must take over - the low EASE factor reads as lag on long pages.
-       This used to key off a #merch landmark section that no longer exists
-       on the page, which meant pastMerch() always returned false and the
-       laggy custom easing never handed off to native scroll anywhere on the
-       site - every page, not just the homepage hero. Keying off the hero
-       stage itself is both correct (there is nothing to ease through once
-       its pinned track has fully scrolled by) and self-hiding on pages/modes
-       that never had a stage to begin with. */
-    function pastMerch() {
-      var stage = document.getElementById('hero');
-      if (!stage) return true;
-      return stage.getBoundingClientRect().bottom < window.innerHeight * 0.55;
-    }
-
-    function syncNativeScroll() {
-      current = target = window.scrollY;
-      looping = false;
-    }
-
+    /* This eased wheel scroll is a sitewide feel, not just the pinned hero -
+       every page gets the same slow, momentum-like deceleration once a
+       scroll starts. It has no handoff to native scroll: that was tried
+       (keying off a landmark section past the hero) and it made scrolling
+       past that point feel abrupt by comparison, which read as worse than
+       just keeping the one consistent feel everywhere. */
     function isInsideScrollable(node) {
       while (node && node !== document.documentElement) {
         if (node.nodeType === 1) {
@@ -118,10 +104,6 @@
     window.addEventListener('wheel', function (e) {
       if (e.ctrlKey || e.defaultPrevented) return;
       if (isInsideScrollable(e.target)) return;
-      if (pastMerch()) {
-        syncNativeScroll();
-        return;
-      }
 
       if (!looping) current = target = window.scrollY;
 
@@ -140,15 +122,6 @@
 
     smoothScrollTo = function (y, opts) {
       var clamped = clampScroll(y);
-      if (pastMerch()) {
-        window.scrollTo({
-          top: clamped,
-          left: 0,
-          behavior: opts && opts.instant ? 'instant' : 'smooth'
-        });
-        syncNativeScroll();
-        return;
-      }
       if (opts && opts.instant) {
         current = target = clamped;
         setScroll(current);
