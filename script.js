@@ -56,12 +56,19 @@
       return Math.max(0, Math.min(maxScroll(), y));
     }
 
-    /* Custom wheel easing is for the pinned hero only. Past merch, native
-       scroll must take over - the low EASE factor reads as lag on long pages. */
+    /* Custom wheel easing is for the pinned hero only. Past the hero, native
+       scroll must take over - the low EASE factor reads as lag on long pages.
+       This used to key off a #merch landmark section that no longer exists
+       on the page, which meant pastMerch() always returned false and the
+       laggy custom easing never handed off to native scroll anywhere on the
+       site - every page, not just the homepage hero. Keying off the hero
+       stage itself is both correct (there is nothing to ease through once
+       its pinned track has fully scrolled by) and self-hiding on pages/modes
+       that never had a stage to begin with. */
     function pastMerch() {
-      var merch = document.getElementById('merch');
-      if (!merch) return false;
-      return merch.getBoundingClientRect().bottom < window.innerHeight * 0.55;
+      var stage = document.getElementById('hero');
+      if (!stage) return true;
+      return stage.getBoundingClientRect().bottom < window.innerHeight * 0.55;
     }
 
     function syncNativeScroll() {
