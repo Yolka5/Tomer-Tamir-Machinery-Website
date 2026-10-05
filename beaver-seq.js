@@ -92,17 +92,14 @@ const NODE_MATERIAL = {
   'M5 Insert': 'steel-303-stainless',
   'Lower Reciever': 'al-7075-anodized',
   'Buffer Tube': 'al-7075-anodized',
-  STOCK_KORPUS: 'polymer',
-  STOCK_TILNIK: 'polymer',
-  STOCK_V: 'polymer',
-  '55CA5C4 CMMG Grip': 'polymer',
-  KORPUS_MAGAZINA_7_62_X51: 'polymer',
-  KRISHKA_MAGAZINA_7_62_X51: 'polymer',
-  NAPRAVL_MAGAZ_7_62_51: 'polymer',
-  PRT_BUMP_FLOOR_0001_22: 'polymer',
-  PRT_CASE_0001_4: 'brass',
-  PRT_PRIMER_0001_1: 'brass',
-  PRT_BULLET_CORE_0002_4: 'copper-jacket',
+  'Barrel Extention': 'steel-4140-nitride',
+  'Barrel Liner': 'steel-4140-nitride',
+  'Barrel Connection Indexer': 'steel-17-4ph',
+  'Stock Butt': 'polymer',
+  'Stock Frame': 'al-7075-anodized',
+  'Stock Rod': 'steel-17-4ph',
+  'Stock Rod Other Side': 'steel-17-4ph',
+  Grip: 'polymer',
   Cam: 'steel-17-4ph',
   'Bullet - TVCM 6.8mm': 'copper-jacket',
   'Casing - TVCM 6.8mm': 'polymer-white',
@@ -122,7 +119,7 @@ const SPECS = {
   'bullet-mass': 135,
   'muzzle-velocity': 2750,
   'velocity-500m': 1900,
-  'upper-part-count': 90,
+  'upper-part-count': 93,
   'twist-rate': '7:1'
 };
 const fmt = (id) => {
@@ -278,8 +275,9 @@ function presetList() {
       azimuth: 0,
       elevation: 5,
       fill: 0.55,
-      /* Look at the bore, not the stock/mag-weighted box centre, or the rifle sits high. */
-      nudge: [0, 70, 0],
+      /* Look at the bore, not the stock/grip-weighted box centre, or the rifle sits high.
+         Lands 4 mm above the box centre's old height, as before the magazine came out. */
+      nudge: [0, 57, 0],
       frame: 0,
       follow: false,
       focus: []

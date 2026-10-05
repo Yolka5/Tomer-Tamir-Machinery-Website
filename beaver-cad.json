@@ -1,5 +1,5 @@
 {
-  "source": "public/models/beaver.glb",
+  "source": "C:\\Users\\yonik\\Desktop\\TTM Website\\tools\\.model-build\\beaver-full\\s4.glb",
   "units": "millimetres, rifle frame [forward, up, right]",
   "frame": {
     "forward": [
@@ -19,17 +19,17 @@
     ],
     "originMetres": [
       -0.000030171764592523687,
-      -0.047928156331181526,
+      -0.04787815734744072,
       0.022568371146917343
     ]
   },
   "evidence": [
     "Bore axis is glTF Y (longest extent, 690 mm).",
-    "Muzzle points toward glTF -Y: barrel centre is 256 mm forward of receiver centre.",
+    "Muzzle points toward glTF -Y: barrel centre is 262 mm forward of receiver centre.",
     "Up is glTF +Z: rail centre is 36 mm above barrel centreline.",
     "Right is glTF -X (forward x up, proper rotation, never mirrored).",
     "Cross-check Gas Block: 7 mm above bore (consistent with above).",
-    "Cross-check Charging Handle: 18 mm above bore (consistent with above).",
+    "Cross-check Charging Handle: 20 mm above bore (consistent with above).",
     "Cross-check Recoil Spring: 158 mm behind receiver centre (consistent with behind)."
   ],
   "overall": {
@@ -46,14 +46,14 @@
   },
   "everything": {
     "min": [
-      -423,
-      -167,
-      -38
+      -366,
+      -142,
+      -23
     ],
     "max": [
       345,
       35,
-      38
+      23
     ]
   },
   "travel": {
@@ -84,20 +84,20 @@
       "Casing - TVCM 6.8mm"
     ],
     "gas": [
-      "Valve Detent Spring",
-      "Gas Tube",
-      "Gas Valve",
-      "Piston Spring Socket",
-      "Seal Bump",
       "Gas Block Nut",
+      "Valve Detent Spring",
       "Piston Sleeve",
       "Gas Block Bottom Screw",
+      "Gas Tube",
       "Gas Block",
       "Gas Lock Pin",
+      "Gas Valve",
       "Valve Detent Pin Lock",
       "Piston Spring",
       "Gas Piston",
-      "Valve Detent Pin"
+      "Valve Detent Pin",
+      "Piston Spring Socket",
+      "Seal Bump"
     ],
     "rail": [
       "Picatinny Top Rail",
@@ -107,371 +107,173 @@
     "instanced": []
   },
   "parts": {
-    "STOCK_KORPUS": {
+    "Stock Butt - Rod Connecting Pin": {
       "center": [
-        -314,
-        -43,
-        0
-      ],
-      "size": [
-        183,
-        135,
-        75
-      ],
-      "min": [
-        -406,
-        -110,
-        -38
-      ],
-      "max": [
-        -223,
-        25,
-        38
-      ]
-    },
-    "UPOR_STOCK_": {
-      "center": [
-        -297,
-        -38,
-        0
-      ],
-      "size": [
-        16,
-        23,
-        16
-      ],
-      "min": [
-        -305,
-        -50,
-        -8
-      ],
-      "max": [
-        -289,
-        -27,
-        8
-      ]
-    },
-    "PIN_STOCK": {
-      "center": [
-        -284,
-        -53,
-        0
-      ],
-      "size": [
-        2,
-        2,
-        18
-      ],
-      "min": [
-        -285,
-        -54,
-        -9
-      ],
-      "max": [
-        -283,
-        -52,
-        9
-      ]
-    },
-    "FIX_STOCK": {
-      "center": [
-        -297,
-        -43,
-        0
-      ],
-      "size": [
-        2,
-        16,
-        12
-      ],
-      "min": [
-        -298,
-        -51,
-        -6
-      ],
-      "max": [
-        -295,
-        -35,
-        6
-      ]
-    },
-    "KNOPKA_FIX_STOCK_": {
-      "center": [
-        -310,
-        -68,
-        0
-      ],
-      "size": [
-        102,
-        59,
-        19
-      ],
-      "min": [
-        -360,
-        -98,
-        -9
-      ],
-      "max": [
-        -259,
-        -39,
-        9
-      ]
-    },
-    "SPRING_FIX_STOCK": {
-      "center": [
-        -297,
-        -34,
+        -355,
+        -19,
         0
       ],
       "size": [
         5,
-        12,
-        5
+        5,
+        39
       ],
       "min": [
-        -299,
-        -41,
-        -2
+        -357,
+        -22,
+        -19
       ],
       "max": [
-        -294,
-        -28,
-        2
+        -353,
+        -17,
+        19
       ]
     },
-    "STOCK_TILNIK": {
+    "Stock Adjust Button Other Side": {
       "center": [
-        -407,
-        -46,
-        1
+        -331,
+        -21,
+        14
       ],
       "size": [
-        33,
-        131,
-        59
-      ],
-      "min": [
-        -423,
-        -111,
-        -29
-      ],
-      "max": [
-        -390,
-        20,
-        30
-      ]
-    },
-    "STOCK_V": {
-      "center": [
-        -394,
-        -45,
-        0
-      ],
-      "size": [
-        18,
-        120,
-        59
-      ],
-      "min": [
-        -403,
-        -105,
-        -29
-      ],
-      "max": [
-        -385,
         15,
-        29
-      ]
-    },
-    "SPRING_MAG_": {
-      "center": [
-        -56,
-        -148,
-        0
-      ],
-      "size": [
-        36,
-        20,
-        21
+        7,
+        13
       ],
       "min": [
-        -74,
-        -158,
-        -11
+        -339,
+        -24,
+        7
       ],
       "max": [
-        -38,
-        -138,
-        10
+        -324,
+        -17,
+        20
       ]
     },
-    "PRT_BULLET_CORE_0002_4": {
+    "Stock Adjust Button": {
       "center": [
-        -31,
-        -72,
-        0
+        -331,
+        -21,
+        -14
       ],
       "size": [
-        42,
-        116,
-        18
+        15,
+        7,
+        13
       ],
       "min": [
-        -52,
-        -130,
-        -9
+        -339,
+        -24,
+        -20
       ],
       "max": [
-        -10,
-        -14,
-        8
+        -324,
+        -17,
+        -7
       ]
     },
-    "PRT_PRIMER_0001_1": {
+    "Stock Adjust Button Spring": {
       "center": [
-        -84,
-        -81,
+        -335,
+        -23,
         0
       ],
       "size": [
-        16,
-        116,
-        16
+        2,
+        2,
+        15
       ],
       "min": [
-        -92,
-        -138,
+        -336,
+        -24,
         -8
       ],
       "max": [
-        -76,
-        -23,
-        7
+        -334,
+        -22,
+        8
       ]
     },
-    "PRT_CASE_0001_4": {
+    "Stock Frame": {
       "center": [
-        -60,
-        -78,
-        0
-      ],
-      "size": [
-        64,
-        128,
-        22
-      ],
-      "min": [
-        -92,
-        -142,
-        -12
-      ],
-      "max": [
-        -28,
-        -14,
-        11
-      ]
-    },
-    "KORPUS_MAGAZINA_7_62_X51": {
-      "center": [
-        -49,
-        -87,
-        0
-      ],
-      "size": [
-        95,
-        153,
-        30
-      ],
-      "min": [
-        -96,
-        -163,
-        -16
-      ],
-      "max": [
-        -1,
-        -10,
-        15
-      ]
-    },
-    "PRT_BUMP_FLOOR_0001_22": {
-      "center": [
-        -45,
-        -138,
-        0
-      ],
-      "size": [
-        76,
-        35,
-        21
-      ],
-      "min": [
-        -83,
-        -156,
-        -11
-      ],
-      "max": [
+        -291,
         -7,
-        -121,
-        10
-      ]
-    },
-    "KRISHKA_MAGAZINA_7_62_X51": {
-      "center": [
-        -42,
-        -155,
         0
       ],
       "size": [
-        83,
-        24,
-        32
+        137,
+        36,
+        39
       ],
       "min": [
-        -84,
-        -167,
-        -16
+        -360,
+        -25,
+        -19
       ],
       "max": [
-        -1,
-        -143,
-        16
+        -223,
+        11,
+        19
       ]
     },
-    "NAPRAVL_MAGAZ_7_62_51": {
+    "Stock Frame Nut": {
       "center": [
-        -41,
-        -154,
+        -356,
+        -4,
         0
       ],
       "size": [
-        75,
+        13,
         23,
         23
       ],
       "min": [
-        -79,
-        -166,
-        -12
+        -363,
+        -16,
+        -11
       ],
       "max": [
-        -4,
-        -143,
+        -350,
+        7,
         11
+      ]
+    },
+    "Stock Butt": {
+      "center": [
+        -353,
+        -37,
+        0
+      ],
+      "size": [
+        26,
+        95,
+        39
+      ],
+      "min": [
+        -366,
+        -84,
+        -19
+      ],
+      "max": [
+        -340,
+        11,
+        19
       ]
     },
     "Buffer Tube": {
       "center": [
-        -274,
+        -279,
         -4,
         0
       ],
       "size": [
-        146,
+        155,
         31,
         35
       ],
       "min": [
-        -347,
+        -357,
         -20,
         -18
       ],
@@ -479,6 +281,94 @@
         -201,
         11,
         18
+      ]
+    },
+    "Stock Rod Other Side": {
+      "center": [
+        -243,
+        -19,
+        15
+      ],
+      "size": [
+        233,
+        10,
+        6
+      ],
+      "min": [
+        -360,
+        -24,
+        11
+      ],
+      "max": [
+        -126,
+        -14,
+        18
+      ]
+    },
+    "Stock Rod": {
+      "center": [
+        -243,
+        -19,
+        -15
+      ],
+      "size": [
+        233,
+        10,
+        6
+      ],
+      "min": [
+        -360,
+        -24,
+        -18
+      ],
+      "max": [
+        -126,
+        -14,
+        -11
+      ]
+    },
+    "Selector Detent": {
+      "center": [
+        -165,
+        -47,
+        10
+      ],
+      "size": [
+        1,
+        3,
+        1
+      ],
+      "min": [
+        -165,
+        -49,
+        10
+      ],
+      "max": [
+        -164,
+        -45,
+        11
+      ]
+    },
+    "Disconnector Pin": {
+      "center": [
+        -164,
+        -27,
+        0
+      ],
+      "size": [
+        3,
+        3,
+        23
+      ],
+      "min": [
+        -165,
+        -29,
+        -11
+      ],
+      "max": [
+        -162,
+        -26,
+        11
       ]
     },
     "Bolt Catch Detent": {
@@ -503,48 +393,92 @@
         -6
       ]
     },
-    "Hammer Pin": {
+    "Selector Tic": {
       "center": [
-        -150,
-        -38,
+        -170,
+        -42,
         0
       ],
       "size": [
-        31,
-        24,
-        23
+        22,
+        12,
+        37
       ],
       "min": [
-        -166,
-        -50,
-        -11
+        -180,
+        -48,
+        -18
       ],
       "max": [
-        -134,
-        -25,
-        11
+        -159,
+        -36,
+        18
       ]
     },
-    "Trigger + Sear Pin": {
+    "Grip": {
       "center": [
-        -115,
-        -40,
+        -183,
+        -99,
         0
       ],
       "size": [
-        4,
-        4,
-        23
+        60,
+        87,
+        30
       ],
       "min": [
-        -117,
-        -42,
-        -11
+        -213,
+        -142,
+        -15
       ],
       "max": [
-        -113,
-        -38,
-        11
+        -153,
+        -56,
+        15
+      ]
+    },
+    "Front Pivot Pin Detent": {
+      "center": [
+        -92,
+        -31,
+        13
+      ],
+      "size": [
+        169,
+        5,
+        8
+      ],
+      "min": [
+        -177,
+        -34,
+        8
+      ],
+      "max": [
+        -7,
+        -28,
+        17
+      ]
+    },
+    "Rear Takedown Pin Detent Spring": {
+      "center": [
+        -176,
+        -49,
+        9
+      ],
+      "size": [
+        2,
+        30,
+        2
+      ],
+      "min": [
+        -177,
+        -64,
+        8
+      ],
+      "max": [
+        -175,
+        -34,
+        10
       ]
     },
     "Front Pivot Pin": {
@@ -569,70 +503,48 @@
         17
       ]
     },
-    "Bolt Catch": {
+    "Fire Selector Roll pin": {
       "center": [
-        -110,
-        -22,
-        1
+        -165,
+        -42,
+        0
       ],
       "size": [
-        40,
-        27,
-        44
-      ],
-      "min": [
-        -129,
-        -35,
-        -21
-      ],
-      "max": [
-        -90,
-        -9,
-        23
-      ]
-    },
-    "Bolt Catch Roll Pin": {
-      "center": [
-        -105,
-        -27,
-        -15
-      ],
-      "size": [
-        16,
         2,
-        2
+        12,
+        27
       ],
       "min": [
-        -113,
-        -28,
-        -16
-      ],
-      "max": [
-        -97,
-        -26,
+        -166,
+        -48,
         -14
-      ]
-    },
-    "Front Pivot Pin Detent": {
-      "center": [
-        -9,
-        -30,
-        15
-      ],
-      "size": [
-        4,
-        2,
-        2
-      ],
-      "min": [
-        -11,
-        -31,
-        14
       ],
       "max": [
-        -7,
-        -28,
-        17
+        -164,
+        -36,
+        14
+      ]
+    },
+    "Trigger": {
+      "center": [
+        -142,
+        -62,
+        0
+      ],
+      "size": [
+        52,
+        38,
+        19
+      ],
+      "min": [
+        -168,
+        -81,
+        -9
+      ],
+      "max": [
+        -116,
+        -43,
+        9
       ]
     },
     "Bolt Catch Spring": {
@@ -657,6 +569,116 @@
         0
       ]
     },
+    "Bolt Catch": {
+      "center": [
+        -110,
+        -22,
+        1
+      ],
+      "size": [
+        40,
+        27,
+        44
+      ],
+      "min": [
+        -129,
+        -35,
+        -21
+      ],
+      "max": [
+        -90,
+        -9,
+        23
+      ]
+    },
+    "Disconnector": {
+      "center": [
+        -164,
+        -29,
+        0
+      ],
+      "size": [
+        18,
+        23,
+        18
+      ],
+      "min": [
+        -173,
+        -41,
+        -9
+      ],
+      "max": [
+        -155,
+        -18,
+        9
+      ]
+    },
+    "Bolt Catch Roll Pin": {
+      "center": [
+        -105,
+        -27,
+        -15
+      ],
+      "size": [
+        16,
+        2,
+        2
+      ],
+      "min": [
+        -113,
+        -28,
+        -16
+      ],
+      "max": [
+        -97,
+        -26,
+        -14
+      ]
+    },
+    "Hammer": {
+      "center": [
+        -119,
+        -20,
+        0
+      ],
+      "size": [
+        54,
+        58,
+        19
+      ],
+      "min": [
+        -146,
+        -49,
+        -9
+      ],
+      "max": [
+        -92,
+        9,
+        9
+      ]
+    },
+    "Rear Takedown Pin": {
+      "center": [
+        -176,
+        -28,
+        1
+      ],
+      "size": [
+        9,
+        9,
+        25
+      ],
+      "min": [
+        -180,
+        -32,
+        -11
+      ],
+      "max": [
+        -171,
+        -23,
+        13
+      ]
+    },
     "Front Pivot Pin Detent Spring": {
       "center": [
         -23,
@@ -677,6 +699,116 @@
         -11,
         -29,
         16
+      ]
+    },
+    "Grip Screw": {
+      "center": [
+        -167,
+        -69,
+        0
+      ],
+      "size": [
+        25,
+        33,
+        31
+      ],
+      "min": [
+        -179,
+        -86,
+        -15
+      ],
+      "max": [
+        -154,
+        -53,
+        16
+      ]
+    },
+    "Trigger + Hammer Pin": {
+      "center": [
+        -126,
+        -44,
+        0
+      ],
+      "size": [
+        25,
+        12,
+        23
+      ],
+      "min": [
+        -138,
+        -50,
+        -11
+      ],
+      "max": [
+        -113,
+        -38,
+        11
+      ]
+    },
+    "Selector Detent Spring": {
+      "center": [
+        -165,
+        -56,
+        10
+      ],
+      "size": [
+        1,
+        15,
+        1
+      ],
+      "min": [
+        -165,
+        -64,
+        10
+      ],
+      "max": [
+        -164,
+        -49,
+        11
+      ]
+    },
+    "Sear": {
+      "center": [
+        -137,
+        -41,
+        0
+      ],
+      "size": [
+        35,
+        27,
+        3
+      ],
+      "min": [
+        -154,
+        -54,
+        -1
+      ],
+      "max": [
+        -119,
+        -27,
+        2
+      ]
+    },
+    "Mag Catch Spring": {
+      "center": [
+        -102,
+        -49,
+        5
+      ],
+      "size": [
+        6,
+        6,
+        15
+      ],
+      "min": [
+        -105,
+        -52,
+        -2
+      ],
+      "max": [
+        -99,
+        -46,
+        12
       ]
     },
     "Mag Release": {
@@ -723,50 +855,6 @@
         17
       ]
     },
-    "Ambi Mag Release": {
-      "center": [
-        -98,
-        -51,
-        -17
-      ],
-      "size": [
-        64,
-        15,
-        11
-      ],
-      "min": [
-        -130,
-        -58,
-        -23
-      ],
-      "max": [
-        -66,
-        -44,
-        -12
-      ]
-    },
-    "Mag Catch Spring": {
-      "center": [
-        -102,
-        -49,
-        7
-      ],
-      "size": [
-        6,
-        6,
-        10
-      ],
-      "min": [
-        -105,
-        -52,
-        2
-      ],
-      "max": [
-        -100,
-        -46,
-        12
-      ]
-    },
     "Ambi Mag Release Roll Pin": {
       "center": [
         -94,
@@ -789,25 +877,47 @@
         -13
       ]
     },
-    "55CA5C4 CMMG Grip": {
+    "Ambi Mag Release": {
       "center": [
-        -191,
-        -97,
+        -98,
+        -51,
+        -17
+      ],
+      "size": [
+        64,
+        15,
+        11
+      ],
+      "min": [
+        -130,
+        -58,
+        -23
+      ],
+      "max": [
+        -66,
+        -44,
+        -12
+      ]
+    },
+    "Selector Body": {
+      "center": [
+        -165,
+        -42,
         0
       ],
       "size": [
-        76,
-        124,
-        30
+        10,
+        10,
+        31
       ],
       "min": [
-        -229,
-        -159,
+        -170,
+        -47,
         -15
       ],
       "max": [
-        -153,
-        -35,
+        -160,
+        -37,
         15
       ]
     },
@@ -841,18 +951,458 @@
       ],
       "size": [
         30,
-        30,
-        30
+        32,
+        32
       ],
       "min": [
         2,
-        -19,
-        -15
+        -20,
+        -16
       ],
       "max": [
         32,
-        11,
+        12,
+        16
+      ]
+    },
+    "Charging Handle": {
+      "center": [
+        -113,
+        16,
+        0
+      ],
+      "size": [
+        193,
+        19,
+        40
+      ],
+      "min": [
+        -210,
+        7,
+        -20
+      ],
+      "max": [
+        -17,
+        25,
+        20
+      ]
+    },
+    "Barrel Connection Indexer": {
+      "center": [
+        33,
+        8,
+        0
+      ],
+      "size": [
+        8,
+        1,
+        5
+      ],
+      "min": [
+        29,
+        7,
+        -2
+      ],
+      "max": [
+        37,
+        8,
+        2
+      ]
+    },
+    "Gas Block Nut": {
+      "center": [
+        231,
+        -4,
+        0
+      ],
+      "size": [
+        7,
+        20,
+        23
+      ],
+      "min": [
+        227,
+        -14,
+        -11
+      ],
+      "max": [
+        234,
+        6,
+        11
+      ]
+    },
+    "Valve Detent Spring": {
+      "center": [
+        222,
+        8,
+        -4
+      ],
+      "size": [
+        2,
+        3,
+        3
+      ],
+      "min": [
+        221,
+        7,
+        -5
+      ],
+      "max": [
+        223,
+        10,
+        -2
+      ]
+    },
+    "Piston Sleeve": {
+      "center": [
+        44,
+        16,
+        0
+      ],
+      "size": [
+        84,
+        15,
         15
+      ],
+      "min": [
+        2,
+        9,
+        -8
+      ],
+      "max": [
+        86,
+        24,
+        8
+      ]
+    },
+    "Barrel Extention": {
+      "center": [
+        9,
+        -4,
+        0
+      ],
+      "size": [
+        49,
+        28,
+        28
+      ],
+      "min": [
+        -15,
+        -18,
+        -14
+      ],
+      "max": [
+        34,
+        10,
+        14
+      ]
+    },
+    "Gas Block Bottom Screw": {
+      "center": [
+        219,
+        -15,
+        0
+      ],
+      "size": [
+        4,
+        7,
+        4
+      ],
+      "min": [
+        218,
+        -18,
+        -2
+      ],
+      "max": [
+        221,
+        -11,
+        2
+      ]
+    },
+    "Gas Tube": {
+      "center": [
+        195,
+        16,
+        0
+      ],
+      "size": [
+        65,
+        15,
+        14
+      ],
+      "min": [
+        162,
+        9,
+        -7
+      ],
+      "max": [
+        227,
+        23,
+        7
+      ]
+    },
+    "Gas Block": {
+      "center": [
+        214,
+        3,
+        0
+      ],
+      "size": [
+        30,
+        41,
+        25
+      ],
+      "min": [
+        199,
+        -18,
+        -12
+      ],
+      "max": [
+        229,
+        23,
+        12
+      ]
+    },
+    "Gas Lock Pin": {
+      "center": [
+        224,
+        11,
+        0
+      ],
+      "size": [
+        2,
+        2,
+        15
+      ],
+      "min": [
+        223,
+        10,
+        -8
+      ],
+      "max": [
+        225,
+        12,
+        8
+      ]
+    },
+    "Barrel Liner": {
+      "center": [
+        45,
+        -4,
+        0
+      ],
+      "size": [
+        95,
+        18,
+        18
+      ],
+      "min": [
+        -3,
+        -13,
+        -9
+      ],
+      "max": [
+        93,
+        5,
+        9
+      ]
+    },
+    "Gas Valve": {
+      "center": [
+        227,
+        16,
+        0
+      ],
+      "size": [
+        23,
+        15,
+        16
+      ],
+      "min": [
+        216,
+        8,
+        -8
+      ],
+      "max": [
+        239,
+        23,
+        7
+      ]
+    },
+    "Valve Detent Pin Lock": {
+      "center": [
+        225,
+        7,
+        -5
+      ],
+      "size": [
+        1,
+        2,
+        7
+      ],
+      "min": [
+        225,
+        6,
+        -9
+      ],
+      "max": [
+        226,
+        7,
+        -2
+      ]
+    },
+    "13.7\" Barrel": {
+      "center": [
+        171,
+        -4,
+        0
+      ],
+      "size": [
+        348,
+        25,
+        25
+      ],
+      "min": [
+        -3,
+        -17,
+        -12
+      ],
+      "max": [
+        345,
+        8,
+        12
+      ]
+    },
+    "Piston Spring": {
+      "center": [
+        117,
+        16,
+        0
+      ],
+      "size": [
+        72,
+        10,
+        10
+      ],
+      "min": [
+        81,
+        11,
+        -5
+      ],
+      "max": [
+        153,
+        21,
+        5
+      ]
+    },
+    "Gas Piston": {
+      "center": [
+        85,
+        16,
+        0
+      ],
+      "size": [
+        265,
+        10,
+        10
+      ],
+      "min": [
+        -48,
+        11,
+        -5
+      ],
+      "max": [
+        218,
+        21,
+        5
+      ]
+    },
+    "Valve Detent Pin": {
+      "center": [
+        227,
+        8,
+        -4
+      ],
+      "size": [
+        7,
+        3,
+        3
+      ],
+      "min": [
+        223,
+        7,
+        -5
+      ],
+      "max": [
+        231,
+        10,
+        -2
+      ]
+    },
+    "Piston Spring Socket": {
+      "center": [
+        154,
+        16,
+        0
+      ],
+      "size": [
+        16,
+        20,
+        20
+      ],
+      "min": [
+        146,
+        6,
+        -10
+      ],
+      "max": [
+        162,
+        26,
+        10
+      ]
+    },
+    "Seal Bump": {
+      "center": [
+        0,
+        16,
+        0
+      ],
+      "size": [
+        5,
+        14,
+        14
+      ],
+      "min": [
+        -3,
+        9,
+        -7
+      ],
+      "max": [
+        2,
+        23,
+        7
+      ]
+    },
+    "Cam": {
+      "center": [
+        -40,
+        1,
+        -3
+      ],
+      "size": [
+        8,
+        21,
+        15
+      ],
+      "min": [
+        -44,
+        -9,
+        -11
+      ],
+      "max": [
+        -36,
+        12,
+        5
       ]
     },
     "Recoil Spring": {
@@ -863,18 +1413,62 @@
       ],
       "size": [
         192,
-        25,
-        25
+        34,
+        34
       ],
       "min": [
         -345,
-        -17,
-        -12
+        -21,
+        -17
       ],
       "max": [
         -153,
-        8,
-        12
+        13,
+        17
+      ]
+    },
+    "Bolt": {
+      "center": [
+        -34,
+        -4,
+        0
+      ],
+      "size": [
+        62,
+        20,
+        20
+      ],
+      "min": [
+        -65,
+        -14,
+        -10
+      ],
+      "max": [
+        -3,
+        6,
+        10
+      ]
+    },
+    "Recoil Buffer Pin": {
+      "center": [
+        -170,
+        -4,
+        0
+      ],
+      "size": [
+        2,
+        2,
+        19
+      ],
+      "min": [
+        -171,
+        -5,
+        -10
+      ],
+      "max": [
+        -169,
+        -3,
+        9
       ]
     },
     "Bolt Carrier #1": {
@@ -1000,7 +1594,7 @@
       ],
       "min": [
         -4,
-        -11,
+        -12,
         -7
       ],
       "max": [
@@ -1045,12 +1639,12 @@
       "min": [
         22,
         -8,
-        -3
+        -4
       ],
       "max": [
         59,
         -1,
-        3
+        4
       ]
     },
     "Casing - TVCM 6.8mm": {
@@ -1061,18 +1655,18 @@
       ],
       "size": [
         48,
-        15,
-        15
+        14,
+        14
       ],
       "min": [
         -5,
-        -12,
-        -8
+        -11,
+        -7
       ],
       "max": [
         43,
         3,
-        8
+        7
       ]
     },
     "Recoil Buffer": {
@@ -1105,12 +1699,12 @@
       ],
       "size": [
         43,
-        17,
+        19,
         2
       ],
       "min": [
-        -97,
-        0,
+        -98,
+        -1,
         -1
       ],
       "max": [
@@ -1127,436 +1721,18 @@
       ],
       "size": [
         85,
-        16,
-        16
+        15,
+        15
       ],
       "min": [
         -91,
         -12,
-        -8
+        -7
       ],
       "max": [
         -6,
-        4,
-        8
-      ]
-    },
-    "Cam": {
-      "center": [
-        -40,
-        1,
-        -3
-      ],
-      "size": [
-        8,
-        21,
-        15
-      ],
-      "min": [
-        -44,
-        -9,
-        -11
-      ],
-      "max": [
-        -36,
-        12,
-        5
-      ]
-    },
-    "Bolt": {
-      "center": [
-        -34,
-        -4,
-        0
-      ],
-      "size": [
-        62,
-        18,
-        18
-      ],
-      "min": [
-        -65,
-        -13,
-        -9
-      ],
-      "max": [
-        -3,
-        5,
-        9
-      ]
-    },
-    "Recoil Buffer Pin": {
-      "center": [
-        -170,
-        -4,
-        0
-      ],
-      "size": [
-        2,
-        2,
-        19
-      ],
-      "min": [
-        -171,
-        -5,
-        -10
-      ],
-      "max": [
-        -169,
-        -3,
-        9
-      ]
-    },
-    "Valve Detent Spring": {
-      "center": [
-        222,
-        8,
-        -4
-      ],
-      "size": [
-        2,
         3,
-        3
-      ],
-      "min": [
-        221,
-        7,
-        -5
-      ],
-      "max": [
-        223,
-        10,
-        -2
-      ]
-    },
-    "Gas Tube": {
-      "center": [
-        195,
-        16,
-        0
-      ],
-      "size": [
-        65,
-        15,
-        14
-      ],
-      "min": [
-        162,
-        9,
-        -7
-      ],
-      "max": [
-        227,
-        23,
         7
-      ]
-    },
-    "Gas Valve": {
-      "center": [
-        228,
-        16,
-        0
-      ],
-      "size": [
-        23,
-        15,
-        16
-      ],
-      "min": [
-        216,
-        8,
-        -8
-      ],
-      "max": [
-        239,
-        23,
-        7
-      ]
-    },
-    "Piston Spring Socket": {
-      "center": [
-        154,
-        16,
-        0
-      ],
-      "size": [
-        16,
-        18,
-        18
-      ],
-      "min": [
-        146,
-        7,
-        -9
-      ],
-      "max": [
-        162,
-        25,
-        9
-      ]
-    },
-    "Seal Bump": {
-      "center": [
-        0,
-        16,
-        0
-      ],
-      "size": [
-        5,
-        14,
-        14
-      ],
-      "min": [
-        -3,
-        9,
-        -7
-      ],
-      "max": [
-        2,
-        23,
-        7
-      ]
-    },
-    "Gas Block Nut": {
-      "center": [
-        231,
-        -4,
-        0
-      ],
-      "size": [
-        7,
-        20,
-        23
-      ],
-      "min": [
-        227,
-        -14,
-        -11
-      ],
-      "max": [
-        234,
-        6,
-        11
-      ]
-    },
-    "Piston Sleeve": {
-      "center": [
-        44,
-        16,
-        0
-      ],
-      "size": [
-        84,
-        14,
-        14
-      ],
-      "min": [
-        2,
-        9,
-        -7
-      ],
-      "max": [
-        87,
-        23,
-        7
-      ]
-    },
-    "Gas Block Bottom Screw": {
-      "center": [
-        219,
-        -15,
-        0
-      ],
-      "size": [
-        4,
-        7,
-        4
-      ],
-      "min": [
-        218,
-        -18,
-        -2
-      ],
-      "max": [
-        221,
-        -11,
-        2
-      ]
-    },
-    "Gas Block": {
-      "center": [
-        219,
-        3,
-        0
-      ],
-      "size": [
-        21,
-        41,
-        25
-      ],
-      "min": [
-        208,
-        -18,
-        -12
-      ],
-      "max": [
-        229,
-        23,
-        12
-      ]
-    },
-    "13.7\" Barrel": {
-      "center": [
-        165,
-        -4,
-        0
-      ],
-      "size": [
-        360,
-        28,
-        28
-      ],
-      "min": [
-        -15,
-        -18,
-        -14
-      ],
-      "max": [
-        345,
-        10,
-        14
-      ]
-    },
-    "Gas Lock Pin": {
-      "center": [
-        224,
-        11,
-        0
-      ],
-      "size": [
-        2,
-        2,
-        15
-      ],
-      "min": [
-        223,
-        10,
-        -8
-      ],
-      "max": [
-        225,
-        12,
-        8
-      ]
-    },
-    "Valve Detent Pin Lock": {
-      "center": [
-        225,
-        7,
-        -5
-      ],
-      "size": [
-        1,
-        2,
-        7
-      ],
-      "min": [
-        225,
-        6,
-        -9
-      ],
-      "max": [
-        226,
-        7,
-        -2
-      ]
-    },
-    "Piston Spring": {
-      "center": [
-        117,
-        16,
-        0
-      ],
-      "size": [
-        72,
-        10,
-        10
-      ],
-      "min": [
-        82,
-        11,
-        -5
-      ],
-      "max": [
-        153,
-        21,
-        5
-      ]
-    },
-    "Gas Piston": {
-      "center": [
-        85,
-        16,
-        0
-      ],
-      "size": [
-        265,
-        10,
-        10
-      ],
-      "min": [
-        -48,
-        11,
-        -5
-      ],
-      "max": [
-        218,
-        21,
-        5
-      ]
-    },
-    "Valve Detent Pin": {
-      "center": [
-        227,
-        8,
-        -4
-      ],
-      "size": [
-        7,
-        3,
-        3
-      ],
-      "min": [
-        223,
-        7,
-        -5
-      ],
-      "max": [
-        231,
-        10,
-        -2
-      ]
-    },
-    "Charging Handle": {
-      "center": [
-        -113,
-        14,
-        0
-      ],
-      "size": [
-        194,
-        15,
-        22
-      ],
-      "min": [
-        -210,
-        7,
-        -11
-      ],
-      "max": [
-        -17,
-        22,
-        11
       ]
     },
     "Handguard Side Insert": {
@@ -1669,6 +1845,50 @@
         10
       ]
     },
+    "Handguard Top Screw": {
+      "center": [
+        2,
+        25,
+        0
+      ],
+      "size": [
+        11,
+        5,
+        5
+      ],
+      "min": [
+        -4,
+        22,
+        -2
+      ],
+      "max": [
+        8,
+        27,
+        2
+      ]
+    },
+    "Upper Reciever": {
+      "center": [
+        -91,
+        -4,
+        1
+      ],
+      "size": [
+        221,
+        62,
+        40
+      ],
+      "min": [
+        -201,
+        -35,
+        -19
+      ],
+      "max": [
+        20,
+        28,
+        21
+      ]
+    },
     "Charging Handle Insert": {
       "center": [
         -186,
@@ -1716,17 +1936,17 @@
     "Charging Handle Buffer": {
       "center": [
         -194,
-        27,
+        25,
         0
       ],
       "size": [
         17,
-        2,
+        6,
         16
       ],
       "min": [
         -203,
-        26,
+        22,
         -8
       ],
       "max": [
@@ -1743,62 +1963,18 @@
       ],
       "size": [
         21,
-        10,
-        10
+        11,
+        11
       ],
       "min": [
         9,
         -34,
-        -5
+        -6
       ],
       "max": [
         30,
-        -24,
-        5
-      ]
-    },
-    "Handguard Top Screw": {
-      "center": [
-        2,
-        25,
-        0
-      ],
-      "size": [
-        11,
-        5,
-        5
-      ],
-      "min": [
-        -4,
-        22,
-        -2
-      ],
-      "max": [
-        7,
-        27,
-        2
-      ]
-    },
-    "Upper Reciever": {
-      "center": [
-        -91,
-        -4,
-        1
-      ],
-      "size": [
-        221,
-        62,
-        40
-      ],
-      "min": [
-        -201,
-        -35,
-        -19
-      ],
-      "max": [
-        20,
-        28,
-        21
+        -23,
+        6
       ]
     }
   },
@@ -1808,8 +1984,118 @@
       0,
       0
     ],
+    "Charging Handle": [
+      -3,
+      44,
+      0
+    ],
+    "Barrel Connection Indexer": [
+      19,
+      35,
+      0
+    ],
+    "Gas Block Nut": [
+      36,
+      40,
+      0
+    ],
+    "Valve Detent Spring": [
+      31,
+      58,
+      -6
+    ],
+    "Piston Sleeve": [
+      -76,
+      70,
+      0
+    ],
+    "Barrel Extention": [
+      50,
+      0,
+      0
+    ],
+    "Gas Block Bottom Screw": [
+      29,
+      40,
+      0
+    ],
+    "Gas Tube": [
+      15,
+      70,
+      0
+    ],
+    "Gas Block": [
+      26,
+      51,
+      0
+    ],
+    "Gas Lock Pin": [
+      32,
+      63,
+      0
+    ],
+    "Barrel Liner": [
+      68,
+      0,
+      0
+    ],
+    "Gas Valve": [
+      34,
+      70,
+      0
+    ],
+    "Valve Detent Pin Lock": [
+      33,
+      57,
+      -7
+    ],
+    "13.7\" Barrel": [
+      131,
+      0,
+      0
+    ],
+    "Piston Spring": [
+      -32,
+      70,
+      0
+    ],
+    "Gas Piston": [
+      -51,
+      70,
+      0
+    ],
+    "Valve Detent Pin": [
+      34,
+      58,
+      -6
+    ],
+    "Piston Spring Socket": [
+      -10,
+      70,
+      0
+    ],
+    "Seal Bump": [
+      -102,
+      70,
+      0
+    ],
+    "Cam": [
+      -90,
+      0,
+      0
+    ],
     "Recoil Spring": [
       -216,
+      0,
+      0
+    ],
+    "Bolt": [
+      -87,
+      0,
+      0
+    ],
+    "Recoil Buffer Pin": [
+      -168,
       0,
       0
     ],
@@ -1873,101 +2159,6 @@
       0,
       0
     ],
-    "Cam": [
-      -90,
-      0,
-      0
-    ],
-    "Bolt": [
-      -87,
-      0,
-      0
-    ],
-    "Recoil Buffer Pin": [
-      -168,
-      0,
-      0
-    ],
-    "Valve Detent Spring": [
-      31,
-      58,
-      -6
-    ],
-    "Gas Tube": [
-      15,
-      70,
-      0
-    ],
-    "Gas Valve": [
-      34,
-      70,
-      0
-    ],
-    "Piston Spring Socket": [
-      -10,
-      70,
-      0
-    ],
-    "Seal Bump": [
-      -102,
-      70,
-      0
-    ],
-    "Gas Block Nut": [
-      36,
-      40,
-      0
-    ],
-    "Piston Sleeve": [
-      -76,
-      70,
-      0
-    ],
-    "Gas Block Bottom Screw": [
-      29,
-      40,
-      0
-    ],
-    "Gas Block": [
-      29,
-      51,
-      0
-    ],
-    "13.7\" Barrel": [
-      128,
-      0,
-      0
-    ],
-    "Gas Lock Pin": [
-      32,
-      63,
-      0
-    ],
-    "Valve Detent Pin Lock": [
-      33,
-      57,
-      -7
-    ],
-    "Piston Spring": [
-      -32,
-      70,
-      0
-    ],
-    "Gas Piston": [
-      -51,
-      70,
-      0
-    ],
-    "Valve Detent Pin": [
-      34,
-      58,
-      -6
-    ],
-    "Charging Handle": [
-      -3,
-      40,
-      0
-    ],
     "Picatinny Top Rail": [
       22,
       77,
@@ -1983,6 +2174,16 @@
       -55,
       0
     ],
+    "Handguard Top Screw": [
+      14,
+      64,
+      0
+    ],
+    "Upper Reciever": [
+      0,
+      0,
+      0
+    ],
     "Charging Handle Insert": [
       -14,
       53,
@@ -1995,22 +2196,12 @@
     ],
     "Charging Handle Buffer": [
       -15,
-      68,
+      64,
       0
     ],
     "Bottom Handguard Screw": [
       17,
       -55,
-      0
-    ],
-    "Handguard Top Screw": [
-      14,
-      64,
-      0
-    ],
-    "Upper Reciever": [
-      0,
-      0,
       0
     ],
     "Handguard Side Insert": [
@@ -2025,170 +2216,195 @@
     ]
   },
   "extras": {
-    "STOCK_KORPUS": [
-      -425,
+    "Stock Butt - Rod Connecting Pin": [
+      -469,
       238,
       0
     ],
-    "UPOR_STOCK_": [
-      -410,
-      245,
-      0
-    ],
-    "PIN_STOCK": [
-      -398,
-      224,
-      0
-    ],
-    "FIX_STOCK": [
-      -410,
-      238,
-      0
-    ],
-    "KNOPKA_FIX_STOCK_": [
-      -422,
-      203,
-      0
-    ],
-    "SPRING_FIX_STOCK": [
-      -410,
-      251,
-      0
-    ],
-    "STOCK_TILNIK": [
-      -509,
-      234,
-      2
-    ],
-    "STOCK_V": [
-      -497,
+    "Stock Adjust Button Other Side": [
+      -447,
       235,
+      28
+    ],
+    "Stock Adjust Button": [
+      -447,
+      235,
+      -28
+    ],
+    "Stock Adjust Button Spring": [
+      -451,
+      232,
       0
     ],
-    "SPRING_MAG_": [
-      -4,
-      -494,
+    "Stock Frame": [
+      -411,
+      255,
       0
     ],
-    "PRT_BULLET_CORE_0002_4": [
-      16,
-      -373,
+    "Stock Frame Nut": [
+      -470,
+      259,
       0
     ],
-    "PRT_PRIMER_0001_1": [
-      -26,
-      -387,
-      0
-    ],
-    "PRT_CASE_0001_4": [
-      -7,
-      -382,
-      0
-    ],
-    "KORPUS_MAGAZINA_7_62_X51": [
-      2,
-      -397,
-      0
-    ],
-    "PRT_BUMP_FLOOR_0001_22": [
-      5,
-      -478,
-      0
-    ],
-    "KRISHKA_MAGAZINA_7_62_X51": [
-      7,
-      -505,
-      0
-    ],
-    "NAPRAVL_MAGAZ_7_62_51": [
-      8,
-      -504,
+    "Stock Butt": [
+      -467,
+      213,
       0
     ],
     "Buffer Tube": [
-      -389,
-      293,
+      -401,
+      259,
       0
     ],
+    "Stock Rod Other Side": [
+      -368,
+      238,
+      30
+    ],
+    "Stock Rod": [
+      -368,
+      238,
+      -30
+    ],
+    "Selector Detent": [
+      -51,
+      -306,
+      62
+    ],
+    "Disconnector Pin": [
+      -50,
+      -282,
+      -33
+    ],
     "Bolt Catch Detent": [
-      -10,
-      -289,
-      -61
+      31,
+      -288,
+      -64
     ],
-    "Hammer Pin": [
-      -72,
-      -296,
-      30
+    "Selector Tic": [
+      -57,
+      -300,
+      -33
     ],
-    "Trigger + Sear Pin": [
-      -27,
-      -298,
-      30
-    ],
-    "Front Pivot Pin": [
-      118,
-      -286,
-      34
-    ],
-    "Bolt Catch": [
-      -20,
-      -277,
-      34
-    ],
-    "Bolt Catch Roll Pin": [
-      -14,
-      -283,
-      -82
+    "Grip": [
+      -74,
+      -368,
+      -33
     ],
     "Front Pivot Pin Detent": [
-      111,
+      44,
       -286,
-      83
+      73
+    ],
+    "Rear Takedown Pin Detent Spring": [
+      -65,
+      -308,
+      59
+    ],
+    "Front Pivot Pin": [
+      158,
+      -285,
+      31
+    ],
+    "Fire Selector Roll pin": [
+      -51,
+      -300,
+      -33
+    ],
+    "Trigger": [
+      -21,
+      -324,
+      -33
     ],
     "Bolt Catch Spring": [
-      -10,
-      -289,
-      -40
+      31,
+      -288,
+      -43
+    ],
+    "Bolt Catch": [
+      21,
+      -276,
+      31
+    ],
+    "Disconnector": [
+      -50,
+      -284,
+      -33
+    ],
+    "Bolt Catch Roll Pin": [
+      27,
+      -282,
+      -85
+    ],
+    "Hammer": [
+      9,
+      -273,
+      -33
+    ],
+    "Rear Takedown Pin": [
+      -65,
+      -283,
+      31
     ],
     "Front Pivot Pin Detent Spring": [
-      93,
-      -286,
-      83
+      134,
+      -285,
+      80
     ],
-    "Mag Release": [
-      -10,
-      -308,
-      83
+    "Grip Screw": [
+      -54,
+      -332,
+      -33
     ],
-    "Mag Catch Body": [
-      -6,
-      -309,
-      34
+    "Trigger + Hammer Pin": [
+      0,
+      -302,
+      -33
     ],
-    "Ambi Mag Release": [
-      -5,
-      -311,
-      -89
+    "Selector Detent Spring": [
+      -51,
+      -316,
+      62
     ],
-    "Mag Catch Spring": [
-      -10,
-      -309,
-      55
-    ],
-    "Ambi Mag Release Roll Pin": [
-      1,
-      -309,
-      -75
-    ],
-    "55CA5C4 CMMG Grip": [
-      -125,
-      -367,
-      30
-    ],
-    "Lower Reciever": [
+    "Sear": [
       -15,
       -298,
-      30
+      -33
+    ],
+    "Mag Catch Spring": [
+      31,
+      -308,
+      45
+    ],
+    "Mag Release": [
+      31,
+      -307,
+      80
+    ],
+    "Mag Catch Body": [
+      35,
+      -308,
+      31
+    ],
+    "Ambi Mag Release Roll Pin": [
+      41,
+      -308,
+      -78
+    ],
+    "Ambi Mag Release": [
+      36,
+      -310,
+      -92
+    ],
+    "Selector Body": [
+      -51,
+      -300,
+      -33
+    ],
+    "Lower Reciever": [
+      26,
+      -297,
+      -33
     ]
   }
 }
