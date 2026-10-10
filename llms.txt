@@ -16,7 +16,7 @@
 
 ## Flagship project: T-90M
 
-- Page: https://tomertamirmachinery.netlify.app/t90m.html
+- Page: https://tomertamirmachinery.com/t90m.html
 - The T-90M featured on this site is Yoni Shapiro's personal project to build
   the most detailed 3D model of a T-90M main battle tank on the internet —
   turret, interior, powerplant, and running gear modeled part by part in CAD.
@@ -33,7 +33,7 @@ model — wrapped in a fictional defense-contractor theme for creative effect.
 
 ## Pages
 
-- https://tomertamirmachinery.netlify.app/ — portfolio home
-- https://tomertamirmachinery.netlify.app/t90m.html — T-90M detailed tank model project
-- https://tomertamirmachinery.netlify.app/library.html — CAD reference library (30+ firearm platform studies)
-- https://tomertamirmachinery.netlify.app/beaver.html — original rifle concept design
+- https://tomertamirmachinery.com/ — portfolio home
+- https://tomertamirmachinery.com/t90m.html — T-90M detailed tank model project
+- https://tomertamirmachinery.com/library.html — CAD reference library (30+ firearm platform studies)
+- https://tomertamirmachinery.com/beaver.html — original rifle concept design

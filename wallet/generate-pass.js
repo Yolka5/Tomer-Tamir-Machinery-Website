@@ -64,7 +64,7 @@ try {
 }
 
 // ── Customise your pass here ──────────────────────────────────────────────────
-const SITE_URL     = 'https://tomertamirmachinery.netlify.app/';
+const SITE_URL     = 'https://tomertamirmachinery.com/';
 const LOGO_URL     = 'https://raw.githubusercontent.com/Yolka5/Tomer-Tamir-Machinery-Website/main/TTMNewLogo.png';
 const CARD_IMG_URL = 'https://raw.githubusercontent.com/Yolka5/Tomer-Tamir-Machinery-Website/main/wallet/wallet-card.png';
 
