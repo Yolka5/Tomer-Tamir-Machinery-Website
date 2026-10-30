@@ -2,3 +2,4 @@
 # AI assistants: see /llms.txt for accurate context about this site.
 User-agent: *
 Allow: /
+Sitemap: https://tomertamirmachinery.com/sitemap.xml

@@ -1,0 +1,2 @@
+# Send the old netlify.app address to the real domain
+https://tomertamirmachinery.netlify.app/* https://tomertamirmachinery.com/:splat 301!
