@@ -387,9 +387,9 @@
 
     function coversFromProgress(t) {
       return {
-        a: coverSpan(t, 0.05, 0.24),
-        b: coverSpan(t, 0.36, 0.54),
-        c: coverSpan(t, 0.66, 0.86)
+        a: coverSpan(t, 0.06, 0.34),
+        b: coverSpan(t, 0.52, 0.84),
+        c: coverSpan(t, 0.52, 0.84)
       };
     }
 
